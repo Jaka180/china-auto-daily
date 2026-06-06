@@ -82,31 +82,33 @@ tail -f ~/Documents/每日简报/mac/push.log
 ```
 > Mac 06:15 若处于关机/睡眠会错过；如需更稳可改用唤醒计划，或干脆把中继也放服务器。
 
-### C. 服务器发布
+### C. 服务器发布（Oracle Cloud Always Free, Ubuntu）
 
+**先在 Oracle 控制台开机：**
+1. 创建实例：Always Free 的 `VM.Standard.A1.Flex`（ARM）或 `VM.Standard.E2.1.Micro`，镜像选 **Ubuntu 22.04 / 24.04**。
+2. **把公网 IP 设为「保留 / Reserved」**（默认是临时 Ephemeral，重启可能变；微信白名单要固定 IP，这步必须做）。
+3. 用 SSH 登入（Oracle 默认用户名 `ubuntu`，密钥在创建时下载）。
+
+**登入后一条命令完成配置：**
 ```bash
-# 1) 克隆仓库
-git clone git@github.com:<你的账号>/china-auto-daily.git
+git clone https://github.com/<你的账号>/china-auto-daily.git
 cd china-auto-daily
-
-# 2) 依赖
-python3 -m pip install -r server/requirements.txt
-
-# 3) 凭证（二选一）
-#    方式① 环境变量写进 server/.env（已被 .gitignore 忽略）
-printf 'WX_APPID=你的AppID\nWX_APPSECRET=你的AppSecret\n' > server/.env
-#    方式② 复制 config.example.json 为 config.json 填入
-
-# 4) 把【这台服务器的公网IP】加进公众号后台 IP白名单
-
-# 5) 手测一次（只建草稿）
-bash server/run.sh
-
-# 6) 加 cron 每天 06:20
-crontab -e
-# 追加：
-20 6 * * * /绝对路径/china-auto-daily/server/run.sh >> /绝对路径/china-auto-daily/server/publish.log 2>&1
+bash server/setup_server.sh
 ```
+脚本会：装 git/python3/requests → 生成 `server/.env` 模板 → 写好每天 06:20 的 cron → 打印这台机的公网 IP。
+
+**然后手动两步（脚本结尾也会提示）：**
+```bash
+# ① 填凭证
+nano server/.env          # 填入 WX_APPID / WX_APPSECRET
+# ② 把脚本打印出来的公网 IP 加进公众号后台白名单
+#    mp.weixin.qq.com → 设置与开发 → 基本配置 → IP白名单
+# 然后手测一次（只建草稿）：
+bash server/run.sh
+```
+看到「✅ 草稿已创建」即贯通；之后每早 06:20 自动建草稿。
+
+> Oracle 默认只放行出站，本流程无需开任何入站端口。私钥仅放 `server/.env`（已被 .gitignore 忽略）。
 
 默认**只创建草稿**，你在公众号后台预览确认后手动群发。  
 确认稳定后，想全自动群发，把 `server/run.sh` 里的命令改成
