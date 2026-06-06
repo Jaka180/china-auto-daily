@@ -15,13 +15,20 @@ if [ ! -d .git ]; then
   exit 0
 fi
 
+DATE=$(python3 -c "import json;print(json.load(open('content/meta.json'))['date'])" 2>/dev/null || date '+%F')
+
+# 有工作区改动就提交（无改动则跳过提交，但仍会 push 未推送的历史提交）
 git add -A
-if git diff --cached --quiet; then
-  echo "无变更，跳过 push。" >> "$LOG"
-  exit 0
+if ! git diff --cached --quiet; then
+  git commit -m "每日简报 $DATE" >> "$LOG" 2>&1
+  echo "$(date '+%F %T') 已提交当日变更" >> "$LOG"
+else
+  echo "$(date '+%F %T') 工作区无改动" >> "$LOG"
 fi
 
-DATE=$(python3 -c "import json;print(json.load(open('content/meta.json'))['date'])" 2>/dev/null || date '+%F')
-git commit -m "每日简报 $DATE" >> "$LOG" 2>&1
-git push origin HEAD >> "$LOG" 2>&1
-echo "==== $(date '+%F %T') push 完成 ($DATE) ====" >> "$LOG"
+# 无论是否有新提交，都尝试 push（已同步时 git 自身会判定 up-to-date，无副作用）
+if git push origin HEAD >> "$LOG" 2>&1; then
+  echo "==== $(date '+%F %T') push 完成 ($DATE) ====" >> "$LOG"
+else
+  echo "==== $(date '+%F %T') push 失败，见上方日志 ====" >> "$LOG"
+fi
