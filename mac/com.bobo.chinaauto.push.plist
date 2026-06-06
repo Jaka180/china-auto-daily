@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+    <key>Label</key>
+    <string>com.bobo.chinaauto.push</string>
+
+    <key>ProgramArguments</key>
+    <array>
+        <string>/bin/bash</string>
+        <string>/Users/Junbo2TOM/Documents/每日简报/mac/push.sh</string>
+    </array>
+
+    <!-- 每天 06:15 触发（Cowork 06:00 生成之后） -->
+    <key>StartCalendarInterval</key>
+    <dict>
+        <key>Hour</key>
+        <integer>6</integer>
+        <key>Minute</key>
+        <integer>15</integer>
+    </dict>
+
+    <!-- 若到点时电脑在睡眠/关机，开机后补跑一次 -->
+    <key>RunAtLoad</key>
+    <false/>
+
+    <key>StandardOutPath</key>
+    <string>/Users/Junbo2TOM/Documents/每日简报/mac/launchd.out.log</string>
+    <key>StandardErrorPath</key>
+    <string>/Users/Junbo2TOM/Documents/每日简报/mac/launchd.err.log</string>
+</dict>
+</plist>

@@ -1,0 +1,10 @@
+# 凭证 / 密钥 —— 绝不提交
+server/config.json
+server/.env
+*.log
+
+# Python
+__pycache__/
+*.pyc
+.venv/
+venv/
