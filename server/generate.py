@@ -90,18 +90,36 @@ def between(s, a, b):
     j = s.find(b, i + len(a)) if i != -1 else -1
     return s[i + len(a):j].strip() if (i != -1 and j != -1) else None
 
+# meta：优先标记内的 JSON
+meta = None
 meta_raw = between(text, "===META===", "===HTML===")
-html = between(text, "===HTML===", "===END===")
-if not meta_raw or not html:
-    # 兜底：把整段当 HTML，meta 用默认
-    sys.stderr.write("⚠️ 未找到标记，使用兜底解析。原始输出前500字：\n" + text[:500] + "\n")
-    html = html or text
-    meta = {"title": f"中国车企出海日报 | {date_cn}", "digest": "14家中国车企海外动态日报"}
-else:
+if meta_raw:
     try:
         meta = json.loads(meta_raw)
     except Exception:
-        meta = {"title": f"中国车企出海日报 | {date_cn}", "digest": "14家中国车企海外动态日报"}
+        meta = None
+if meta is None:
+    # 兜底：从全文里抓第一个 {...} 试解析
+    mobj = re.search(r"\{[^{}]*\"title\"[^{}]*\}", text, re.S)
+    if mobj:
+        try:
+            meta = json.loads(mobj.group(0))
+        except Exception:
+            meta = None
+if meta is None:
+    sys.stderr.write("⚠️ meta 解析失败，使用默认标题。\n")
+    meta = {"title": f"中国车企出海日报 | {date_cn}", "digest": "14家中国车企海外动态日报"}
+
+# html：不依赖结尾标记，直接截取 <section>...</section>（最稳）
+si = text.find("<section")
+se = text.rfind("</section>")
+if si != -1 and se != -1:
+    html = text[si:se + len("</section>")]
+else:
+    # 退而求其次：取 ===HTML=== 之后的内容
+    after = text.split("===HTML===", 1)
+    html = after[1].split("===END===", 1)[0].strip() if len(after) > 1 else text
+    sys.stderr.write("⚠️ 未找到 <section> 标签，使用退化解析。\n")
 
 meta.update({"author": meta.get("author", "波波哥"), "date": today,
              "content_file": "wechat-content.html", "cover_file": "cover.jpg"})

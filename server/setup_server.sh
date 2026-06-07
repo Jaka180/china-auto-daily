@@ -15,8 +15,8 @@ if command -v apt >/dev/null 2>&1; then
   sudo apt install -y git python3 python3-pip cron
   # Ubuntu 24.04 起 pip 受 PEP668 限制，优先用系统包安装 requests
   sudo apt install -y python3-requests || pip3 install requests --break-system-packages
-  # 封面中文渲染所需字体
-  sudo apt install -y fonts-noto-cjk || true
+  # 封面渲染：Pillow + 中文字体
+  sudo apt install -y python3-pil fonts-noto-cjk || true
   # Claude API SDK（服务器自助生成日报用）——兼容新老 pip
   sudo apt install -y python3-pip || true
   pip3 install anthropic || pip3 install --user anthropic || pip3 install anthropic --break-system-packages || true
