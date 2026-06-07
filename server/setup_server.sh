@@ -35,7 +35,8 @@ fi
 
 # ---------- 3. 安装每日 cron（06:20）----------
 CRON_LINE="20 6 * * * $REPO_DIR/server/run.sh >> $REPO_DIR/server/publish.log 2>&1"
-( crontab -l 2>/dev/null | grep -vF "$REPO_DIR/server/run.sh" ; echo "$CRON_LINE" ) | crontab -
+EXISTING=$(crontab -l 2>/dev/null | grep -vF "$REPO_DIR/server/run.sh" || true)
+printf '%s\n%s\n' "$EXISTING" "$CRON_LINE" | grep -v '^$' | crontab - || true
 echo "==> 已写入 cron：每天 06:20 运行 run.sh"
 crontab -l | grep run.sh || true
 
