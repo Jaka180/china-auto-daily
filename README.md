@@ -1,29 +1,25 @@
 # 中国车企出海日报 · 自动发布流水线
 
-每天早上自动：**搜索 → 生成日报 + 封面 → 推到 GitHub → 服务器拉取 → 发布到公众号「波波哥的小酒馆」**。
+每天早上,**服务器一台机器全自动**：搜索 → 生成日报 + 封面 → 发布到公众号「波波哥的小酒馆」。不依赖 Mac、不依赖 Cowork。
 
-## 为什么是这条链路
+## 架构（V2 · 服务器自助）
 
-Cowork（生成日报的环境）出于安全限制**无法直接访问外网**——连不上微信 API、GitHub、也连不上你的服务器。它唯一的对外出口是**写文件到本机这个文件夹**。所以：
+服务器用 **Claude API(带联网搜索)** 自己生成日报,再渲染封面,再发草稿。一条 cron 串起三步：
 
 ```
-① Cowork 定时任务 06:00（自动）
-   搜索 → 生成 content/wechat-content.html + content/cover.jpg + content/meta.json
-   （同时更新 Cowork 仪表板 artifact）
-        │  ← 写入本文件夹，沙盒唯一出口
-        ▼
-② 你的 Mac · launchd 06:15（自动）
-   mac/push.sh → git commit & push 到 GitHub
-        ▼
-③ GitHub 仓库（内容 + 每日版本历史）
-        ▼
-④ 你的服务器 · cron 06:20（自动，固定IP已加公众号白名单）
-   server/run.sh → git pull → server/wechat_publish.py → 公众号草稿
+你的服务器 · cron 每天 06:20（北京时间，固定IP已加公众号白名单）
+   server/run_daily.sh：
+     1) server/generate.py    调 Claude API 联网搜索14家车企 → wechat-content.html + meta.json
+     2) tools/make_cover.py    渲染 2.35:1 封面 cover.jpg
+     3) server/wechat_publish.py  上传封面 + 创建公众号草稿
 ```
 
-> **关键**：调用微信接口的机器，其公网 IP 必须在公众号后台
-> 「设置与开发 → 基本配置 → IP白名单」里，否则换 token 报 `errcode 40164`。
-> 服务器固定 IP 正是为此——这也是用服务器而非 Mac 直发的主要理由。
+> **两个关键前提**：
+> 1. 调微信接口的机器公网 IP 必须在公众号后台「设置与开发 → 基本配置 → IP白名单」里(否则 `errcode 40164`)——服务器固定 IP 正为此。
+> 2. 需要一个 **Anthropic API Key**(console.anthropic.com 创建,绑卡充值),每天一次生成约几美分~¥1 量级。
+
+### 关于 Mac / Cowork（旧 V1，已不需要）
+最初的链路是 Cowork(06:00 在 Mac 上跑)生成 → Mac(launchd 06:15)push 到 GitHub → 服务器 pull 发布。但 Cowork 是桌面应用、生成那步就要 Mac 开机,做不到"完全无 Mac"。V2 把生成也搬到服务器后,`mac/` 目录与 Cowork 定时任务都**不再需要**(可停用)。仓库里仍保留 `mac/`、`server/run.sh` 仅作历史参考。
 
 ---
 

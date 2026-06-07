@@ -15,30 +15,37 @@ if command -v apt >/dev/null 2>&1; then
   sudo apt install -y git python3 python3-pip cron
   # Ubuntu 24.04 起 pip 受 PEP668 限制，优先用系统包安装 requests
   sudo apt install -y python3-requests || pip3 install requests --break-system-packages
+  # 封面中文渲染所需字体
+  sudo apt install -y fonts-noto-cjk || true
+  # Claude API SDK（服务器自助生成日报用）
+  pip3 install anthropic --break-system-packages || sudo apt install -y python3-pip && pip3 install anthropic --break-system-packages || true
   sudo systemctl enable --now cron 2>/dev/null || true
 else
-  echo "非 apt 系统，请手动安装 git / python3 / python3-requests"
+  echo "非 apt 系统，请手动安装 git / python3 / python3-requests / fonts-noto-cjk / pip install anthropic"
 fi
 
 # ---------- 2. 凭证模板 ----------
 if [ ! -f server/.env ]; then
   cat > server/.env <<'EOF'
-# 公众号凭证（本文件已被 .gitignore 忽略，勿提交）
+# 凭证（本文件已被 .gitignore 忽略，勿提交）
 WX_APPID=在这里填AppID
 WX_APPSECRET=在这里填AppSecret
+ANTHROPIC_API_KEY=在这里填AnthropicKey
+# 可选，默认 claude-sonnet-4-6
+# ANTHROPIC_MODEL=claude-sonnet-4-6
 EOF
   chmod 600 server/.env
-  echo "==> 已生成 server/.env 模板，请填入 AppID / AppSecret"
+  echo "==> 已生成 server/.env 模板，请填入 AppID / AppSecret / ANTHROPIC_API_KEY"
 else
   echo "==> server/.env 已存在，跳过"
 fi
 
 # ---------- 3. 安装每日 cron（06:20）----------
-CRON_LINE="20 6 * * * $REPO_DIR/server/run.sh >> $REPO_DIR/server/publish.log 2>&1"
-EXISTING=$(crontab -l 2>/dev/null | grep -vF "$REPO_DIR/server/run.sh" || true)
+CRON_LINE="20 6 * * * $REPO_DIR/server/run_daily.sh >> $REPO_DIR/server/publish.log 2>&1"
+EXISTING=$(crontab -l 2>/dev/null | grep -vF "/server/run" || true)
 printf '%s\n%s\n' "$EXISTING" "$CRON_LINE" | grep -v '^$' | crontab - || true
-echo "==> 已写入 cron：每天 06:20 运行 run.sh"
-crontab -l | grep run.sh || true
+echo "==> 已写入 cron：每天 06:20 运行 run_daily.sh（生成→封面→发布，全自动）"
+crontab -l | grep run_daily.sh || true
 
 # ---------- 4. 展示本机公网 IP（用于公众号白名单）----------
 echo
