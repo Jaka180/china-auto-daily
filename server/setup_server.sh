@@ -17,8 +17,9 @@ if command -v apt >/dev/null 2>&1; then
   sudo apt install -y python3-requests || pip3 install requests --break-system-packages
   # 封面中文渲染所需字体
   sudo apt install -y fonts-noto-cjk || true
-  # Claude API SDK（服务器自助生成日报用）
-  pip3 install anthropic --break-system-packages || sudo apt install -y python3-pip && pip3 install anthropic --break-system-packages || true
+  # Claude API SDK（服务器自助生成日报用）——兼容新老 pip
+  sudo apt install -y python3-pip || true
+  pip3 install anthropic || pip3 install --user anthropic || pip3 install anthropic --break-system-packages || true
   sudo systemctl enable --now cron 2>/dev/null || true
 else
   echo "非 apt 系统，请手动安装 git / python3 / python3-requests / fonts-noto-cjk / pip install anthropic"
