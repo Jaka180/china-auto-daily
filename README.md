@@ -1,8 +1,42 @@
 # 中国车企出海日报 · 自动发布流水线
 
-每天早上,**服务器一台机器全自动**：搜索 → 生成日报 + 封面 → 发布到公众号「波波哥的小酒馆」。不依赖 Mac、不依赖 Cowork。
+每天早上全自动：搜索 → 生成日报 + 封面 → 发送邮件（或发布到公众号「波波哥的小酒馆」）。
 
-## 架构（V2 · 服务器自助）
+## 架构（V3 · GitHub Actions + 邮件，推荐）
+
+不需要自建服务器、不需要固定公网 IP。GitHub Actions 按 cron 定时跑：
+
+```
+GitHub Actions · 每天 22:20 UTC（北京时间 06:20）
+  .github/workflows/daily-report.yml：
+    1) server/generate.py         调 Claude API 联网搜索14家车企 → wechat-content.html + meta.json
+    2) tools/make_cover.py        渲染 2.35:1 封面 cover.jpg（失败不影响后续）
+    3) server/send_email.py       通过 SMTP 发送 HTML 邮件（内联封面图）
+    4) 把 content/ 归档 commit 回仓库
+```
+
+**一次性配置**（仓库 Settings → Secrets and variables → Actions → New repository secret）：
+
+| Secret | 说明 |
+|---|---|
+| `ANTHROPIC_API_KEY` | console.anthropic.com 创建，联网搜索+生成日报用 |
+| `SMTP_HOST` / `SMTP_PORT` | 发件邮箱的 SMTP 服务器，如 Gmail 是 `smtp.gmail.com` / `587` |
+| `SMTP_USER` / `SMTP_PASS` | 发件邮箱账号 + 密码。**建议用一个普通邮箱的"应用专用密码"**（如 Gmail App Password），公司邮箱 SMTP 中继通常不允许 GitHub Actions 的外部 IP 直接鉴权发信 |
+| `EMAIL_FROM` | 发件人地址（同 SMTP_USER 一般填一样） |
+| `EMAIL_TO` | 收件人，不填默认 `junbo.wei@tomtom.com` |
+
+配置好 secrets 后，去仓库 Actions 页面 → 选「中国车企出海日报（每日邮件）」→ **Run workflow** 手动跑一次即可测试；之后每天北京时间 06:20 自动跑。
+
+也可以在自己有 `server/.env` 的机器上手动跑一次（本地测试/临时手动补发）：
+```bash
+bash server/run_daily_email.sh
+```
+
+---
+
+## 架构（V2 · 服务器自助 + 微信公众号，可选）
+
+如果除了邮件还想同时发公众号草稿，可以继续用下面这套（需要一台常驻服务器 + 固定公网 IP，因为微信接口强制 IP 白名单）：
 
 服务器用 **Claude API(带联网搜索)** 自己生成日报,再渲染封面,再发草稿。一条 cron 串起三步：
 
@@ -27,22 +61,28 @@
 
 ```
 每日简报/
-├── content/                  ← Cowork 每天覆盖写入
-│   ├── wechat-content.html   公众号版正文（内联样式）
+├── .github/workflows/
+│   └── daily-report.yml      GitHub Actions 定时任务（V3 入口）
+├── content/                  ← 每天自动覆盖写入 / Actions 自动 commit 归档
+│   ├── wechat-content.html   正文（内联样式，公众号/邮件通用）
 │   ├── cover.jpg             封面 2.35:1
 │   ├── briefing.html         完整网页版（备份）
 │   └── meta.json             标题/作者/摘要/日期
 ├── tools/
-│   └── make_cover.py         封面生成器（Cowork 调用）
+│   └── make_cover.py         封面生成器
 ├── mac/
-│   ├── push.sh               Mac 中继：commit & push
+│   ├── push.sh               Mac 中继：commit & push（旧 V1，仅历史参考）
 │   ├── com.bobo.chinaauto.push.plist   launchd 定时
 │   └── *.log
 ├── server/
-│   ├── wechat_publish.py     服务器发布脚本
-│   ├── run.sh                服务器 cron 入口（git pull + 发布）
+│   ├── generate.py           调 Claude API 联网搜索 + 生成日报正文
+│   ├── send_email.py         SMTP 发送邮件（V3）
+│   ├── run_daily_email.sh    V3 本地/服务器手动入口：生成→封面→发邮件
+│   ├── wechat_publish.py     微信公众号发布脚本（V2）
+│   ├── run_daily.sh          V2 服务器 cron 入口：生成→封面→发公众号
+│   ├── run.sh                旧版服务器 cron 入口（git pull + 发布）
 │   ├── requirements.txt
-│   └── config.example.json   凭证模板（复制为 config.json，勿提交）
+│   └── config.example.json   微信凭证模板（复制为 config.json，勿提交）
 ├── .gitignore
 └── README.md
 ```
