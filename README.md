@@ -9,7 +9,7 @@
 ```
 GCP e2-micro · cron 每天 06:20（北京时间，静态IP已加公众号白名单）
    server/run_daily.sh：
-     1) server/generate.py       调 Claude API 联网搜索14家车企 → wechat-content.html + meta.json
+     1) server/generate.py       调 Claude API 联网搜索16家车企 → wechat-content.html + meta.json
      2) tools/make_cover.py      渲染 2.35:1 封面 cover.jpg
      3) server/wechat_publish.py 上传封面 + 创建公众号草稿（后台确认后手动群发）
      4) server/send_email.py     Resend 发日报邮件 → junbo.wei@tomtom.com
