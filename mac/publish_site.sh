@@ -37,7 +37,3 @@ git diff --cached --stat | tail -5
 git commit -q -m "$MSG"
 git push -q
 echo "✅ 已推送。Cloudflare Pages 正在部署（1-2分钟）→ https://www.topchinacar.com"
-echo ""
-echo "别忘了（各一次）："
-echo "  1. Cloudflare → tochinacar → Settings → 环境变量: RESEND_API_KEY / RESEND_AUDIENCE_ID / INQUIRY_TO"
-echo "  2. GCP VM 配置 deploy key + clone + nodejs（见 topchinacar-site/README.md）"
