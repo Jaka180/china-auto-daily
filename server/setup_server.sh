@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# 一键配置发布服务器（Ubuntu，含 Oracle Cloud Always Free ARM/A1 机型）
+# 一键配置发布服务器（Ubuntu；适用 GCP e2-micro / Oracle Always Free 等任意固定IP VM）
 # 在已 git clone 的仓库根目录运行：
 #   cd china-auto-daily && bash server/setup_server.sh
 set -euo pipefail
@@ -34,30 +34,40 @@ WX_APPSECRET=在这里填AppSecret
 ANTHROPIC_API_KEY=在这里填AnthropicKey
 # 可选，默认 claude-sonnet-4-6
 # ANTHROPIC_MODEL=claude-sonnet-4-6
+
+# Resend 发邮件（resend.com → API Keys 创建）
+RESEND_API_KEY=在这里填ResendKey
+EMAIL_TO=junbo.wei@tomtom.com
+# 未验证自有域名时只能用 onboarding@resend.dev（且只能发给 Resend 注册邮箱本人）
+EMAIL_FROM=onboarding@resend.dev
 EOF
   chmod 600 server/.env
-  echo "==> 已生成 server/.env 模板，请填入 AppID / AppSecret / ANTHROPIC_API_KEY"
+  echo "==> 已生成 server/.env 模板，请填入 AppID / AppSecret / ANTHROPIC_API_KEY / RESEND_API_KEY"
 else
   echo "==> server/.env 已存在，跳过"
 fi
 
-# ---------- 3. 安装每日 cron（06:20）----------
+# ---------- 3. 时区设为北京时间（GCP 默认 UTC，否则 cron 时间会错 8 小时）----------
+sudo timedatectl set-timezone Asia/Shanghai 2>/dev/null || true
+echo "==> 时区：$(timedatectl show -p Timezone --value 2>/dev/null || date +%Z)"
+
+# ---------- 4. 安装每日 cron（06:20 北京时间）----------
 CRON_LINE="20 6 * * * $REPO_DIR/server/run_daily.sh >> $REPO_DIR/server/publish.log 2>&1"
 EXISTING=$(crontab -l 2>/dev/null | grep -vF "/server/run" || true)
 printf '%s\n%s\n' "$EXISTING" "$CRON_LINE" | grep -v '^$' | crontab - || true
 echo "==> 已写入 cron：每天 06:20 运行 run_daily.sh（生成→封面→发布，全自动）"
 crontab -l | grep run_daily.sh || true
 
-# ---------- 4. 展示本机公网 IP（用于公众号白名单）----------
+# ---------- 5. 展示本机公网 IP（用于公众号白名单）----------
 echo
 echo "================ 还差两步（手动）================"
-IP=$(curl -s --max-time 8 https://api.ipify.org || curl -s --max-time 8 ifconfig.me || echo "（取IP失败，请在 Oracle 控制台查看实例公网IP）")
+IP=$(curl -s --max-time 8 https://api.ipify.org || curl -s --max-time 8 ifconfig.me || echo "（取IP失败，请在云控制台查看实例公网IP）")
 echo "① 把这台服务器的公网 IP 加进公众号后台白名单："
 echo "      >>>  $IP  <<<"
 echo "   位置：mp.weixin.qq.com → 设置与开发 → 基本配置 → IP白名单"
-echo "   （Oracle 默认给的是临时公网IP，务必在控制台把它「保留/Reserved」成静态，否则重启可能变）"
+echo "   （GCP：VPC network → IP addresses 把该 IP 提升为 Static；Oracle：设为 Reserved。否则重启可能变）"
 echo
-echo "② 填好 server/.env 里的 AppID/AppSecret 后，手测一次："
-echo "      cd $REPO_DIR && bash server/run.sh"
-echo "   成功会打印「✅ 草稿已创建」。之后每早 06:20 自动建草稿。"
+echo "② 填好 server/.env 里的 AppID/AppSecret/ANTHROPIC_API_KEY/RESEND_API_KEY 后，手测一次："
+echo "      cd $REPO_DIR && bash server/run_daily.sh"
+echo "   成功会打印「✅ 草稿已创建」和「✅ 邮件已发送」。之后每早 06:20 全自动。"
 echo "================================================"
