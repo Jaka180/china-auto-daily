@@ -11,3 +11,6 @@ __pycache__/
 *.pyc
 .venv/
 venv/
+
+# 网站工作副本（单独 push 到 Jaka180/tochinacar，见 mac/publish_site.sh）
+topchinacar-site/
