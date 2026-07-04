@@ -66,8 +66,8 @@ Requirements:
 2. html_zh: the same article in Chinese (same structure, faithful but natural).
 3. title_en: headline, max 90 chars, specific (numbers/names), no clickbait. title_zh: Chinese headline.
 4. excerpt_en / excerpt_zh: one-sentence summary with the key numbers, max 200 chars.
-5. events: structured records of every distinct news item, for a database. Each: {{"company": "<parent company EN>", "brand": "<brand EN or null>", "market": "<country/region EN or 'Global'>", "action": "<one of: sales_figures | plant | dealer_network | market_entry | product_launch | pricing | partnership | policy | other>", "summary_en": "<one sentence with numbers>", "source_url": "<url or null>"}}.
-6. Only use facts from the briefing. Do not invent numbers or links. If the briefing is thin, a shorter article is fine.
+5. events: REQUIRED, non-negotiable. One structured record for EVERY distinct news item you covered in the article — an article with 6 sections should yield roughly 8-20 events. An empty array is only acceptable if the briefing itself contains zero news. Each record: {{"company": "<parent company EN>", "brand": "<brand EN or null>", "market": "<country/region EN or 'Global'>", "action": "<one of: sales_figures | plant | dealer_network | market_entry | product_launch | pricing | partnership | policy | other>", "summary_en": "<one sentence with numbers>", "source_url": "<url or null>"}}.
+6. Only use facts from the briefing. Do not invent numbers or links. If the briefing is thin, a shorter article is fine — but events must still list whatever items exist.
 
 Output EXACTLY this structure — five sections with these literal markers, no code fences, no commentary. The META and EVENTS sections are JSON; the HTML sections are raw HTML (NOT JSON-escaped):
 ===META===
