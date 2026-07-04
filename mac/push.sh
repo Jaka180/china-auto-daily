@@ -3,7 +3,7 @@
 # 由 launchd 每天 06:15 触发（见 com.bobo.chinaauto.push.plist）。
 set -euo pipefail
 
-REPO_DIR="/Users/Junbo2TOM/Documents/每日简报"
+REPO_DIR="/Users/Junbo2TOM/Documents/china-auto-briefing"
 cd "$REPO_DIR"
 
 LOG="$REPO_DIR/mac/push.log"

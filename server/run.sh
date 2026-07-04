@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 # 服务器端每日发布：拉取最新内容 → 创建公众号草稿
 # 放进服务器 crontab，例如每天 06:20：
-#   20 6 * * * /path/to/每日简报/server/run.sh >> /path/to/每日简报/server/publish.log 2>&1
+#   20 6 * * * /path/to/china-auto-briefing/server/run.sh >> /path/to/china-auto-briefing/server/publish.log 2>&1
 set -euo pipefail
 
 REPO_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"

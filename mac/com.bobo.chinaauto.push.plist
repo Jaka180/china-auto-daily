@@ -8,7 +8,7 @@
     <key>ProgramArguments</key>
     <array>
         <string>/bin/bash</string>
-        <string>/Users/Junbo2TOM/Documents/每日简报/mac/push.sh</string>
+        <string>/Users/Junbo2TOM/Documents/china-auto-briefing/mac/push.sh</string>
     </array>
 
     <!-- 每天 06:15 触发（Cowork 06:00 生成之后） -->
@@ -25,8 +25,8 @@
     <false/>
 
     <key>StandardOutPath</key>
-    <string>/Users/Junbo2TOM/Documents/每日简报/mac/launchd.out.log</string>
+    <string>/Users/Junbo2TOM/Documents/china-auto-briefing/mac/launchd.out.log</string>
     <key>StandardErrorPath</key>
-    <string>/Users/Junbo2TOM/Documents/每日简报/mac/launchd.err.log</string>
+    <string>/Users/Junbo2TOM/Documents/china-auto-briefing/mac/launchd.err.log</string>
 </dict>
 </plist>

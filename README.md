@@ -37,7 +37,7 @@ GCP e2-micro（静态IP已加公众号白名单，时区 Asia/Shanghai）
 ## 目录结构
 
 ```
-每日简报/
+china-auto-briefing/
 ├── content/                  ← Cowork 每天覆盖写入
 │   ├── wechat-content.html   公众号版正文（内联样式）
 │   ├── cover.jpg             封面 2.35:1
@@ -74,7 +74,7 @@ GCP e2-micro（静态IP已加公众号白名单，时区 Asia/Shanghai）
 # 没装过 gh 先装：
 brew install gh
 # 一次性脚本（默认仓库名 china-auto-daily，可传参改名）：
-bash ~/Documents/每日简报/mac/setup_github.sh
+bash ~/Documents/china-auto-briefing/mac/setup_github.sh
 ```
 
 脚本会：检查/触发 `gh auth login` 浏览器授权 → 创建**私有**仓库 → 推送。  

@@ -1,12 +1,12 @@
 #!/usr/bin/env bash
 # 一次性：用 GitHub CLI 创建私有仓库并推送（中国车企出海日报流水线）
 # 用法：
-#   bash ~/Documents/每日简报/mac/setup_github.sh [仓库名]
+#   bash ~/Documents/china-auto-briefing/mac/setup_github.sh [仓库名]
 # 仓库名默认 china-auto-daily
 set -euo pipefail
 
 REPO_NAME="${1:-china-auto-daily}"
-REPO_DIR="/Users/Junbo2TOM/Documents/每日简报"
+REPO_DIR="/Users/Junbo2TOM/Documents/china-auto-briefing"
 cd "$REPO_DIR"
 
 # 1) 检查 gh
