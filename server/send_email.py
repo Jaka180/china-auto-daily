@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 """
-邮件发布脚本 —— 读取 content/ 下当日内容，通过 SMTP 发送 HTML 邮件。
+邮件发布脚本 —— 读取 content/ 下当日内容，通过 Resend API 发送 HTML 邮件。
 
 读取：
   content/meta.json          标题/摘要/日期
@@ -9,34 +9,31 @@
   content/cover.jpg          封面图（可选，取不到就不内联，不报错）
 
 凭证/配置（从环境变量读，run_daily_email.sh 会 source server/.env）：
-  SMTP_HOST / SMTP_PORT(默认587) / SMTP_USER / SMTP_PASS   必填
-  EMAIL_FROM   必填，发件人地址
-  EMAIL_TO     可选，默认 junbo.wei@tomtom.com
+  RESEND_API_KEY   必填（resend.com 控制台创建）
+  EMAIL_FROM       可选，默认 "China Auto Daily <onboarding@resend.dev>"
+                   （未绑定自有域名时只能用 onboarding@resend.dev 发信）
+  EMAIL_TO         可选，默认 junbo.wei@tomtom.com
+                   （未绑定自有域名时，Resend 只允许发到注册账号自己的邮箱）
 
-依赖：仅标准库（smtplib / email）
+依赖：requests（见 server/requirements.txt）
 """
-import json, os, sys, smtplib
-from email.mime.multipart import MIMEMultipart
-from email.mime.text import MIMEText
-from email.mime.image import MIMEImage
+import base64, json, os, sys
+try:
+    import requests
+except ImportError:
+    sys.exit("缺少依赖：pip install requests")
 
+API = "https://api.resend.com/emails"
 HERE = os.path.dirname(os.path.abspath(__file__))
 ROOT = os.path.dirname(HERE)
 CONTENT = os.path.join(ROOT, "content")
 
-SMTP_HOST = os.environ.get("SMTP_HOST")
-SMTP_PORT = int(os.environ.get("SMTP_PORT", "587"))
-SMTP_USER = os.environ.get("SMTP_USER")
-SMTP_PASS = os.environ.get("SMTP_PASS")
-EMAIL_FROM = os.environ.get("EMAIL_FROM")
+RESEND_API_KEY = os.environ.get("RESEND_API_KEY")
+EMAIL_FROM = os.environ.get("EMAIL_FROM", "China Auto Daily <onboarding@resend.dev>")
 EMAIL_TO = os.environ.get("EMAIL_TO", "junbo.wei@tomtom.com")
 
-missing = [k for k, v in {
-    "SMTP_HOST": SMTP_HOST, "SMTP_USER": SMTP_USER,
-    "SMTP_PASS": SMTP_PASS, "EMAIL_FROM": EMAIL_FROM,
-}.items() if not v]
-if missing:
-    sys.exit(f"缺少环境变量：{', '.join(missing)}（请写进 server/.env 或 GitHub Actions secrets）")
+if not RESEND_API_KEY:
+    sys.exit("缺少环境变量：RESEND_API_KEY（请写进 server/.env 或 GitHub Actions secrets）")
 
 meta_path = os.path.join(CONTENT, "meta.json")
 html_path = os.path.join(CONTENT, "wechat-content.html")
@@ -61,32 +58,35 @@ full_html = f"""<!DOCTYPE html><html lang="zh-CN"><head><meta charset="UTF-8"></
 {body_html}
 </body></html>"""
 
-msg = MIMEMultipart("related")
-msg["Subject"] = subject
-msg["From"] = EMAIL_FROM
-msg["To"] = EMAIL_TO
-
-alt = MIMEMultipart("alternative")
-alt.attach(MIMEText(meta.get("digest", ""), "plain", "utf-8"))
-alt.attach(MIMEText(full_html, "html", "utf-8"))
-msg.attach(alt)
+payload = {
+    "from": EMAIL_FROM,
+    "to": [EMAIL_TO],
+    "subject": subject,
+    "html": full_html,
+    "text": meta.get("digest", ""),
+}
 
 if has_cover:
     with open(cover_path, "rb") as f:
-        img = MIMEImage(f.read(), _subtype="jpeg")
-    img.add_header("Content-ID", "<cover>")
-    img.add_header("Content-Disposition", "inline", filename="cover.jpg")
-    msg.attach(img)
+        cover_b64 = base64.b64encode(f.read()).decode("ascii")
+    payload["attachments"] = [{
+        "filename": "cover.jpg",
+        "content": cover_b64,
+        "content_id": "cover",
+    }]
 
-print(f"[send_email] 发送 “{subject}” 到 {EMAIL_TO} via {SMTP_HOST}:{SMTP_PORT} …")
+print(f"[send_email] 发送 “{subject}” 到 {EMAIL_TO} via Resend …")
 try:
-    with smtplib.SMTP(SMTP_HOST, SMTP_PORT, timeout=30) as s:
-        s.starttls()
-        s.login(SMTP_USER, SMTP_PASS)
-        s.sendmail(EMAIL_FROM, [EMAIL_TO], msg.as_string())
-except smtplib.SMTPAuthenticationError as e:
-    sys.exit(f"✗ SMTP 认证失败，请检查 SMTP_USER/SMTP_PASS：{e}")
+    r = requests.post(
+        API,
+        headers={"Authorization": f"Bearer {RESEND_API_KEY}", "Content-Type": "application/json"},
+        json=payload,
+        timeout=30,
+    )
 except Exception as e:
-    sys.exit(f"✗ 邮件发送失败：{e}")
+    sys.exit(f"✗ 邮件发送失败（网络错误）：{e}")
 
-print("✅ 邮件已发送")
+if r.status_code >= 300:
+    sys.exit(f"✗ 邮件发送失败：HTTP {r.status_code} {r.text}")
+
+print(f"✅ 邮件已发送（id={r.json().get('id')}）")

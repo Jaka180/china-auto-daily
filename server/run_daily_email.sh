@@ -8,7 +8,7 @@ cd "$REPO_DIR"
 
 echo "==== $(date '+%F %T') 开始 ===="
 
-# 凭证/配置：ANTHROPIC_API_KEY / SMTP_HOST / SMTP_PORT / SMTP_USER / SMTP_PASS / EMAIL_FROM / EMAIL_TO
+# 凭证/配置：ANTHROPIC_API_KEY / RESEND_API_KEY / EMAIL_FROM / EMAIL_TO
 if [ -f "server/.env" ]; then
   set -a; . server/.env; set +a
 fi

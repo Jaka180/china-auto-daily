@@ -11,7 +11,7 @@ GitHub Actions · 每天 22:20 UTC（北京时间 06:20）
   .github/workflows/daily-report.yml：
     1) server/generate.py         调 Claude API 联网搜索14家车企 → wechat-content.html + meta.json
     2) tools/make_cover.py        渲染 2.35:1 封面 cover.jpg（失败不影响后续）
-    3) server/send_email.py       通过 SMTP 发送 HTML 邮件（内联封面图）
+    3) server/send_email.py       通过 Resend API 发送 HTML 邮件（内联封面图）
     4) 把 content/ 归档 commit 回仓库
 ```
 
@@ -20,10 +20,9 @@ GitHub Actions · 每天 22:20 UTC（北京时间 06:20）
 | Secret | 说明 |
 |---|---|
 | `ANTHROPIC_API_KEY` | console.anthropic.com 创建，联网搜索+生成日报用 |
-| `SMTP_HOST` / `SMTP_PORT` | 发件邮箱的 SMTP 服务器，如 Gmail 是 `smtp.gmail.com` / `587` |
-| `SMTP_USER` / `SMTP_PASS` | 发件邮箱账号 + 密码。**建议用一个普通邮箱的"应用专用密码"**（如 Gmail App Password），公司邮箱 SMTP 中继通常不允许 GitHub Actions 的外部 IP 直接鉴权发信 |
-| `EMAIL_FROM` | 发件人地址（同 SMTP_USER 一般填一样） |
-| `EMAIL_TO` | 收件人，不填默认 `junbo.wei@tomtom.com` |
+| `RESEND_API_KEY` | resend.com 注册账号后创建（免费额度足够每天一封） |
+| `EMAIL_FROM` | 可不填，默认 `China Auto Daily <onboarding@resend.dev>`。绑定自有域名后可改成自己的地址 |
+| `EMAIL_TO` | 可不填，默认 `junbo.wei@tomtom.com`。**注意**：未在 Resend 绑定/验证自有域名前，Resend 只允许发到注册该 Resend 账号时用的邮箱地址，所以第一次用时建议用 `junbo.wei@tomtom.com` 注册 Resend 账号 |
 
 配置好 secrets 后，去仓库 Actions 页面 → 选「中国车企出海日报（每日邮件）」→ **Run workflow** 手动跑一次即可测试；之后每天北京时间 06:20 自动跑。
 
@@ -76,7 +75,7 @@ bash server/run_daily_email.sh
 │   └── *.log
 ├── server/
 │   ├── generate.py           调 Claude API 联网搜索 + 生成日报正文
-│   ├── send_email.py         SMTP 发送邮件（V3）
+│   ├── send_email.py         Resend API 发送邮件（V3）
 │   ├── run_daily_email.sh    V3 本地/服务器手动入口：生成→封面→发邮件
 │   ├── wechat_publish.py     微信公众号发布脚本（V2）
 │   ├── run_daily.sh          V2 服务器 cron 入口：生成→封面→发公众号
