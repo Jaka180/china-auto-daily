@@ -69,9 +69,15 @@ Requirements:
 5. events: structured records of every distinct news item, for a database. Each: {{"company": "<parent company EN>", "brand": "<brand EN or null>", "market": "<country/region EN or 'Global'>", "action": "<one of: sales_figures | plant | dealer_network | market_entry | product_launch | pricing | partnership | policy | other>", "summary_en": "<one sentence with numbers>", "source_url": "<url or null>"}}.
 6. Only use facts from the briefing. Do not invent numbers or links. If the briefing is thin, a shorter article is fine.
 
-Output EXACTLY this structure, no code fences, no commentary:
-===JSON===
-{{"slug": "{slug}", "date": "{date}", "tag_en": "Daily Briefing", "tag_zh": "每日简报", "title_en": "...", "title_zh": "...", "excerpt_en": "...", "excerpt_zh": "...", "html_en": "...", "html_zh": "...", "events": [...]}}
+Output EXACTLY this structure — five sections with these literal markers, no code fences, no commentary. The META and EVENTS sections are JSON; the HTML sections are raw HTML (NOT JSON-escaped):
+===META===
+{{"title_en": "...", "title_zh": "...", "excerpt_en": "...", "excerpt_zh": "..."}}
+===HTML_EN===
+<p>...</p>
+===HTML_ZH===
+<p>...</p>
+===EVENTS===
+[{{"company": "...", "brand": null, "market": "...", "action": "...", "summary_en": "...", "source_url": null}}]
 ===END===
 
 Today's briefing:
@@ -86,24 +92,41 @@ resp = client.messages.create(
 text = "".join(b.text for b in resp.content if getattr(b, "type", None) == "text")
 text = text.replace("```json", "").replace("```", "")
 
-m = re.search(r"===JSON===\s*(\{.*\})\s*===END===", text, re.S)
-raw = m.group(1) if m else None
-if raw is None:
-    # 兜底：取第一个 { 到最后一个 }
-    i, j = text.find("{"), text.rfind("}")
-    raw = text[i:j + 1] if (i != -1 and j > i) else None
-if raw is None:
-    sys.exit("✗ 未能从模型输出中提取 JSON")
+def between(s, a, b):
+    i = s.find(a)
+    j = s.find(b, i + len(a)) if i != -1 else -1
+    return s[i + len(a):j].strip() if (i != -1 and j != -1) else None
+
+meta_raw = between(text, "===META===", "===HTML_EN===")
+html_en = between(text, "===HTML_EN===", "===HTML_ZH===")
+html_zh = between(text, "===HTML_ZH===", "===EVENTS===")
+events_raw = between(text, "===EVENTS===", "===END===")
+
+if not (meta_raw and html_en):
+    sys.exit("✗ 模型输出缺少 META 或 HTML_EN 分段")
 
 try:
-    article = json.loads(raw)
+    meta_obj = json.loads(meta_raw, strict=False)
 except Exception as e:
-    sys.exit(f"✗ 文章 JSON 解析失败：{e}")
+    sys.exit(f"✗ META JSON 解析失败：{e}")
 
-for k in ("slug", "date", "title_en", "html_en"):
-    if not article.get(k):
-        sys.exit(f"✗ 文章缺少字段 {k}")
-article["slug"] = slug  # 强制确定性 slug，防止模型改动
+events = []
+if events_raw:
+    try:
+        events = json.loads(events_raw, strict=False)
+    except Exception as e:
+        sys.stderr.write(f"⚠️ events 解析失败（不阻塞发布）：{e}\n")
+
+article = {
+    "slug": slug, "date": date,
+    "tag_en": "Daily Briefing", "tag_zh": "每日简报",
+    "title_en": meta_obj.get("title_en", ""), "title_zh": meta_obj.get("title_zh", ""),
+    "excerpt_en": meta_obj.get("excerpt_en", ""), "excerpt_zh": meta_obj.get("excerpt_zh", ""),
+    "html_en": html_en, "html_zh": html_zh or html_en,
+    "events": events if isinstance(events, list) else []
+}
+if not article["title_en"]:
+    sys.exit("✗ 缺少 title_en")
 
 out_dir = os.path.join(SITE_REPO, "articles")
 os.makedirs(out_dir, exist_ok=True)
