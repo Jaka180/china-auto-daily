@@ -16,10 +16,16 @@ trap 'rm -rf "$TMP"' EXIT
 echo "→ 克隆网站仓库…"
 git clone -q "$REPO" "$TMP/site"
 
-echo "→ 同步文件（css/ 与 images/ 保留仓库原有）…"
-rsync -a --exclude .git "$SRC/" "$TMP/site/"
+echo "→ 同步文件（css/ images/ articles/ 保留仓库原有）…"
+rsync -a --exclude .git --exclude articles --exclude js/articles-data.js "$SRC/" "$TMP/site/"
 
 cd "$TMP/site"
+if command -v node >/dev/null 2>&1; then
+  echo "→ 重新构建（合并仓库里的每日文章）…"
+  node build.js
+else
+  echo "⚠️ 本机未装 Node（brew install node），跳过重建——每日文章列表可能暂时缺失，服务器明早会自动修复。"
+fi
 git add -A
 if git diff --cached --quiet; then
   echo "✓ 没有变更，无需发布。"
