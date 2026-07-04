@@ -55,17 +55,28 @@ def main():
     from_addr = os.environ.get("EMAIL_FROM", DEFAULT_FROM)
     subject = meta.get("title", f"中国车企出海日报 {meta.get('date', '')}")
 
-    # 邮件外壳：浅灰背景 + 摘要头，正文沿用公众号内联样式版
+    # 邮件外壳：很多客户端（尤其 Outlook）会忽略 <section>/max-width 样式，
+    # 导致正文铺满全屏。这里用邮件安全的表格布局锁宽 640px，
+    # 并把 <section> 换成 <div>（部分客户端会剥掉 section 标签）。
     digest = meta.get("digest", "")
-    html = (
-        "<div style='background:#eceef1;margin:0;padding:16px;'>"
-        f"<p style='max-width:677px;margin:0 auto 12px;font-family:-apple-system,sans-serif;"
-        f"font-size:13px;color:#6b7280;'>{digest}</p>"
-        f"{body_html}"
-        "<p style='max-width:677px;margin:12px auto 0;font-family:-apple-system,sans-serif;"
-        "font-size:12px;color:#9ca3af;'>由每日简报流水线自动发送 · 公众号「波波哥的小酒馆」</p>"
-        "</div>"
-    )
+    date_str = meta.get("date", "")
+    body_div = (body_html.replace("<section", "<div")
+                          .replace("</section>", "</div>"))
+    html = f"""<table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="background-color:#eceef1;">
+<tr><td align="center" style="padding:24px 12px;">
+  <table role="presentation" width="640" cellpadding="0" cellspacing="0" border="0" style="width:640px;max-width:640px;">
+    <tr><td style="padding:0 4px 10px;font-family:-apple-system,'Segoe UI','PingFang SC',sans-serif;">
+      <span style="font-size:13px;color:#6b7280;">{date_str} · 每日 06:20 自动送达</span>
+    </td></tr>
+    <tr><td style="background-color:#ffffff;border-radius:10px;padding:20px 22px;">
+      <p style="margin:0 0 16px;padding:12px 14px;background-color:#f9fafb;border-left:3px solid #dc2626;font-family:-apple-system,'Segoe UI','PingFang SC',sans-serif;font-size:14px;line-height:1.7;color:#374151;">{digest}</p>
+      {body_div}
+    </td></tr>
+    <tr><td align="center" style="padding:14px 4px 0;font-family:-apple-system,'Segoe UI','PingFang SC',sans-serif;font-size:12px;color:#9ca3af;">
+      由每日简报流水线自动发送 · 公众号「波波哥的小酒馆」
+    </td></tr>
+  </table>
+</td></tr></table>"""
 
     payload = {"from": f"中国车企出海日报 <{from_addr}>",
                "to": [to_addr], "subject": subject, "html": html}
