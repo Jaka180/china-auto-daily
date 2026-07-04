@@ -1,7 +1,8 @@
 #!/usr/bin/env bash
-# 服务器端每日全自动：生成日报 → 生成封面 → 发布公众号草稿 → Resend 发邮件
-# 完全不依赖 Mac / Cowork。放进服务器 crontab，例如每天 06:20：
+# 服务器端每日全自动：生成 → 存档 → 封面 → 链接校验 → 公众号 → 邮件
+# cron（setup_server.sh 已写入）：
 #   20 6 * * * /path/to/china-auto-daily/server/run_daily.sh >> /path/to/china-auto-daily/server/publish.log 2>&1
+# 任何关键步骤失败会通过 Resend 发告警邮件（notify_failure.py）。
 set -uo pipefail
 
 REPO_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
@@ -9,32 +10,51 @@ cd "$REPO_DIR"
 
 echo "==== $(date '+%F %T') 开始 ===="
 
-# 凭证/配置：ANTHROPIC_API_KEY / ANTHROPIC_MODEL / WX_APPID / WX_APPSECRET / RESEND_API_KEY / EMAIL_TO / EMAIL_FROM
+# 凭证/配置：ANTHROPIC_API_KEY / WX_APPID / WX_APPSECRET / RESEND_API_KEY
+#           EMAIL_TO(可逗号分隔多人) / EMAIL_FROM / WX_AUTO_PUBLISH(1=自动群发)
 if [ -f "server/.env" ]; then
   set -a; . server/.env; set +a
 fi
 
-# 可选：拉取最新代码（不影响主流程，失败也继续）
+# 可选：拉取最新代码（失败也继续）
 git pull --ff-only 2>/dev/null || true
 
 DATE=$(date '+%F')
+TMPLOG=$(mktemp)
+trap 'rm -f "$TMPLOG"' EXIT
 
-echo "---- 1/4 生成日报正文 ----"
-if ! python3 server/generate.py; then
-  echo "✗ 生成失败，终止。" ; exit 1
+alert() {  # $1=步骤名；告警本身失败只打日志
+  python3 server/notify_failure.py --step "$1" --log "$TMPLOG" || echo "⚠️ 告警邮件发送失败"
+}
+step() {   # $1=步骤名，其余=命令；输出同屏并留底供告警引用
+  echo "---- $1 ----"
+  : > "$TMPLOG"
+  "${@:2}" 2>&1 | tee -a "$TMPLOG"
+}
+
+if ! step "1/6 生成日报正文" python3 server/generate.py; then
+  echo "✗ 生成失败，终止。"; alert "生成日报正文"; exit 1
 fi
 
-echo "---- 2/4 生成封面 ----"
-if ! python3 tools/make_cover.py --date "$DATE" --out content/cover.jpg; then
-  echo "✗ 封面生成失败，终止。" ; exit 1
+echo "---- 2/6 存档 ----"
+mkdir -p archive
+cp -f content/briefing.html "archive/$DATE.html" && cp -f content/meta.json "archive/$DATE.json" \
+  && echo "已存档 archive/$DATE.html" || echo "⚠️ 存档失败（不影响发布）"
+
+if ! step "3/6 生成封面" python3 tools/make_cover.py --date "$DATE" --out content/cover.jpg; then
+  echo "✗ 封面失败，终止。"; alert "生成封面"; exit 1
 fi
 
-echo "---- 3/4 发布草稿 ----"
-# 默认只建草稿；如需自动群发，把下一行改成： python3 server/wechat_publish.py --publish
-# 草稿失败不终止——邮件仍照发（各自独立）
-python3 server/wechat_publish.py || echo "⚠️ 公众号草稿失败（见上方错误），继续发邮件。"
+step "4/6 校验来源链接" python3 server/check_links.py || echo "⚠️ 链接校验异常（不影响发布）"
 
-echo "---- 4/4 Resend 发邮件 ----"
-python3 server/send_email.py || echo "⚠️ 邮件发送失败（见上方错误）。"
+PUB_FLAG=""
+[ "${WX_AUTO_PUBLISH:-0}" = "1" ] && PUB_FLAG="--publish"
+if ! step "5/6 公众号发布${PUB_FLAG:+(自动群发)}" python3 server/wechat_publish.py $PUB_FLAG; then
+  echo "⚠️ 公众号失败，继续发邮件。"; alert "公众号发布"
+fi
+
+if ! step "6/6 Resend 发邮件" python3 server/send_email.py; then
+  echo "⚠️ 邮件失败。"; alert "Resend 发邮件"
+fi
 
 echo "==== $(date '+%F %T') 完成 ===="

@@ -7,12 +7,17 @@
 服务器用 **Claude API(带联网搜索)** 自己生成日报,再渲染封面,再发草稿和邮件。一条 cron 串起四步：
 
 ```
-GCP e2-micro · cron 每天 06:20（北京时间，静态IP已加公众号白名单）
-   server/run_daily.sh：
-     1) server/generate.py       调 Claude API 联网搜索16家车企 → wechat-content.html + meta.json
-     2) tools/make_cover.py      渲染 2.35:1 封面 cover.jpg
-     3) server/wechat_publish.py 上传封面 + 创建公众号草稿（后台确认后手动群发）
-     4) server/send_email.py     Resend 发日报邮件 → junbo.wei@tomtom.com
+GCP e2-micro（静态IP已加公众号白名单，时区 Asia/Shanghai）
+├─ cron 每天 06:20  server/run_daily.sh：
+│    1) generate.py        调 Claude API 联网搜索16家车企(含全部子品牌)
+│    2) 存档                briefing.html → archive/日期.html
+│    3) make_cover.py      渲染 2.35:1 封面
+│    4) check_links.py     校验来源链接，剔除 404 死链
+│    5) wechat_publish.py  公众号草稿（.env 里 WX_AUTO_PUBLISH=1 则自动群发）
+│    6) send_email.py      Resend 发邮件（EMAIL_TO 支持多人）
+├─ cron 每周日 08:00  server/run_weekly.sh：
+│    weekly.py 汇总最近7天存档 → 周报 → 封面/草稿/邮件同上
+└─ 任何关键步骤失败 → notify_failure.py 发告警邮件
 ```
 
 **部署指南见 [`server/DEPLOY_GCP.md`](server/DEPLOY_GCP.md)。**

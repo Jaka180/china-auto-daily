@@ -51,7 +51,8 @@ def main():
     with open(content_path, encoding="utf-8") as f:
         body_html = f.read()
 
-    to_addr = os.environ.get("EMAIL_TO", DEFAULT_TO)
+    # EMAIL_TO 支持逗号分隔多个收件人（发非注册邮箱需先在 Resend 验证自有域名）
+    to_list = [x.strip() for x in os.environ.get("EMAIL_TO", DEFAULT_TO).split(",") if x.strip()]
     from_addr = os.environ.get("EMAIL_FROM", DEFAULT_FROM)
     subject = meta.get("title", f"中国车企出海日报 {meta.get('date', '')}")
 
@@ -79,10 +80,10 @@ def main():
 </td></tr></table>"""
 
     payload = {"from": f"中国车企出海日报 <{from_addr}>",
-               "to": [to_addr], "subject": subject, "html": html}
+               "to": to_list, "subject": subject, "html": html}
 
     if a.dry_run:
-        print(f"[dry-run] to={to_addr} from={from_addr}")
+        print(f"[dry-run] to={','.join(to_list)} from={from_addr}")
         print(f"[dry-run] subject={subject}")
         print(f"[dry-run] html 长度={len(html)} 字符，未发送。")
         return
@@ -100,7 +101,7 @@ def main():
     except ValueError:
         data = {"raw": r.text}
     if r.status_code // 100 == 2 and data.get("id"):
-        print(f"✅ 邮件已发送 → {to_addr}  (id={data['id']})")
+        print(f"✅ 邮件已发送 → {','.join(to_list)}  (id={data['id']})")
     else:
         sys.exit(f"✗ 发送失败 HTTP {r.status_code}: {data}\n"
                  "  常见原因：403→免费账号只能发给 Resend 注册邮箱本人（需验证域名后才能发任意收件人）；"

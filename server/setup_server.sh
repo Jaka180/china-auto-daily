@@ -37,9 +37,13 @@ ANTHROPIC_API_KEY=在这里填AnthropicKey
 
 # Resend 发邮件（resend.com → API Keys 创建）
 RESEND_API_KEY=在这里填ResendKey
+# 可逗号分隔多个收件人（发非注册邮箱需先在 Resend 验证自有域名）
 EMAIL_TO=junbo.wei@tomtom.com
 # 未验证自有域名时只能用 onboarding@resend.dev（且只能发给 Resend 注册邮箱本人）
 EMAIL_FROM=onboarding@resend.dev
+
+# 公众号：0=只建草稿(默认，人工确认后群发)；1=自动群发(不可撤回，慎开)
+WX_AUTO_PUBLISH=0
 EOF
   chmod 600 server/.env
   echo "==> 已生成 server/.env 模板，请填入 AppID / AppSecret / ANTHROPIC_API_KEY / RESEND_API_KEY"
@@ -51,12 +55,30 @@ fi
 sudo timedatectl set-timezone Asia/Shanghai 2>/dev/null || true
 echo "==> 时区：$(timedatectl show -p Timezone --value 2>/dev/null || date +%Z)"
 
-# ---------- 4. 安装每日 cron（06:20 北京时间）----------
-CRON_LINE="20 6 * * * $REPO_DIR/server/run_daily.sh >> $REPO_DIR/server/publish.log 2>&1"
+# ---------- 4. 安装 cron：每日 06:20 日报 + 每周日 08:00 周报 ----------
+CRON_DAILY="20 6 * * * $REPO_DIR/server/run_daily.sh >> $REPO_DIR/server/publish.log 2>&1"
+CRON_WEEKLY="0 8 * * 0 $REPO_DIR/server/run_weekly.sh >> $REPO_DIR/server/weekly.log 2>&1"
 EXISTING=$(crontab -l 2>/dev/null | grep -vF "/server/run" || true)
-printf '%s\n%s\n' "$EXISTING" "$CRON_LINE" | grep -v '^$' | crontab - || true
-echo "==> 已写入 cron：每天 06:20 运行 run_daily.sh（生成→封面→发布，全自动）"
-crontab -l | grep run_daily.sh || true
+printf '%s\n%s\n%s\n' "$EXISTING" "$CRON_DAILY" "$CRON_WEEKLY" | grep -v '^$' | crontab - || true
+echo "==> 已写入 cron：每天 06:20 日报 / 每周日 08:00 周报"
+crontab -l | grep '/server/run' || true
+
+# ---------- 4b. 日志轮转 + 自动安全更新 ----------
+sudo tee /etc/logrotate.d/china-auto-daily >/dev/null <<LOGEOF
+$REPO_DIR/server/*.log {
+  monthly
+  rotate 6
+  compress
+  missingok
+  notifempty
+  copytruncate
+}
+LOGEOF
+echo "==> 已配置 logrotate（server/*.log 按月轮转，保留6份）"
+sudo apt install -y unattended-upgrades >/dev/null 2>&1 || true
+printf 'APT::Periodic::Update-Package-Lists "1";\nAPT::Periodic::Unattended-Upgrade "1";\n' \
+  | sudo tee /etc/apt/apt.conf.d/20auto-upgrades >/dev/null
+echo "==> 已开启 Ubuntu 自动安全更新"
 
 # ---------- 5. 展示本机公网 IP（用于公众号白名单）----------
 echo

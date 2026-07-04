@@ -3,6 +3,9 @@ server/config.json
 server/.env
 *.log
 
+# 服务器端每日存档（只留在服务器，不进仓库）
+archive/
+
 # Python
 __pycache__/
 *.pyc

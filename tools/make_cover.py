@@ -43,10 +43,10 @@ if not CJK or not LAT_B:
 
 TITLE_CN = "中国车企出海日报"
 KICKER = "CHINA AUTO · OVERSEAS BRIEFING"
-SUBTITLE = "14 家车企 · 每日海外动态 · 中英双语"
+SUBTITLE = "16 家车企 · 每日海外动态 · 中英双语"
 BRAND = "波波哥的小酒馆"
 
-def render(date_str, out_path):
+def render(date_str, out_path, pill_text=None, subtitle=None, title_cn=None):
     W, H = 1410, 600
     img = Image.new("RGB", (W, H), "#111827")
     d = ImageDraw.Draw(img, "RGBA")
@@ -104,9 +104,9 @@ def render(date_str, out_path):
     f_kick = ImageFont.truetype(LAT_B, 26); xx = 120
     for ch in KICKER:
         d.text((xx,196), ch, font=f_kick, fill=(156,163,175)); xx += d.textlength(ch, font=f_kick)+3
-    d.text((118,232), TITLE_CN, font=ImageFont.truetype(CJK, 92), fill="#ffffff")
-    draw_mixed(d, (120,360), SUBTITLE, 36, (209,213,219), spacing=1)
-    pill = f"{date_str} · 早间版"
+    d.text((118,232), title_cn or TITLE_CN, font=ImageFont.truetype(CJK, 92), fill="#ffffff")
+    draw_mixed(d, (120,360), subtitle or SUBTITLE, 36, (209,213,219), spacing=1)
+    pill = pill_text or f"{date_str} · 早间版"
     pw = width_mixed(pill, 30, 1) + 56
     d.rounded_rectangle([120,418,120+pw,472], radius=27, fill="#dc2626")
     draw_mixed(d, (148,427), pill, 30, "#ffffff", spacing=1)
@@ -121,10 +121,13 @@ if __name__ == "__main__":
     ap = argparse.ArgumentParser()
     ap.add_argument("--date", required=True, help="如 2026-06-07，将渲染为 '2026年6月7日'")
     ap.add_argument("--out", default="content/cover.jpg")
+    ap.add_argument("--pill", default=None, help="覆盖角标文字，默认 '{日期} · 早间版'（周报用）")
+    ap.add_argument("--subtitle", default=None, help="覆盖副标题文字")
+    ap.add_argument("--title", default=None, help="覆盖中文主标题")
     a = ap.parse_args()
     # 2026-06-07 -> 2026年6月7日
     try:
         y,m,dd = a.date.split("-"); disp = f"{int(y)}年{int(m)}月{int(dd)}日"
     except Exception:
         disp = a.date
-    render(disp, a.out)
+    render(disp, a.out, pill_text=a.pill, subtitle=a.subtitle, title_cn=a.title)
