@@ -1,5 +1,5 @@
 import type { StoredEvent } from "@/lib/events/types";
-import { formatScore } from "@/lib/events/scoring";
+import { EventReaderScore } from "@/components/EventReaderScore";
 import { eventTypeLabel, localeDate, t, withLocale, type Locale } from "@/lib/i18n";
 
 function formatDate(date: string | null, locale: Locale) {
@@ -42,32 +42,9 @@ export function EventCard({ event, rank, locale = "en" }: { event: StoredEvent; 
         {event.market ? <a className="text-accent hover:underline" href={withLocale(`/market/${encodeURIComponent(event.market)}`, locale)}>{event.market}</a> : null}
         {event.model ? <span className="text-muted">{event.model}</span> : null}
       </div>
-      <dl className="mt-4 grid gap-3 text-sm sm:grid-cols-2 lg:grid-cols-6">
-        <div>
-          <dt className="text-xs uppercase tracking-wide text-muted">{copy.impact}</dt>
-          <dd className="font-semibold text-ink">{formatScore(event.impact_score)}</dd>
-        </div>
-        <div>
-          <dt className="text-xs uppercase tracking-wide text-muted">{copy.confidence}</dt>
-          <dd className="font-semibold text-ink">{event.confidence_score.toFixed(2)}</dd>
-        </div>
-        <div>
-          <dt className="text-xs uppercase tracking-wide text-muted">{copy.finalScore}</dt>
-          <dd className="font-semibold text-ink">{formatScore(event.final_score)}</dd>
-        </div>
-        <div>
-          <dt className="text-xs uppercase tracking-wide text-muted">{copy.source}</dt>
-          <dd className="truncate font-semibold text-ink">{event.source_name || new URL(event.source_url).hostname}</dd>
-        </div>
-        <div>
-          <dt className="text-xs uppercase tracking-wide text-muted">{copy.priority}</dt>
-          <dd className="font-semibold text-ink">{formatScore(event.source_priority)}</dd>
-        </div>
-        <div>
-          <dt className="text-xs uppercase tracking-wide text-muted">{copy.date}</dt>
-          <dd className="font-semibold text-ink">{formatDate(event.event_date, locale)}</dd>
-        </div>
-      </dl>
+      <div className="mt-4">
+        <EventReaderScore event={event} locale={locale} />
+      </div>
     </article>
   );
 }
