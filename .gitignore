@@ -12,5 +12,11 @@ __pycache__/
 .venv/
 venv/
 
+# Node / Next.js
+node_modules/
+.next/
+*.tsbuildinfo
+.env.local
+
 # 网站工作副本（单独 push 到 Jaka180/tochinacar，见 mac/publish_site.sh）
 topchinacar-site/

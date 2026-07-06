@@ -57,17 +57,62 @@ with open(html_path, encoding="utf-8") as f:
 date = meta.get("date") or datetime.date.today().isoformat()
 slug = f"{date}-china-auto-daily"
 
+
+def run(cmd, **kw):
+    r = subprocess.run(cmd, cwd=SITE_REPO, capture_output=True, text=True, **kw)
+    if r.returncode != 0:
+        sys.exit(f"✗ {' '.join(cmd)} 失败：\n{r.stdout}\n{r.stderr}")
+    return r.stdout
+
+
+# 先同步仓库，确保能读到最新的历史文章（用于去重）
+run(["git", "pull", "--ff-only"])
+
+# ---- 读取最近一篇已发布文章，供模型去重 ----
+# 连续两天的日报常大面积重复同一批新闻；把昨天已发布的内容喂给模型，
+# 要求今天只报增量，避免产出近乎重复的文章（也降低搜索引擎重复内容风险）。
+prev_block = ""
+articles_dir = os.path.join(SITE_REPO, "articles")
+if os.path.isdir(articles_dir):
+    prev_files = sorted(f for f in os.listdir(articles_dir)
+                        if f.endswith(".json") and not f.startswith(slug))
+    if prev_files:
+        try:
+            with open(os.path.join(articles_dir, prev_files[-1]), encoding="utf-8") as f:
+                prev = json.load(f)
+            prev_headings = re.findall(r"<h2>(.*?)</h2>", prev.get("html_en", ""))[:8]
+            prev_block = f"""
+
+IMPORTANT — avoid repeating yesterday's coverage. The previous published article ({prev.get('date')}, /news/{prev.get('slug')}) was:
+Title: {prev.get('title_en')}
+Summary: {prev.get('excerpt_en')}
+Sections: {'; '.join(prev_headings)}
+
+Rules for today's article:
+- LEAD with what is genuinely NEW versus that article. Do not re-report items already covered yesterday unless there is a concrete new development (new number, new date, new market).
+- Where yesterday's context is needed, compress it to at most one sentence and link to the previous article as <a href="/news/{prev.get('slug')}">yesterday's briefing</a>.
+- If today's briefing contains almost nothing new, write a short article focused on the few new items — do NOT pad it by re-telling yesterday's stories."""
+        except Exception as e:
+            sys.stderr.write(f"⚠️ 读取前一篇文章失败（继续，不做去重）：{e}\n")
+
 PROMPT = f"""You are the editor of TopChinaCar, an independent English-language publication covering Chinese automakers for overseas readers (executives, dealers, analysts, enthusiasts).
 
 Below is today's ({date}) internal bilingual briefing on Chinese automakers' overseas moves. Turn it into ONE published article.
 
 Requirements:
-1. html_en: an English editorial article, NOT a bullet-dump. Structure: a 2-3 sentence lede on the day's biggest signal, then 3-6 short sections with <h2> headings grouping related news (e.g. by theme or company), each with specific numbers and inline source links preserved as <a href="...">[Source]</a>. End with a one-paragraph "What it means" analysis. Use only clean semantic HTML: <p>, <h2>, <ul>, <li>, <a>, <em>, <strong>. No inline styles, no <section>, no images.
+1. html_en: an English editorial article, NOT a bullet-dump. TopChinaCar's positioning is "China auto news for global markets" — news + intelligence, not news translation. Use EXACTLY this fixed structure:
+   - Lede: 1-2 sentences stating the core of the day's news (no heading).
+   - <h2>What happened</h2> — the facts, with specific numbers and inline source links preserved as <a href="...">[Source]</a>. If several distinct stories, use short company/theme sub-groupings inside this section as <strong> lead-ins or additional <h2>s.
+   - <h2>Why it matters</h2> — significance for readers watching China auto globalization.
+   - <h2>Market context</h2> — the competitive/regional backdrop (tariffs, rivals, market size).
+   - <h2>Impact on Chinese automakers</h2> — who gains, who is pressured, strategic consequences.
+   - <h2>What to watch next</h2> — concrete upcoming dates, thresholds or decisions.
+   Use only clean semantic HTML: <p>, <h2>, <ul>, <li>, <a>, <em>, <strong>. No inline styles, no <section>, no images.
 2. html_zh: the same article in Chinese (same structure, faithful but natural).
 3. title_en: headline, max 90 chars, specific (numbers/names), no clickbait. title_zh: Chinese headline.
 4. excerpt_en / excerpt_zh: one-sentence summary with the key numbers, max 200 chars.
 5. events: REQUIRED, non-negotiable. One structured record for EVERY distinct news item you covered in the article — an article with 6 sections should yield roughly 8-20 events. An empty array is only acceptable if the briefing itself contains zero news. Each record: {{"company": "<parent company EN>", "brand": "<brand EN or null>", "market": "<country/region EN or 'Global'>", "action": "<one of: sales_figures | plant | dealer_network | market_entry | product_launch | pricing | partnership | policy | other>", "summary_en": "<one sentence with numbers>", "source_url": "<url or null>"}}.
-6. Only use facts from the briefing. Do not invent numbers or links. If the briefing is thin, a shorter article is fine — but events must still list whatever items exist.
+6. Only use facts from the briefing. Do not invent numbers or links. If the briefing is thin, a shorter article is fine — but events must still list whatever items exist.{prev_block}
 
 Output EXACTLY this structure — five sections with these literal markers, no code fences, no commentary. The META and EVENTS sections are JSON; the HTML sections are raw HTML (NOT JSON-escaped):
 ===META===
@@ -136,14 +181,6 @@ with open(out_path, "w", encoding="utf-8") as f:
 print(f"[site] 已写入 {out_path}（{len(article.get('events', []))} 条结构化事件）")
 
 
-def run(cmd, **kw):
-    r = subprocess.run(cmd, cwd=SITE_REPO, capture_output=True, text=True, **kw)
-    if r.returncode != 0:
-        sys.exit(f"✗ {' '.join(cmd)} 失败：\n{r.stdout}\n{r.stderr}")
-    return r.stdout
-
-
-run(["git", "pull", "--ff-only"])
 print("[site] node build.js …")
 run(["node", "build.js"])
 run(["git", "add", "-A"])

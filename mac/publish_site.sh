@@ -16,8 +16,12 @@ trap 'rm -rf "$TMP"' EXIT
 echo "→ 克隆网站仓库…"
 git clone -q "$REPO" "$TMP/site"
 
-echo "→ 同步文件（css/ images/ articles/ 保留仓库原有）…"
-rsync -a --exclude .git --exclude articles --exclude js/articles-data.js "$SRC/" "$TMP/site/"
+echo "→ 同步文件（css/ articles/ 保留仓库原有）…"
+# 2026-07-05 改版：品牌页迁移到 /chinese-car-brands，清理仓库里的旧路径产物
+rm -rf "$TMP/site/brands" "$TMP/site/zh/brands" "$TMP/site/brands.html" "$TMP/site/zh/brands.html"
+# articles/ 采用"合并"策略：保留仓库里 GCP 每日产出的文章，同时把本地新增的
+# 长文（如 content-plan 的 20 篇奠基文章）一并同步上去。
+rsync -a --exclude .git --exclude js/articles-data.js "$SRC/" "$TMP/site/"
 
 cd "$TMP/site"
 if command -v node >/dev/null 2>&1; then

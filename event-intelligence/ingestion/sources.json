@@ -1,0 +1,60 @@
+{
+  "official_oem": [
+    { "name": "BYD News", "type": "rss", "url": "https://www.byd.com/en/rss", "region": "global", "priority": 10 },
+    { "name": "Geely News", "type": "rss", "url": "https://global.geely.com/rss", "region": "global", "priority": 10 },
+    { "name": "SAIC Motor News", "type": "rss", "url": "https://www.saicmotor.com/english/rss", "region": "global", "priority": 10 },
+    { "name": "Changan Global", "type": "scraper", "url": "https://www.changan.com.cn/", "region": "global", "priority": 10 },
+    { "name": "Great Wall Motor Global", "type": "scraper", "url": "https://www.gwm-global.com/", "region": "global", "priority": 10 },
+    { "name": "Chery International", "type": "scraper", "url": "https://www.cheryinternational.com/", "region": "global", "priority": 10 },
+    { "name": "FAW Group", "type": "scraper", "url": "https://www.faw.com/", "region": "global", "priority": 10 },
+    { "name": "Dongfeng Motor", "type": "scraper", "url": "https://www.dfmc.com.cn/", "region": "global", "priority": 10 },
+    { "name": "GAC Motor", "type": "scraper", "url": "https://www.gac-motor.com/", "region": "global", "priority": 10 },
+    { "name": "BAIC Group", "type": "scraper", "url": "https://www.baicgroup.com.cn/", "region": "global", "priority": 10 },
+    { "name": "JAC Motors", "type": "scraper", "url": "https://www.jac.com.cn/", "region": "global", "priority": 10 },
+    { "name": "XPeng News", "type": "scraper", "url": "https://www.xpeng.com/news", "region": "global", "priority": 10 },
+    { "name": "NIO News", "type": "scraper", "url": "https://www.nio.com/news", "region": "global", "priority": 10 },
+    { "name": "Li Auto News", "type": "scraper", "url": "https://www.lixiang.com/", "region": "global", "priority": 10 },
+    { "name": "Leapmotor Global", "type": "scraper", "url": "https://www.leapmotor.com/", "region": "global", "priority": 10 },
+    { "name": "Zeekr Global", "type": "scraper", "url": "https://www.zeekrglobal.com/", "region": "global", "priority": 10 },
+    { "name": "Avatr", "type": "scraper", "url": "https://www.avatr.com/", "region": "global", "priority": 10 },
+    { "name": "Deepal", "type": "scraper", "url": "https://www.deepal.com/", "region": "global", "priority": 10 },
+    { "name": "AITO", "type": "scraper", "url": "https://aito.auto/", "region": "global", "priority": 10 },
+    { "name": "IM Motors", "type": "scraper", "url": "https://www.immotors.com/", "region": "global", "priority": 10 }
+  ],
+  "policy_signals": [
+    { "name": "EU Commission", "type": "scraper", "url": "https://ec.europa.eu/commission/presscorner/home/en", "region": "Europe", "priority": 9 },
+    { "name": "US DOE", "type": "scraper", "url": "https://www.energy.gov/newsroom", "region": "United States", "priority": 9 },
+    { "name": "China MIIT", "type": "scraper", "url": "https://www.miit.gov.cn/", "region": "China", "priority": 9 },
+    { "name": "China Customs", "type": "scraper", "url": "http://www.customs.gov.cn/", "region": "China", "priority": 9 },
+    { "name": "WTO trade data", "type": "api", "endpoint": "https://api.wto.org/", "query": "automotive trade tariff electric vehicles", "priority": 9 },
+    { "name": "National EV subsidies", "type": "scraper", "url": "https://www.iea.org/policies", "region": "global", "priority": 9 },
+    { "name": "Tariff announcements", "type": "scraper", "url": "https://policy.trade.ec.europa.eu/", "region": "global", "priority": 9 }
+  ],
+  "industry_media_global": [
+    { "name": "Reuters Autos", "type": "rss", "url": "https://www.reuters.com/rssFeed/automobilesNews", "priority": 8 },
+    { "name": "Bloomberg Mobility", "type": "scraper", "url": "https://www.bloomberg.com/industries/technology", "priority": 8 },
+    { "name": "Automotive News", "type": "rss", "url": "https://www.autonews.com/rss.xml", "priority": 8 },
+    { "name": "InsideEVs", "type": "rss", "url": "https://insideevs.com/rss/news.xml", "priority": 8 },
+    { "name": "Electrek EV", "type": "rss", "url": "https://electrek.co/feed/", "priority": 8 },
+    { "name": "CNBC Auto", "type": "scraper", "url": "https://www.cnbc.com/autos/", "priority": 8 },
+    { "name": "Financial Times Mobility", "type": "scraper", "url": "https://www.ft.com/transport", "priority": 8 }
+  ],
+  "china_media": [
+    { "name": "CarNewsChina", "type": "rss", "url": "https://carnewschina.com/feed/", "priority": 7 },
+    { "name": "CnEVPost", "type": "rss", "url": "https://cnevpost.com/feed/", "priority": 7 },
+    { "name": "36Kr Auto", "type": "rss", "url": "https://www.36kr.com/feed", "priority": 7 },
+    { "name": "Yicai Auto", "type": "rss", "url": "https://www.yicai.com/rss/auto.xml", "priority": 7 },
+    { "name": "TechNode Mobility", "type": "rss", "url": "https://technode.com/feed/", "priority": 7 }
+  ],
+  "macro_data": [
+    { "name": "IEA EV Outlook", "type": "scraper", "url": "https://www.iea.org/reports/global-ev-outlook-2026", "priority": 6 },
+    { "name": "OICA", "type": "scraper", "url": "https://www.oica.net/category/production-statistics/", "priority": 6 },
+    { "name": "EV Volumes", "type": "scraper", "url": "https://www.ev-volumes.com/", "priority": 6 },
+    { "name": "World Bank transport data", "type": "api", "endpoint": "https://api.worldbank.org/v2/", "query": "transport vehicles trade", "priority": 6 },
+    { "name": "EU transport statistics", "type": "scraper", "url": "https://ec.europa.eu/eurostat/web/transport", "priority": 6 }
+  ],
+  "api_sources": [
+    { "name": "NewsAPI", "type": "api", "endpoint": "https://newsapi.org/v2/everything", "query": "electric vehicles China OR BYD OR Geely OR Chery", "priority": 6 },
+    { "name": "GDELT", "type": "api", "endpoint": "https://api.gdeltproject.org/api/v2/doc/doc", "query": "Chinese electric vehicle OR BYD OR XPeng OR Chery", "priority": 6 }
+  ]
+}
