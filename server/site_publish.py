@@ -188,7 +188,7 @@ if events_raw:
 
 article = {
     "slug": slug, "date": date,
-    "tag_en": "Daily Briefing", "tag_zh": "每日简报",
+    "tag_en": "China Auto Overseas Daily", "tag_zh": "中国车企出海日报",
     "title_en": meta_obj.get("title_en", ""), "title_zh": meta_obj.get("title_zh", ""),
     "excerpt_en": meta_obj.get("excerpt_en", ""), "excerpt_zh": meta_obj.get("excerpt_zh", ""),
     "html_en": html_en, "html_zh": html_zh or html_en,
