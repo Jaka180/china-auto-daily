@@ -9,10 +9,10 @@ cd "$REPO_DIR"
 echo "仓库目录：$REPO_DIR"
 
 # ---------- 1. 系统依赖 ----------
-echo "==> 安装 git / python3 / requests"
+echo "==> 安装 git / python3 / requests / nodejs"
 if command -v apt >/dev/null 2>&1; then
   sudo apt update -y
-  sudo apt install -y git python3 python3-pip cron
+  sudo apt install -y git python3 python3-pip cron nodejs npm
   # Ubuntu 24.04 起 pip 受 PEP668 限制，优先用系统包安装 requests
   sudo apt install -y python3-requests || pip3 install requests --break-system-packages
   # 封面渲染：Pillow + 中文字体
@@ -38,12 +38,18 @@ ANTHROPIC_API_KEY=在这里填AnthropicKey
 # Resend 发邮件（resend.com → API Keys 创建）
 RESEND_API_KEY=在这里填ResendKey
 # 可逗号分隔多个收件人（发非注册邮箱需先在 Resend 验证自有域名）
-EMAIL_TO=junbo.wei@tomtom.com
+EMAIL_TO=jackwee020@gmail.com
 # 未验证自有域名时只能用 onboarding@resend.dev（且只能发给 Resend 注册邮箱本人）
 EMAIL_FROM=onboarding@resend.dev
 
 # 公众号：0=只建草稿(默认，人工确认后群发)；1=自动群发(不可撤回，慎开)
 WX_AUTO_PUBLISH=0
+
+# TopChinaCar 网站自动发布：日报会写入网站仓库 articles/，生成 /news 与 /zh/news 双语页面
+SITE_REPO_DIR=$HOME/tochinacar
+SITE_REPO_URL=git@github.com:Jaka180/tochinacar.git
+SITE_GIT_USER_NAME=briefing-bot
+SITE_GIT_USER_EMAIL=bot@topchinacar.com
 EOF
   chmod 600 server/.env
   echo "==> 已生成 server/.env 模板，请填入 AppID / AppSecret / ANTHROPIC_API_KEY / RESEND_API_KEY"

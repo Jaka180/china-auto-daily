@@ -9,7 +9,7 @@
 
 凭证/配置（从环境变量读，run_daily.sh 会 source server/.env）：
   RESEND_API_KEY   必填。resend.com → API Keys 创建
-  EMAIL_TO         可选，默认 junbo.wei@tomtom.com
+  EMAIL_TO         可选，默认 jackwee020@gmail.com
   EMAIL_FROM       可选，默认 onboarding@resend.dev
                    （免费账号未验证域名时只能用该地址，且只能发给
                      Resend 注册邮箱本人；验证自有域名后可改成
@@ -30,7 +30,7 @@ ROOT = os.path.dirname(HERE)
 CONTENT = os.path.join(ROOT, "content")
 
 API_URL = "https://api.resend.com/emails"
-DEFAULT_TO = "junbo.wei@tomtom.com"
+DEFAULT_TO = "jackwee020@gmail.com"
 DEFAULT_FROM = "onboarding@resend.dev"
 
 

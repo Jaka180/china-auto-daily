@@ -57,7 +57,8 @@ if ! step "6/7 Resend 发邮件" python3 server/send_email.py; then
   echo "⚠️ 邮件失败。"; alert "Resend 发邮件"
 fi
 
-# 网站文章（SITE_REPO_DIR 未配置时自动跳过；失败不影响其他步骤）
+# 网站文章：生成中英文 /news + /zh/news 页面，并 push 到 TopChinaCar 网站仓库。
+# 首次运行时 site_publish.py 会按 SITE_REPO_URL 自动 clone SITE_REPO_DIR。
 if ! step "7/7 topchinacar.com 发布文章" python3 server/site_publish.py; then
   echo "⚠️ 网站发布失败。"; alert "网站发布文章"
 fi

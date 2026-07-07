@@ -24,7 +24,7 @@ def main():
     key = os.environ.get("RESEND_API_KEY")
     if not key:
         sys.exit("未设置 RESEND_API_KEY，无法发送告警")
-    to = [x.strip() for x in os.environ.get("EMAIL_TO", "junbo.wei@tomtom.com").split(",") if x.strip()]
+    to = [x.strip() for x in os.environ.get("EMAIL_TO", "jackwee020@gmail.com").split(",") if x.strip()]
     frm = os.environ.get("EMAIL_FROM", "onboarding@resend.dev")
 
     tail = ""

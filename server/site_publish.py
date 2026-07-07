@@ -1,12 +1,12 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 """
-把当日日报转成一篇英文编辑文章，发布到 topchinacar.com（Cloudflare Pages）。
+把当日日报转成一篇中英文网站文章，发布到 topchinacar.com（Cloudflare Pages）。
 
 流程：
   1. 读 content/meta.json + content/wechat-content.html（当日日报）
   2. 调 Claude API 生成文章 JSON：
-     - 双语标题/摘要/正文（英文为主，编辑口吻，非日报罗列）
+     - 双语标题/摘要/正文（英文页纯英文，中文页纯中文）
      - events[] 结构化数据（公司/品牌/市场/动作/来源）——为将来的数据产品积累
   3. 写入网站仓库 articles/<日期>-daily.json
   4. node build.js 重新生成静态页 → git commit + push → Cloudflare 自动部署
@@ -14,14 +14,14 @@
 凭证/配置（环境变量，run_daily.sh 会 source server/.env）：
   ANTHROPIC_API_KEY   必填（与 generate.py 共用）
   ANTHROPIC_MODEL     可选，默认 claude-sonnet-4-6
-  SITE_REPO_DIR       网站仓库本地路径，默认 ~/tochinacar；目录不存在则跳过不报错
+  SITE_REPO_DIR       网站仓库本地路径，默认 ~/tochinacar；目录不存在会自动 clone
+  SITE_REPO_URL       网站仓库地址，默认 git@github.com:Jaka180/tochinacar.git
 
 首次配置（在 GCP VM 上，只做一次）：
   1) GitHub 网站仓库 Settings → Deploy keys → 添加 VM 的公钥（勾选 Allow write access）
      公钥生成：ssh-keygen -t ed25519 -f ~/.ssh/id_ed25519 -N ""
-  2) git clone git@github.com:Jaka180/tochinacar.git ~/tochinacar
-  3) sudo apt install -y nodejs
-  4) cd ~/tochinacar && git config user.name "briefing-bot" && git config user.email "bot@topchinacar.com"
+  2) sudo apt install -y nodejs
+  3) 第一次运行会自动 clone 到 ~/tochinacar
 """
 import json, os, re, subprocess, sys, datetime
 
@@ -35,12 +35,10 @@ ROOT = os.path.dirname(HERE)
 CONTENT = os.path.join(ROOT, "content")
 
 SITE_REPO = os.path.expanduser(os.environ.get("SITE_REPO_DIR", "~/tochinacar"))
+SITE_REPO_URL = os.environ.get("SITE_REPO_URL", "git@github.com:Jaka180/tochinacar.git")
 MODEL = os.environ.get("ANTHROPIC_MODEL", "claude-sonnet-4-6")
 API_KEY = os.environ.get("ANTHROPIC_API_KEY")
 
-if not os.path.isdir(SITE_REPO):
-    print(f"[site] SITE_REPO_DIR 不存在（{SITE_REPO}），跳过网站发布。")
-    sys.exit(0)
 if not API_KEY:
     sys.exit("未设置 ANTHROPIC_API_KEY")
 
@@ -58,15 +56,41 @@ date = meta.get("date") or datetime.date.today().isoformat()
 slug = f"{date}-china-auto-daily"
 
 
-def run(cmd, **kw):
-    r = subprocess.run(cmd, cwd=SITE_REPO, capture_output=True, text=True, **kw)
+def run(cmd, cwd=SITE_REPO, **kw):
+    r = subprocess.run(cmd, cwd=cwd, capture_output=True, text=True, **kw)
     if r.returncode != 0:
         sys.exit(f"✗ {' '.join(cmd)} 失败：\n{r.stdout}\n{r.stderr}")
     return r.stdout
 
 
+def ensure_site_repo():
+    if os.path.isdir(SITE_REPO):
+        return
+    parent = os.path.dirname(SITE_REPO) or os.getcwd()
+    os.makedirs(parent, exist_ok=True)
+    print(f"[site] SITE_REPO_DIR 不存在，自动 clone：{SITE_REPO_URL} → {SITE_REPO}")
+    run(["git", "clone", SITE_REPO_URL, SITE_REPO], cwd=parent)
+
+
+def cjk_count(s):
+    return len(re.findall(r"[\u3400-\u9fff]", s or ""))
+
+
+def require_bilingual(html_en, html_zh):
+    if cjk_count(html_en) > 0:
+        sys.exit("✗ html_en 含中文字符，拒绝发布。请重跑 site_publish.py。")
+    if cjk_count(html_zh) < 20:
+        sys.exit("✗ html_zh 不像中文正文，拒绝发布。")
+
+
+ensure_site_repo()
+if not os.path.isfile(os.path.join(SITE_REPO, "build.js")):
+    sys.exit(f"✗ SITE_REPO_DIR 不是网站仓库或缺少 build.js：{SITE_REPO}")
+
 # 先同步仓库，确保能读到最新的历史文章（用于去重）
 run(["git", "pull", "--ff-only"])
+run(["git", "config", "user.name", os.environ.get("SITE_GIT_USER_NAME", "briefing-bot")])
+run(["git", "config", "user.email", os.environ.get("SITE_GIT_USER_EMAIL", "bot@topchinacar.com")])
 
 # ---- 读取最近一篇已发布文章，供模型去重 ----
 # 连续两天的日报常大面积重复同一批新闻；把昨天已发布的内容喂给模型，
@@ -97,10 +121,10 @@ Rules for today's article:
 
 PROMPT = f"""You are the editor of TopChinaCar, an independent English-language publication covering Chinese automakers for overseas readers (executives, dealers, analysts, enthusiasts).
 
-Below is today's ({date}) internal bilingual briefing on Chinese automakers' overseas moves. Turn it into ONE published article.
+Below is today's ({date}) internal bilingual "China Auto Overseas Daily" briefing on Chinese automakers' overseas moves. Turn it into ONE published bilingual website article that appears on /news and /zh/news every day.
 
 Requirements:
-1. html_en: an English editorial article, NOT a bullet-dump. TopChinaCar's positioning is "China auto news for global markets" — news + intelligence, not news translation. Use EXACTLY this fixed structure:
+1. html_en: English only. Do not include Chinese characters anywhere in html_en, including source labels. Use English company names and English source labels. It should be a Daily Briefing article, NOT a raw WeChat dump. TopChinaCar's positioning is "China auto news for global markets" — news + intelligence. Use EXACTLY this fixed structure:
    - Lede: 1-2 sentences stating the core of the day's news (no heading).
    - <h2>What happened</h2> — the facts, with specific numbers and inline source links preserved as <a href="...">[Source]</a>. If several distinct stories, use short company/theme sub-groupings inside this section as <strong> lead-ins or additional <h2>s.
    - <h2>Why it matters</h2> — significance for readers watching China auto globalization.
@@ -108,8 +132,8 @@ Requirements:
    - <h2>Impact on Chinese automakers</h2> — who gains, who is pressured, strategic consequences.
    - <h2>What to watch next</h2> — concrete upcoming dates, thresholds or decisions.
    Use only clean semantic HTML: <p>, <h2>, <ul>, <li>, <a>, <em>, <strong>. No inline styles, no <section>, no images.
-2. html_zh: the same article in Chinese (same structure, faithful but natural).
-3. title_en: headline, max 90 chars, specific (numbers/names), no clickbait. title_zh: Chinese headline.
+2. html_zh: Chinese only, same structure, faithful but natural. Chinese brand names are allowed here.
+3. title_en: must start with "China Auto Overseas Daily | {date}: " and then a specific headline, max 110 chars, no clickbait. title_zh: must start with "中国车企出海日报 | " and then a specific Chinese headline.
 4. excerpt_en / excerpt_zh: one-sentence summary with the key numbers, max 200 chars.
 5. events: REQUIRED, non-negotiable. One structured record for EVERY distinct news item you covered in the article — an article with 6 sections should yield roughly 8-20 events. An empty array is only acceptable if the briefing itself contains zero news. Each record: {{"company": "<parent company EN>", "brand": "<brand EN or null>", "market": "<country/region EN or 'Global'>", "action": "<one of: sales_figures | plant | dealer_network | market_entry | product_launch | pricing | partnership | policy | other>", "summary_en": "<one sentence with numbers>", "source_url": "<url or null>"}}.
 6. Only use facts from the briefing. Do not invent numbers or links. If the briefing is thin, a shorter article is fine — but events must still list whatever items exist.{prev_block}
@@ -170,8 +194,15 @@ article = {
     "html_en": html_en, "html_zh": html_zh or html_en,
     "events": events if isinstance(events, list) else []
 }
+if article["title_en"] and not article["title_en"].startswith("China Auto Overseas Daily |"):
+    article["title_en"] = f"China Auto Overseas Daily | {date}: {article['title_en']}"
+if article["title_zh"] and not article["title_zh"].startswith("中国车企出海日报 |"):
+    article["title_zh"] = f"中国车企出海日报 | {article['title_zh']}"
 if not article["title_en"]:
     sys.exit("✗ 缺少 title_en")
+if not article["title_zh"]:
+    sys.exit("✗ 缺少 title_zh")
+require_bilingual(article["html_en"], article["html_zh"])
 
 out_dir = os.path.join(SITE_REPO, "articles")
 os.makedirs(out_dir, exist_ok=True)
