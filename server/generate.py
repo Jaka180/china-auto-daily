@@ -16,6 +16,11 @@
 import json, os, re, sys, datetime
 
 try:
+    from zoneinfo import ZoneInfo
+except ImportError:
+    ZoneInfo = None
+
+try:
     import anthropic
 except ImportError:
     sys.exit("缺少依赖：pip install anthropic")
@@ -23,6 +28,7 @@ except ImportError:
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 CONTENT = os.path.join(ROOT, "content")
 os.makedirs(CONTENT, exist_ok=True)
+HISTORY_FILE = os.path.join(CONTENT, "daily-history.json")
 
 MODEL = os.environ.get("ANTHROPIC_MODEL", "claude-sonnet-4-6")
 API_KEY = os.environ.get("ANTHROPIC_API_KEY")
@@ -30,11 +36,125 @@ if not API_KEY:
     sys.exit("未设置 ANTHROPIC_API_KEY（请写进 server/.env）")
 
 # 北京时间日期
-today = datetime.datetime.now().strftime("%Y-%m-%d")
+now = datetime.datetime.now(ZoneInfo("Asia/Shanghai")) if ZoneInfo else datetime.datetime.now()
+today = now.strftime("%Y-%m-%d")
+today_date = now.date()
 y, m, d = today.split("-")
 date_cn = f"{int(y)}年{int(m)}月{int(d)}日"
+fresh_cutoff = (today_date - datetime.timedelta(days=2)).isoformat()
 
-PROMPT = f"""你是中国车企出海行业分析师。今天是 {date_cn}。请用联网搜索（web_search）查询过去24-48小时内、以下16家中国车企/品牌的最新出海动态，然后产出一份中英双语「中国车企出海日报」的公众号图文正文。
+
+def strip_tags(s):
+    s = re.sub(r"<script\b[^>]*>.*?</script>", " ", s or "", flags=re.I | re.S)
+    s = re.sub(r"<style\b[^>]*>.*?</style>", " ", s, flags=re.I | re.S)
+    s = re.sub(r"<[^>]+>", " ", s)
+    return re.sub(r"\s+", " ", s).strip()
+
+
+def shorten(s, limit=600):
+    s = strip_tags(s)
+    return s[:limit].rstrip() + ("..." if len(s) > limit else "")
+
+
+def article_links(html, limit=12):
+    seen = []
+    for href, label in re.findall(r"<a\b[^>]*href=[\"']([^\"']+)[\"'][^>]*>(.*?)</a>", html or "", flags=re.I | re.S):
+        label = shorten(label, 80) or href
+        if href not in [x[0] for x in seen]:
+            seen.append((href, label))
+        if len(seen) >= limit:
+            break
+    return seen
+
+
+def load_json(path, default):
+    try:
+        with open(path, encoding="utf-8") as f:
+            return json.load(f)
+    except Exception:
+        return default
+
+
+def recent_history_block():
+    """Build a compact anti-repeat context from previous generated outputs."""
+    items = []
+
+    # Yesterday's local briefing is still present before today's run overwrites content/.
+    prev_meta = load_json(os.path.join(CONTENT, "meta.json"), None)
+    prev_html_path = os.path.join(CONTENT, "wechat-content.html")
+    if prev_meta and prev_meta.get("date") and prev_meta.get("date") != today and os.path.isfile(prev_html_path):
+        try:
+            with open(prev_html_path, encoding="utf-8") as f:
+                prev_html = f.read()
+            items.append({
+                "date": prev_meta.get("date"),
+                "title": prev_meta.get("title", ""),
+                "digest": prev_meta.get("digest", ""),
+                "links": article_links(prev_html, 10),
+            })
+        except Exception:
+            pass
+
+    # Persistent server-side history created after each successful generation.
+    hist = load_json(HISTORY_FILE, [])
+    if isinstance(hist, list):
+        for item in hist[-5:]:
+            if item.get("date") != today:
+                items.append(item)
+
+    # Website article repo, if it already exists on the VM.
+    site_repo = os.path.expanduser(os.environ.get("SITE_REPO_DIR", "~/tochinacar"))
+    articles_dir = os.path.join(site_repo, "articles")
+    if os.path.isdir(articles_dir):
+        daily_files = sorted(
+            name for name in os.listdir(articles_dir)
+            if name.endswith(".json") and "china-auto-daily" in name
+        )[-8:]
+        for name in daily_files:
+            article = load_json(os.path.join(articles_dir, name), None)
+            if not article or article.get("date") == today:
+                continue
+            events = article.get("events") if isinstance(article.get("events"), list) else []
+            links = []
+            for ev in events:
+                url = ev.get("source_url")
+                if url:
+                    links.append((url, ev.get("company") or "Source"))
+            items.append({
+                "date": article.get("date"),
+                "title": article.get("title_en") or article.get("title_zh") or "",
+                "digest": article.get("excerpt_en") or article.get("excerpt_zh") or "",
+                "links": links[:10],
+            })
+
+    # De-duplicate by date/title, keep newest compact set.
+    deduped = []
+    seen = set()
+    for item in items:
+        key = (item.get("date"), item.get("title"))
+        if key in seen:
+            continue
+        seen.add(key)
+        deduped.append(item)
+    deduped = deduped[-5:]
+    if not deduped:
+        return ""
+
+    lines = [
+        "## 最近已覆盖内容（强制去重上下文）",
+        "这些标题、摘要、来源链接已经报道过。今天不得把它们重新包装成 TODAY'S MOVERS；只有出现新的日期、新数字、新市场、新签约或新官方确认，才可再次报道。",
+    ]
+    for item in deduped:
+        links = "; ".join(f"{label}: {url}" for url, label in item.get("links", [])[:6])
+        lines.append(f"- {item.get('date')}: {item.get('title')}\n  摘要: {item.get('digest')}\n  已用来源: {links or 'n/a'}")
+    return "\n".join(lines)
+
+
+previous_context = recent_history_block()
+
+PROMPT = f"""你是中国车企出海行业分析师。今天是 {date_cn}。请用联网搜索（web_search）查询过去24-72小时内、以下中国车企/品牌的最新出海动态，然后产出一份中英双语「中国车企出海日报」的公众号图文正文。
+
+核心原则：这是一份“增量日报”，不是行业背景复述。读者已经看过前几天的日报，今天只需要知道“新增了什么”。
 
 ## 覆盖公司（各家动态含其所有子品牌，子品牌新闻计入母公司板块）
 传统整车集团（10家；比亚迪归入传统整车集团，不归入新势力；按新能源转型、海外能力和自主品牌权重优先追踪）：
@@ -54,11 +174,26 @@ PROMPT = f"""你是中国车企出海行业分析师。今天是 {date_cn}。请
 每家用关键词如 "[公司] overseas export 2026"、"[公司] 海外 工厂 经销商 {int(m)}月 2026" 搜索。重点：海外销量数字、经销商合作、海外设厂、新市场进入、战略调整。优先最近24-48小时；无动态的公司不要编造。
 合资体系只在涉及出口、本地化、新能源、产能调整或海外战略时纳入；常规国内合资新闻不作为出海动态。
 
+{previous_context}
+
+## 新鲜度与去重规则（非常重要，必须执行）
+1) TODAY'S MOVERS 只能写“新增事实”，要求至少满足一项：
+   - 来源发布时间或事件发生时间在 {fresh_cutoff} 至 {today} 之间；
+   - 或者相比最近已覆盖内容，出现新的官方确认、新数字、新车型/市场、新签约、新投产时间、新价格、新关税/政策变化。
+2) 禁止把旧消息当今日新闻：
+   - 禁止重复上期已经写过的工厂规划、渠道目标、年度目标、月度销量数字，除非有新的日期或新的数字；
+   - 禁止用“背景：某公司计划2030年...”填充 TODAY'S MOVERS；
+   - 禁止把 TODAY'S QUIET 写成长段公司背景。
+3) 如果今天硬新闻很少，可以只写1-3个 Movers；不要为了凑篇幅重复旧内容。
+4) 如果没有足够新增事实，标题和摘要必须明确写“今日无重大新增出海事件/No major new overseas updates”，正文写短版雷达日报，说明哪些公司搜索过但没有新增硬信号。
+5) 每条 KEY MOVES 必须包含具体新增点；最好写明“来源日期/事件日期”。无法确认新鲜度的内容只能放在 Market Context 或 TODAY'S QUIET，不能放入 Movers。
+6) CROSS-CUTTING THEMES 只能基于今天新增的 Movers。如果少于2个相互独立的新增事件，就写“今日新增信号不足以形成新的跨公司趋势”，不要强行总结大趋势。
+
 ## 输出内容结构
-1) Executive Summary 摘要：中文段在上、英文段在下，各讲今日3个最大信号（含具体事件+数字）。
-2) TODAY'S MOVERS 今日重点：按重要性排序，有动态的公司各一块，含 公司编号+中文名+英文名、子品牌(如有)、Key Moves(▸开头bullet，含数字与来源链接)、Strategic Read(斜体洞察，讲战略意义与风险)。
-3) TODAY'S QUIET 今日无显著动态：列出当日无重要海外新闻的公司及简短背景。
-4) CROSS-CUTTING THEMES 跨公司趋势：2-3个，编号①②③。
+1) Executive Summary 摘要：中文段在上、英文段在下，只讲今天的新增信号；如果新增很少，明确说“今日硬新闻有限”。
+2) TODAY'S MOVERS 今日重点：按重要性排序，只写有新增硬信号的公司。每家公司含 公司编号+中文名+英文名、子品牌(如有)、Key Moves(▸开头bullet，含新增事实、数字、日期与来源链接)、Strategic Read(斜体洞察，讲新增变化的战略意义与风险)。
+3) TODAY'S QUIET 今日无显著动态：只列公司名 + “过去24-72小时未检索到可确认海外新增硬信号”，不要写历史背景；每家公司一行不超过35字。
+4) CROSS-CUTTING THEMES 跨公司趋势：最多2个；必须由今天至少2个新增事件共同支持。否则写“今日新增信号不足以形成新趋势”。
 
 ## 严格的 HTML 排版要求（公众号会剥离<head>/<style>，不支持flex与::before）
 - 用 <section> 与 <p>/<span>，所有样式写成元素内联 style 属性，禁止 <style> 标签、禁止 flex、禁止 ::before。
@@ -143,6 +278,20 @@ with open(os.path.join(CONTENT, "briefing.html"), "w", encoding="utf-8") as f:
     f.write(f"<!DOCTYPE html><html lang=zh-CN><head><meta charset=UTF-8>"
             f"<meta name=viewport content='width=device-width,initial-scale=1'>"
             f"<title>{meta['title']}</title></head><body style='background:#eceef1;margin:0;padding:16px;'>{html}</body></html>")
+
+history = load_json(HISTORY_FILE, [])
+if not isinstance(history, list):
+    history = []
+history = [x for x in history if x.get("date") != today]
+history.append({
+    "date": today,
+    "title": meta.get("title", ""),
+    "digest": meta.get("digest", ""),
+    "links": article_links(html, 16),
+})
+history = history[-14:]
+with open(HISTORY_FILE, "w", encoding="utf-8") as f:
+    json.dump(history, f, ensure_ascii=False, indent=2)
 
 print(f"[generate] 完成：{meta['title']}")
 print(f"[generate] 已写入 content/wechat-content.html ({len(html)} 字符) 与 meta.json")

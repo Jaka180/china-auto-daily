@@ -92,32 +92,48 @@ run(["git", "pull", "--ff-only"])
 run(["git", "config", "user.name", os.environ.get("SITE_GIT_USER_NAME", "briefing-bot")])
 run(["git", "config", "user.email", os.environ.get("SITE_GIT_USER_EMAIL", "bot@topchinacar.com")])
 
-# ---- 读取最近一篇已发布文章，供模型去重 ----
-# 连续两天的日报常大面积重复同一批新闻；把昨天已发布的内容喂给模型，
+# ---- 读取最近几篇已发布日报，供模型去重 ----
+# 连续几天的日报常大面积重复同一批新闻；把近期已发布内容喂给模型，
 # 要求今天只报增量，避免产出近乎重复的文章（也降低搜索引擎重复内容风险）。
 prev_block = ""
 articles_dir = os.path.join(SITE_REPO, "articles")
 if os.path.isdir(articles_dir):
-    prev_files = sorted(f for f in os.listdir(articles_dir)
-                        if f.endswith(".json") and not f.startswith(slug))
-    if prev_files:
+    prev_files = sorted(
+        f for f in os.listdir(articles_dir)
+        if f.endswith(".json") and "china-auto-daily" in f and not f.startswith(slug)
+    )[-5:]
+    previous_articles = []
+    for filename in prev_files:
         try:
-            with open(os.path.join(articles_dir, prev_files[-1]), encoding="utf-8") as f:
+            with open(os.path.join(articles_dir, filename), encoding="utf-8") as f:
                 prev = json.load(f)
             prev_headings = re.findall(r"<h2>(.*?)</h2>", prev.get("html_en", ""))[:8]
-            prev_block = f"""
+            prev_events = prev.get("events") if isinstance(prev.get("events"), list) else []
+            prev_sources = []
+            for ev in prev_events:
+                url = ev.get("source_url")
+                if url and url not in prev_sources:
+                    prev_sources.append(url)
+            previous_articles.append(
+                f"- {prev.get('date')} /news/{prev.get('slug')}\n"
+                f"  Title: {prev.get('title_en')}\n"
+                f"  Summary: {prev.get('excerpt_en')}\n"
+                f"  Sections: {'; '.join(prev_headings)}\n"
+                f"  Sources already used: {'; '.join(prev_sources[:10]) or 'n/a'}"
+            )
+        except Exception as e:
+            sys.stderr.write(f"⚠️ 读取历史文章失败（跳过 {filename}）：{e}\n")
+    if previous_articles:
+        prev_block = f"""
 
-IMPORTANT — avoid repeating yesterday's coverage. The previous published article ({prev.get('date')}, /news/{prev.get('slug')}) was:
-Title: {prev.get('title_en')}
-Summary: {prev.get('excerpt_en')}
-Sections: {'; '.join(prev_headings)}
+IMPORTANT — avoid repeating recent coverage. These recent daily articles were already published:
+{chr(10).join(previous_articles)}
 
 Rules for today's article:
-- LEAD with what is genuinely NEW versus that article. Do not re-report items already covered yesterday unless there is a concrete new development (new number, new date, new market).
-- Where yesterday's context is needed, compress it to at most one sentence and link to the previous article as <a href="/news/{prev.get('slug')}">yesterday's briefing</a>.
-- If today's briefing contains almost nothing new, write a short article focused on the few new items — do NOT pad it by re-telling yesterday's stories."""
-        except Exception as e:
-            sys.stderr.write(f"⚠️ 读取前一篇文章失败（继续，不做去重）：{e}\n")
+- LEAD with what is genuinely NEW versus these articles. Do not re-report items already covered unless there is a concrete new development: new number, new date, new market, new official confirmation, new price, new model launch, or new policy decision.
+- Do not reuse the same source URLs as the basis for a new event unless the article explains a new update from that source.
+- Where previous context is needed, compress it to at most one sentence and link to the relevant previous briefing.
+- If today's briefing contains almost nothing new, write a short radar-style article focused on the few new or absent signals. Do NOT pad it by re-telling recent stories."""
 
 PROMPT = f"""You are the editor of TopChinaCar, an independent English-language publication covering Chinese automakers for overseas readers (executives, dealers, analysts, enthusiasts).
 
