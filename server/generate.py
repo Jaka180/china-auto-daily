@@ -37,21 +37,22 @@ date_cn = f"{int(y)}年{int(m)}月{int(d)}日"
 PROMPT = f"""你是中国车企出海行业分析师。今天是 {date_cn}。请用联网搜索（web_search）查询过去24-48小时内、以下16家中国车企/品牌的最新出海动态，然后产出一份中英双语「中国车企出海日报」的公众号图文正文。
 
 ## 覆盖公司（各家动态含其所有子品牌，子品牌新闻计入母公司板块）
-传统OEM：
-- 比亚迪BYD：腾势Denza、仰望Yangwang、方程豹Fangchengbao/Bao
-- 吉利Geely：吉利银河Galaxy、领克Lynk & Co、极氪Zeekr、雷达Riddara、smart、宝腾Proton、以及沃尔沃Volvo/极星Polestar的中国制造出口动态
-- 上汽SAIC：MG名爵、Maxus大通/LDV、荣威Roewe、智己IM Motors、五菱Wuling（含宝骏Baojun）
-- 一汽FAW：红旗Hongqi、奔腾Bestune、解放Jiefang（商用车出口）
-- 奇瑞Chery：星途Exeed、捷途Jetour、OMODA、Jaecoo、iCAR
-- 长安Changan：深蓝Deepal、阿维塔Avatr、启源Nevo/Qiyuan、凯程Kaicene
-- 长城GWM：哈弗Haval、魏牌Wey、欧拉Ora、坦克Tank、长城炮Poer
-- 东风Dongfeng：岚图Voyah、猛士MHero、风行Forthing、奕派eπ、纳米Nammi、风神Aeolus
-- 广汽GAC：埃安Aion、昊铂Hyptec、传祺Trumpchi
-- 北汽BAIC：极狐Arcfox、北京牌Beijing、福田Foton（商用车出口）
+传统整车集团（10家；比亚迪归入传统整车集团，不归入新势力；按新能源转型、海外能力和自主品牌权重优先追踪）：
+- 比亚迪BYD：比亚迪、腾势Denza、方程豹Fang Cheng Bao、仰望Yangwang
+- 吉利控股Geely Holding：吉利、银河Galaxy、领克Lynk & Co、极氪Zeekr、沃尔沃Volvo、路特斯Lotus、极星Polestar、雷达Riddara、smart、宝腾Proton
+- 奇瑞集团Chery：奇瑞、星途Exeed、捷途Jetour、OMODA、Jaecoo、iCAR、智界Luxeed/合作品牌
+- 长安汽车集团Changan：长安、深蓝Deepal、阿维塔Avatr、启源Nevo/Qiyuan、凯程Kaicene、长安福特、长安马自达
+- 上汽集团SAIC：荣威Roewe、名爵MG、智己IM Motors、飞凡Rising/Feifan、大通Maxus/LDV、五菱Wuling（含宝骏Baojun）、上汽大众、上汽通用
+- 一汽集团FAW：红旗Hongqi、奔腾Bestune、解放Jiefang、一汽大众、一汽丰田
+- 长城汽车GWM：哈弗Haval、魏牌Wey、坦克Tank、欧拉Ora、长城皮卡/长城炮Poer
+- 广汽集团GAC：广汽传祺Trumpchi、埃安Aion、昊铂Hyptec、广汽丰田、广汽本田
+- 东风集团Dongfeng：东风、岚图Voyah、猛士MHero、风行Forthing、奕派eπ、纳米Nammi、风神Aeolus、东风日产、东风本田
+- 北汽集团BAIC：北京汽车、极狐Arcfox、北京奔驰、北京现代、福田Foton（商用车出口）
 新势力：蔚来NIO（含乐道Onvo、萤火虫Firefly）、理想Li Auto、小鹏XPeng、零跑Leapmotor、小米汽车Xiaomi
 华为汽车：鸿蒙智行HIMA（问界AITO、智界Luxeed、享界Stelato、尊界Maextro、尚界Shangjie）
 
 每家用关键词如 "[公司] overseas export 2026"、"[公司] 海外 工厂 经销商 {int(m)}月 2026" 搜索。重点：海外销量数字、经销商合作、海外设厂、新市场进入、战略调整。优先最近24-48小时；无动态的公司不要编造。
+合资体系只在涉及出口、本地化、新能源、产能调整或海外战略时纳入；常规国内合资新闻不作为出海动态。
 
 ## 输出内容结构
 1) Executive Summary 摘要：中文段在上、英文段在下，各讲今日3个最大信号（含具体事件+数字）。
