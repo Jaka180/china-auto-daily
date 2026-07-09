@@ -35,11 +35,15 @@ ANTHROPIC_API_KEY=在这里填AnthropicKey
 # 可选，默认 claude-sonnet-4-6
 # ANTHROPIC_MODEL=claude-sonnet-4-6
 
-# Resend 发邮件（resend.com → API Keys 创建）
+# Resend 发日报（resend.com → API Keys 创建）
 RESEND_API_KEY=在这里填ResendKey
-# 可逗号分隔多个收件人（发非注册邮箱需先在 Resend 验证自有域名）
+# 推荐：Contacts → Segments → 创建 "China Auto Overseas Daily" 后复制 Segment ID。
+# 设置后，系统会用 Resend Broadcast 自动群发，并自动包含退订链接。
+RESEND_SEGMENT_ID=
+# 兜底直发收件人；仅在未配置 RESEND_SEGMENT_ID 时使用，可逗号分隔多人。
 EMAIL_TO=jackwee020@gmail.com
-# 未验证自有域名时只能用 onboarding@resend.dev（且只能发给 Resend 注册邮箱本人）
+# 生产建议验证 topchinacar.com 域名后使用 daily@topchinacar.com。
+# 未验证自有域名时只能用 onboarding@resend.dev（且通常只能发给 Resend 注册邮箱本人）
 EMAIL_FROM=onboarding@resend.dev
 
 # 公众号：0=只建草稿(默认，人工确认后群发)；1=自动群发(不可撤回，慎开)

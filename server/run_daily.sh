@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# 服务器端每日全自动：生成 → 存档 → 封面 → 链接校验 → 公众号 → 邮件
+# 服务器端每日全自动：生成 → 存档 → 封面 → 链接校验 → 公众号 → 网站 → 邮件
 # cron（setup_server.sh 已写入）：
 #   20 6 * * * /path/to/china-auto-daily/server/run_daily.sh >> /path/to/china-auto-daily/server/publish.log 2>&1
 # 任何关键步骤失败会通过 Resend 发告警邮件（notify_failure.py）。
@@ -11,7 +11,7 @@ cd "$REPO_DIR"
 echo "==== $(date '+%F %T') 开始 ===="
 
 # 凭证/配置：ANTHROPIC_API_KEY / WX_APPID / WX_APPSECRET / RESEND_API_KEY
-#           EMAIL_TO(可逗号分隔多人) / EMAIL_FROM / WX_AUTO_PUBLISH(1=自动群发)
+#           RESEND_SEGMENT_ID / EMAIL_TO(兜底) / EMAIL_FROM / WX_AUTO_PUBLISH(1=自动群发)
 if [ -f "server/.env" ]; then
   set -a; . server/.env; set +a
 fi
@@ -53,14 +53,14 @@ if ! step "5/7 公众号发布${PUB_FLAG:+(自动群发)}" python3 server/wechat
   echo "⚠️ 公众号失败，继续发邮件。"; alert "公众号发布"
 fi
 
-if ! step "6/7 Resend 发邮件" python3 server/send_email.py; then
-  echo "⚠️ 邮件失败。"; alert "Resend 发邮件"
-fi
-
 # 网站文章：生成中英文 /news + /zh/news 页面，并 push 到 TopChinaCar 网站仓库。
 # 首次运行时 site_publish.py 会按 SITE_REPO_URL 自动 clone SITE_REPO_DIR。
-if ! step "7/7 topchinacar.com 发布文章" python3 server/site_publish.py; then
-  echo "⚠️ 网站发布失败。"; alert "网站发布文章"
+if ! step "6/7 topchinacar.com 发布文章" python3 server/site_publish.py; then
+  echo "✗ 网站发布失败，跳过日报邮件。"; alert "网站发布文章"; exit 1
+fi
+
+if ! step "7/7 Resend 发日报" python3 server/send_email.py; then
+  echo "⚠️ 邮件失败。"; alert "Resend 发日报"
 fi
 
 echo "==== $(date '+%F %T') 完成 ===="
