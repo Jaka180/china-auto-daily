@@ -52,9 +52,12 @@ title ≤ 64 字，digest ≤ 110 字。
 - 禁止 `<style>` 标签、禁止 flex、禁止 `::before`（公众号会剥离）。所有样式写成元素内联 `style`。
 - 配色：深灰 `#111827`、红 `#dc2626`、正文 `#374151`、次要 `#9ca3af`、链接 `#3b82f6`、浅底 `#f9fafb`。
 - 顶部深色 header（背景 `#111827`，红色底边）放标题「中国车企出海日报 / China Auto Overseas Briefing」、日期「<DATE_CN> · 早间版」。
-- 结构：Executive Summary 摘要（中文段在上、英文段在下）→ **15家车厂月度出口数据 MONTHLY EXPORT DATA（强制，每期都要有）** → TODAY'S MOVERS 今日重点（每家：编号+中文名+英文名、子品牌、Key Moves 以红色 `▸` 开头 bullet 含数字/日期/来源链接、Strategic Read 用左红边框浅底斜体块 `border-left:3px solid #dc2626;background:#f9fafb;font-style:italic`）→ TODAY'S QUIET（只列公司名+一行说明，≤35字）→ CROSS-CUTTING THEMES（最多2个，须由今天≥2个新增事件支撑，否则写「今日新增信号不足以形成新趋势」）。
+- 结构：Executive Summary 摘要（中文段在上、英文段在下）→ **15家车厂出口与海外生产数据（强制，每期都要有）** → TODAY'S MOVERS 今日重点（每家：编号+中文名+英文名、子品牌、Key Moves 以红色 `▸` 开头 bullet 含数字/日期/来源链接、Strategic Read 用左红边框浅底斜体块 `border-left:3px solid #dc2626;background:#f9fafb;font-style:italic`）→ TODAY'S QUIET（只列公司名+一行说明，≤35字）→ CROSS-CUTTING THEMES（最多2个，须由今天≥2个新增事件支撑，否则写「今日新增信号不足以形成新趋势」）。
 - 月度出口数据固定覆盖10家传统集团（比亚迪、吉利、奇瑞、长安、上汽、一汽、长城、广汽、东风、北汽）+5家新势力（蔚来、小鹏、理想、零跑、小米）。旗下20个子品牌全部并入母集团，**不单列、不重复计算**。
-- 每家显示 `最近有来源的完整月份 + 数量 + metric口径 + 同比（如有）+ 来源`。若暂无数字也必须保留该车厂并写“暂无可核验月度数据”，绝不编造；不同月份、`overseas` 与 `customs_export` 必须明确提示不可直接横比。
+- 用两张紧凑表分别展示传统车企与新势力；每家固定四列：`车厂 | 2025全年 | 2026逐月 | 2026累计/口径`。2026逐月必须列出截至上一个完整月的每个月，缺月写“—”。
+- `customs_export` 显示为“中国出口”；`overseas` 显示为“海外总量（含海外生产，未拆分）”。只有来源明确拆分时才分别显示中国出口与海外生产，禁止用海外总量相减推算。
+- 2025全年及2026官方累计维护在 `data/overseas-period-totals.csv`。没有官方累计时，只能把有来源的月度值标为“已披露 n/m 个月小计”，不得冒充完整累计。
+- 若暂无数字也必须保留该车厂并写“未披露”，绝不编造；不同口径必须明确提示不可直接横比。
 - 来源链接内联：`<a href="URL" style="color:#3b82f6;font-size:12px;text-decoration:none;">[来源名]</a>`。
 - 可参考 `archive/` 里往期 HTML 的排版风格。
 
@@ -78,11 +81,11 @@ title ≤ 64 字，digest ≤ 110 字。
 }
 ```
 - **html_en 只能是英文**（含来源标签也用英文），**html_zh 只能是中文**。两者用固定结构：先 1–2 句 lede（无标题），然后 `<h2>What happened</h2>`（事实+数字+内联 `<a href>[Source]</a>）、`<h2>Why it matters</h2>`、`<h2>Market context</h2>`、`<h2>Impact on Chinese automakers</h2>`、`<h2>What to watch next</h2>`。中文版对应「发生了什么/为何重要/市场背景/对中国车企的影响/后续关注」。
-- lede 后、`What happened / 发生了什么` 前必须插入“15家车厂月度出口数据”板块；该板块由最后的自动注入命令生成，避免漏项。
-- 只用干净语义标签：`<p><h2><ul><li><a><em><strong>`。无内联样式、无 `<section>`、无图片。
+- lede 后、`What happened / 发生了什么` 前必须插入“15家车厂出口与海外生产数据”板块；该板块由最后的自动注入命令生成，避免漏项。
+- 正文生成阶段只用干净语义标签：`<p><h2><ul><li><a><em><strong>`。自动注入的数据板块会额外使用 `<table><thead><tbody><tr><th><td><small><br>`。无内联样式、无 `<section>`、无图片。
 - **events**：必填。文章里每一条独立新闻对应一条结构化记录（6 段的文章通常 8–20 条）。每条：`{"company":"<母公司英文>","brand":"<品牌英文或null>","market":"<国家/地区英文或'Global'>","action":"<sales_figures|plant|dealer_network|market_entry|product_launch|pricing|partnership|policy|other>","summary_en":"<含数字的一句话>","source_url":"<url或null>"}`。只有当日确实零新闻时 events 才可为空数组。
 
-## 顺带维护:出口/海外销量数据底座（data/overseas-sales.csv）
+## 顺带维护:出口/海外销量数据底座（data/overseas-sales.csv + overseas-period-totals.csv）
 
 这是一个持续累积的月度**海外销量**时间序列(10 传统 + 5 新势力),详见 `data/README.md`。
 搜索过程中若看到某公司**上一个完整月**(不是本月、不是当日)的海外销量/出口新数字:
@@ -97,11 +100,13 @@ title ≤ 64 字，digest ≤ 110 字。
 
 当日无新月度数据则跳过本节,不改数据底座。
 
+若检索到官方全年或累计数据，维护 `data/overseas-period-totals.csv`。来源只披露合计而未拆分中国出口/海外生产时，两项拆分字段均留空；只有原始来源明确给值才填。字段和精度规则见 `data/README.md`。
+
 ## 完成后
 四个主内容文件与数据底座都完成后，**必须最后执行**：
 ```bash
 python3 tools/inject_export_radar.py --date <DATE>
 ```
-它会从 `data/overseas-sales.csv` 生成 `content/export-radar.json`，并把15家车厂月度数据强制注入公众号、邮件/网页备份和网站中英文章。命令失败则本次生成视为失败，不得跳过。
+它会从 `data/overseas-sales.csv` 与 `data/overseas-period-totals.csv` 生成 `content/export-radar.json`，并把15家车厂的2025全年、2026逐月及累计表强制注入公众号、邮件/网页备份和网站中英文章。命令失败则本次生成视为失败，不得跳过。
 
 不要 git push、不要发邮件、不要碰公众号——这些由 Mac 本机 `mac/distribute_daily.sh` 在稍后自动完成。你只需确认四个内容文件及 `content/export-radar.json` 已写好(如更新了数据底座则确认已重跑 build_json.py)，并在结束消息里给出今天的标题、Movers 条数、月度数据覆盖数,以及是否更新了数据底座(哪几家哪个月)。

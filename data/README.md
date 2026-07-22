@@ -15,7 +15,8 @@
 - 新势力(new_force)：`nio` `xpeng` `li` `leapmotor` `xiaomi`
 
 ## 文件
-- `overseas-sales.csv` —— 唯一事实来源(long format,一行一个「公司-月」)。人工与 pipeline 都改这个。
+- `overseas-sales.csv` —— 月度事实来源(long format,一行一个「公司-月」)。人工与 pipeline 都改这个。
+- `overseas-period-totals.csv` —— 2025 全年与 2026 累计等官方/可核验周期总量；用于保存不能由月度缺口可靠求和的数据。
 - `overseas-sales.json` —— 由 CSV 生成的嵌套结构,供网站/日报消费。**不要手改**。
 - `build_json.py` —— 读 CSV 生成 JSON:`python3 data/build_json.py`。
 
@@ -31,6 +32,16 @@
 
 > 口径混用是真实存在的:BYD/GWM/SAIC/Changan 报「海外销量」(含海外厂本地产销),
 > Geely/Chery/GAC 及新势力多为「海关出口」。`metric` 列如实标注,跨公司比较时注意。
+
+## 周期总量字段
+`overseas-period-totals.csv` 字段：
+`company_key, year, start_month, end_month, total_units, metric, china_export_units, overseas_production_units, qualifier, source_url, note`
+
+- `total_units`：该来源披露的周期海外总量或中国出口量。
+- `china_export_units` / `overseas_production_units`：只有来源明确拆分才填；禁止用海外总量相减推算。
+- `qualifier`：`exact` | `about` | `more_than`，保留来源的精度。
+- 当 `metric=overseas` 且两部分未拆分时，日报显示“海外总量（含海外生产，未拆分）”。
+- 周期总量优先于缺月的月度求和；没有周期总量时，只显示“已披露 n/m 个月小计”。
 
 ## 更新协议（pipeline 每次运行时执行）
 1. 中国乘联会/海关月度数据通常在**次月上旬**发布。每天生成日报时,若当天检索到某公司

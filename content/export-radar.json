@@ -1,18 +1,152 @@
 {
   "generated_at": "2026-07-22",
   "date": "2026-07-22",
+  "period": {
+    "annual_year": 2025,
+    "monthly_year": 2026,
+    "through_month": 6
+  },
   "counts": {
     "traditional": 10,
     "new_force": 5,
     "automakers": 15
   },
-  "scope": "subsidiary brands consolidated into parent automaker groups",
+  "scope": "subsidiary brands consolidated; China exports and overseas production are split only when explicitly sourced",
   "automakers": [
     {
       "company_key": "byd",
       "company_en": "BYD",
       "company_zh": "比亚迪",
       "group_type": "traditional",
+      "annual_2025": {
+        "company_key": "byd",
+        "year": 2025,
+        "start_month": 1,
+        "end_month": 12,
+        "total_units": 1046083,
+        "metric": "overseas",
+        "china_export_units": null,
+        "overseas_production_units": null,
+        "qualifier": "exact",
+        "source_url": "https://cnevpost.com/2026/01/01/byd-nev-sales-dec-2025/",
+        "note": "overseas passenger NEV sales; includes locally produced vehicles where reported",
+        "derived": false,
+        "coverage_months": 12,
+        "complete": true
+      },
+      "months_2026": [
+        {
+          "month": 1,
+          "data": {
+            "company_key": "byd",
+            "company_en": "BYD",
+            "company_zh": "比亚迪",
+            "group_type": "traditional",
+            "year": 2026,
+            "month": 1,
+            "overseas_units": 100482,
+            "metric": "overseas",
+            "yoy_pct": "",
+            "source_url": "https://cnevpost.com/2026/07/01/byd-jun-2026-sales/",
+            "note": ""
+          }
+        },
+        {
+          "month": 2,
+          "data": {
+            "company_key": "byd",
+            "company_en": "BYD",
+            "company_zh": "比亚迪",
+            "group_type": "traditional",
+            "year": 2026,
+            "month": 2,
+            "overseas_units": 100600,
+            "metric": "overseas",
+            "yoy_pct": "",
+            "source_url": "https://cnevpost.com/2026/07/01/byd-jun-2026-sales/",
+            "note": ""
+          }
+        },
+        {
+          "month": 3,
+          "data": {
+            "company_key": "byd",
+            "company_en": "BYD",
+            "company_zh": "比亚迪",
+            "group_type": "traditional",
+            "year": 2026,
+            "month": 3,
+            "overseas_units": 120083,
+            "metric": "overseas",
+            "yoy_pct": "",
+            "source_url": "https://cnevpost.com/2026/07/01/byd-jun-2026-sales/",
+            "note": ""
+          }
+        },
+        {
+          "month": 4,
+          "data": {
+            "company_key": "byd",
+            "company_en": "BYD",
+            "company_zh": "比亚迪",
+            "group_type": "traditional",
+            "year": 2026,
+            "month": 4,
+            "overseas_units": 135098,
+            "metric": "overseas",
+            "yoy_pct": "",
+            "source_url": "https://cnevpost.com/2026/07/01/byd-jun-2026-sales/",
+            "note": ""
+          }
+        },
+        {
+          "month": 5,
+          "data": {
+            "company_key": "byd",
+            "company_en": "BYD",
+            "company_zh": "比亚迪",
+            "group_type": "traditional",
+            "year": 2026,
+            "month": 5,
+            "overseas_units": 160644,
+            "metric": "overseas",
+            "yoy_pct": "",
+            "source_url": "https://cnevpost.com/2026/07/01/byd-jun-2026-sales/",
+            "note": ""
+          }
+        },
+        {
+          "month": 6,
+          "data": {
+            "company_key": "byd",
+            "company_en": "BYD",
+            "company_zh": "比亚迪",
+            "group_type": "traditional",
+            "year": 2026,
+            "month": 6,
+            "overseas_units": 175349,
+            "metric": "overseas",
+            "yoy_pct": "94.73",
+            "source_url": "https://cnevpost.com/2026/07/01/byd-jun-2026-sales/",
+            "note": ""
+          }
+        }
+      ],
+      "cumulative_2026": {
+        "year": 2026,
+        "start_month": 1,
+        "end_month": 6,
+        "total_units": 792256,
+        "metric": "overseas",
+        "china_export_units": null,
+        "overseas_production_units": null,
+        "qualifier": "exact",
+        "source_url": "https://cnevpost.com/2026/07/01/byd-jun-2026-sales/",
+        "note": "derived from sourced monthly rows",
+        "derived": true,
+        "coverage_months": 6,
+        "complete": true
+      },
       "latest": {
         "company_key": "byd",
         "company_en": "BYD",
@@ -32,6 +166,135 @@
       "company_en": "Geely",
       "company_zh": "吉利",
       "group_type": "traditional",
+      "annual_2025": {
+        "company_key": "geely",
+        "year": 2025,
+        "start_month": 1,
+        "end_month": 12,
+        "total_units": 420097,
+        "metric": "customs_export",
+        "china_export_units": 420097,
+        "overseas_production_units": null,
+        "qualifier": "exact",
+        "source_url": "https://www1.hkexnews.hk/listedco/listconews/sehk/2026/0427/2026042700756.pdf",
+        "note": "Geely Automobile Holdings export sales; overseas local-plant output not disclosed as one total",
+        "derived": false,
+        "coverage_months": 12,
+        "complete": true
+      },
+      "months_2026": [
+        {
+          "month": 1,
+          "data": {
+            "company_key": "geely",
+            "company_en": "Geely",
+            "company_zh": "吉利",
+            "group_type": "traditional",
+            "year": 2026,
+            "month": 1,
+            "overseas_units": 60506,
+            "metric": "customs_export",
+            "yoy_pct": "",
+            "source_url": "https://cnevpost.com/2026/07/01/geely-jun-2026-sales/",
+            "note": ""
+          }
+        },
+        {
+          "month": 2,
+          "data": {
+            "company_key": "geely",
+            "company_en": "Geely",
+            "company_zh": "吉利",
+            "group_type": "traditional",
+            "year": 2026,
+            "month": 2,
+            "overseas_units": 60879,
+            "metric": "customs_export",
+            "yoy_pct": "",
+            "source_url": "https://cnevpost.com/2026/07/01/geely-jun-2026-sales/",
+            "note": ""
+          }
+        },
+        {
+          "month": 3,
+          "data": {
+            "company_key": "geely",
+            "company_en": "Geely",
+            "company_zh": "吉利",
+            "group_type": "traditional",
+            "year": 2026,
+            "month": 3,
+            "overseas_units": 81639,
+            "metric": "customs_export",
+            "yoy_pct": "",
+            "source_url": "https://cnevpost.com/2026/07/01/geely-jun-2026-sales/",
+            "note": ""
+          }
+        },
+        {
+          "month": 4,
+          "data": {
+            "company_key": "geely",
+            "company_en": "Geely",
+            "company_zh": "吉利",
+            "group_type": "traditional",
+            "year": 2026,
+            "month": 4,
+            "overseas_units": 83186,
+            "metric": "customs_export",
+            "yoy_pct": "",
+            "source_url": "https://cnevpost.com/2026/07/01/geely-jun-2026-sales/",
+            "note": ""
+          }
+        },
+        {
+          "month": 5,
+          "data": {
+            "company_key": "geely",
+            "company_en": "Geely",
+            "company_zh": "吉利",
+            "group_type": "traditional",
+            "year": 2026,
+            "month": 5,
+            "overseas_units": 85144,
+            "metric": "customs_export",
+            "yoy_pct": "",
+            "source_url": "https://cnevpost.com/2026/07/01/geely-jun-2026-sales/",
+            "note": ""
+          }
+        },
+        {
+          "month": 6,
+          "data": {
+            "company_key": "geely",
+            "company_en": "Geely",
+            "company_zh": "吉利",
+            "group_type": "traditional",
+            "year": 2026,
+            "month": 6,
+            "overseas_units": 102874,
+            "metric": "customs_export",
+            "yoy_pct": "157.11",
+            "source_url": "https://cnevpost.com/2026/07/01/geely-jun-2026-sales/",
+            "note": ""
+          }
+        }
+      ],
+      "cumulative_2026": {
+        "year": 2026,
+        "start_month": 1,
+        "end_month": 6,
+        "total_units": 474228,
+        "metric": "customs_export",
+        "china_export_units": null,
+        "overseas_production_units": null,
+        "qualifier": "exact",
+        "source_url": "https://cnevpost.com/2026/07/01/geely-jun-2026-sales/",
+        "note": "derived from sourced monthly rows",
+        "derived": true,
+        "coverage_months": 6,
+        "complete": true
+      },
       "latest": {
         "company_key": "geely",
         "company_en": "Geely",
@@ -51,6 +314,124 @@
       "company_en": "Chery",
       "company_zh": "奇瑞",
       "group_type": "traditional",
+      "annual_2025": {
+        "company_key": "chery",
+        "year": 2025,
+        "start_month": 1,
+        "end_month": 12,
+        "total_units": 1344020,
+        "metric": "customs_export",
+        "china_export_units": 1344020,
+        "overseas_production_units": null,
+        "qualifier": "exact",
+        "source_url": "https://www.cheryholding.com/article/1085.html",
+        "note": "Chery Group exports",
+        "derived": false,
+        "coverage_months": 12,
+        "complete": true
+      },
+      "months_2026": [
+        {
+          "month": 1,
+          "data": {
+            "company_key": "chery",
+            "company_en": "Chery",
+            "company_zh": "奇瑞",
+            "group_type": "traditional",
+            "year": 2026,
+            "month": 1,
+            "overseas_units": 116985,
+            "metric": "customs_export",
+            "yoy_pct": "",
+            "source_url": "https://chinaevhome.com/2026/02/02/chery-group-jan-sales-at-191k-units-overseas-markets-contribute-61/",
+            "note": ""
+          }
+        },
+        {
+          "month": 2,
+          "data": {
+            "company_key": "chery",
+            "company_en": "Chery",
+            "company_zh": "奇瑞",
+            "group_type": "traditional",
+            "year": 2026,
+            "month": 2,
+            "overseas_units": 124929,
+            "metric": "customs_export",
+            "yoy_pct": "41.5",
+            "source_url": "https://autonews.gasgoo.com/articles/news/chinas-passenger-vehicle-exporters-overview-jan-feb-2026-chery-leads-in-europegasgoo-automotive-research-institute-2043989396749991937",
+            "note": ""
+          }
+        },
+        {
+          "month": 3,
+          "data": null
+        },
+        {
+          "month": 4,
+          "data": {
+            "company_key": "chery",
+            "company_en": "Chery",
+            "company_zh": "奇瑞",
+            "group_type": "traditional",
+            "year": 2026,
+            "month": 4,
+            "overseas_units": 177573,
+            "metric": "customs_export",
+            "yoy_pct": "",
+            "source_url": "https://www.bitauto.my/en/news/1001985.html",
+            "note": ""
+          }
+        },
+        {
+          "month": 5,
+          "data": {
+            "company_key": "chery",
+            "company_en": "Chery",
+            "company_zh": "奇瑞",
+            "group_type": "traditional",
+            "year": 2026,
+            "month": 5,
+            "overseas_units": 182000,
+            "metric": "customs_export",
+            "yoy_pct": "80.5",
+            "source_url": "https://autonews.gasgoo.com/articles/market-industry/chery-group-may-sales-rise-over-20-2061833562578558977",
+            "note": ""
+          }
+        },
+        {
+          "month": 6,
+          "data": {
+            "company_key": "chery",
+            "company_en": "Chery",
+            "company_zh": "奇瑞",
+            "group_type": "traditional",
+            "year": 2026,
+            "month": 6,
+            "overseas_units": 191062,
+            "metric": "customs_export",
+            "yoy_pct": "79.7",
+            "source_url": "https://autonews.gasgoo.com/articles/news/chery-groups-h1-2026-exports-exceed-940000-units-2074841180641480704",
+            "note": "Mar not sourced"
+          }
+        }
+      ],
+      "cumulative_2026": {
+        "company_key": "chery",
+        "year": 2026,
+        "start_month": 1,
+        "end_month": 6,
+        "total_units": 943817,
+        "metric": "customs_export",
+        "china_export_units": 943817,
+        "overseas_production_units": null,
+        "qualifier": "exact",
+        "source_url": "https://www.chery-eg.com/en/news/chery-group-h1-sales-exceed-135-million-units-po",
+        "note": "Chery Group H1 exports",
+        "derived": false,
+        "coverage_months": 6,
+        "complete": true
+      },
       "latest": {
         "company_key": "chery",
         "company_en": "Chery",
@@ -70,6 +451,111 @@
       "company_en": "Changan",
       "company_zh": "长安",
       "group_type": "traditional",
+      "annual_2025": {
+        "company_key": "changan",
+        "year": 2025,
+        "start_month": 1,
+        "end_month": 12,
+        "total_units": 637280,
+        "metric": "overseas",
+        "china_export_units": null,
+        "overseas_production_units": 9485,
+        "qualifier": "exact",
+        "source_url": "https://static.cninfo.com.cn/finalpage/2026-04-11/1225093379.PDF",
+        "note": "overseas-region sales and production are separately reported but are not additive; China-origin exports not separately disclosed",
+        "derived": false,
+        "coverage_months": 12,
+        "complete": true
+      },
+      "months_2026": [
+        {
+          "month": 1,
+          "data": {
+            "company_key": "changan",
+            "company_en": "Changan",
+            "company_zh": "长安",
+            "group_type": "traditional",
+            "year": 2026,
+            "month": 1,
+            "overseas_units": 43600,
+            "metric": "overseas",
+            "yoy_pct": "",
+            "source_url": "https://autonews.gasgoo.com/articles/news/changan-auto-march-sales-up-78-mom-overseas-sales-top-100000-unit-mark-2039892947418398720",
+            "note": "low-confidence mixed base"
+          }
+        },
+        {
+          "month": 2,
+          "data": null
+        },
+        {
+          "month": 3,
+          "data": {
+            "company_key": "changan",
+            "company_en": "Changan",
+            "company_zh": "长安",
+            "group_type": "traditional",
+            "year": 2026,
+            "month": 3,
+            "overseas_units": 103900,
+            "metric": "overseas",
+            "yoy_pct": "",
+            "source_url": "https://autonews.gasgoo.com/articles/news/changan-auto-march-sales-up-78-mom-overseas-sales-top-100000-unit-mark-2039892947418398720",
+            "note": "low-confidence mixed base"
+          }
+        },
+        {
+          "month": 4,
+          "data": {
+            "company_key": "changan",
+            "company_en": "Changan",
+            "company_zh": "长安",
+            "group_type": "traditional",
+            "year": 2026,
+            "month": 4,
+            "overseas_units": 72700,
+            "metric": "overseas",
+            "yoy_pct": "69.9",
+            "source_url": "https://www.ichongqing.info/2026/05/14/changan-gains-momentum-as-nev-and-overseas-sales-soar/",
+            "note": "low-confidence mixed base"
+          }
+        },
+        {
+          "month": 5,
+          "data": null
+        },
+        {
+          "month": 6,
+          "data": {
+            "company_key": "changan",
+            "company_en": "Changan",
+            "company_zh": "长安",
+            "group_type": "traditional",
+            "year": 2026,
+            "month": 6,
+            "overseas_units": 91065,
+            "metric": "overseas",
+            "yoy_pct": "",
+            "source_url": "https://finance.biggo.com/news/8d02c767-3077-48a9-b363-f4bb13204e03",
+            "note": "low-confidence mixed base; Feb/May not sourced"
+          }
+        }
+      ],
+      "cumulative_2026": {
+        "year": 2026,
+        "start_month": 1,
+        "end_month": 6,
+        "total_units": 311265,
+        "metric": "overseas",
+        "china_export_units": null,
+        "overseas_production_units": null,
+        "qualifier": "exact",
+        "source_url": "",
+        "note": "derived from sourced monthly rows",
+        "derived": true,
+        "coverage_months": 4,
+        "complete": false
+      },
       "latest": {
         "company_key": "changan",
         "company_en": "Changan",
@@ -89,6 +575,112 @@
       "company_en": "SAIC",
       "company_zh": "上汽",
       "group_type": "traditional",
+      "annual_2025": {
+        "company_key": "saic",
+        "year": 2025,
+        "start_month": 1,
+        "end_month": 12,
+        "total_units": 1071000,
+        "metric": "overseas",
+        "china_export_units": null,
+        "overseas_production_units": null,
+        "qualifier": "about",
+        "source_url": "https://www.saicmotor.com/e/latest_news/saic_motor/63550.shtml",
+        "note": "overseas sales include exported vehicles and overseas-base output; components not separately disclosed as annual totals",
+        "derived": false,
+        "coverage_months": 12,
+        "complete": true
+      },
+      "months_2026": [
+        {
+          "month": 1,
+          "data": {
+            "company_key": "saic",
+            "company_en": "SAIC",
+            "company_zh": "上汽",
+            "group_type": "traditional",
+            "year": 2026,
+            "month": 1,
+            "overseas_units": 105000,
+            "metric": "overseas",
+            "yoy_pct": "51.7",
+            "source_url": "https://emobilityplus.com/2026/02/05/saic-motor-starts-2026-on-a-high-with-24-sales-growth-nevs-and-overseas-markets-drive-momentum/",
+            "note": "company-rounded"
+          }
+        },
+        {
+          "month": 2,
+          "data": null
+        },
+        {
+          "month": 3,
+          "data": null
+        },
+        {
+          "month": 4,
+          "data": {
+            "company_key": "saic",
+            "company_en": "SAIC",
+            "company_zh": "上汽",
+            "group_type": "traditional",
+            "year": 2026,
+            "month": 4,
+            "overseas_units": 92000,
+            "metric": "overseas",
+            "yoy_pct": "2.7",
+            "source_url": "https://autonews.gasgoo.com/articles/market-industry/saic-motor-sales-reach-165-million-units-in-first-5-months-2061819380537819137",
+            "note": "company-rounded"
+          }
+        },
+        {
+          "month": 5,
+          "data": {
+            "company_key": "saic",
+            "company_en": "SAIC",
+            "company_zh": "上汽",
+            "group_type": "traditional",
+            "year": 2026,
+            "month": 5,
+            "overseas_units": 130000,
+            "metric": "overseas",
+            "yoy_pct": "32.5",
+            "source_url": "https://autonews.gasgoo.com/articles/market-industry/saic-motor-sales-reach-165-million-units-in-first-5-months-2061819380537819137",
+            "note": "company-rounded"
+          }
+        },
+        {
+          "month": 6,
+          "data": {
+            "company_key": "saic",
+            "company_en": "SAIC",
+            "company_zh": "上汽",
+            "group_type": "traditional",
+            "year": 2026,
+            "month": 6,
+            "overseas_units": 146000,
+            "metric": "overseas",
+            "yoy_pct": "61.2",
+            "source_url": "https://autonews.gasgoo.com/articles/news/gasgoo-daily-gsa-2026-opens-saic-motor-tops-2m-units-in-h1-sales-catl-partners-jt-express-2072628085332426752",
+            "note": "company-rounded; Feb/Mar not sourced"
+          }
+        }
+      ],
+      "cumulative_2026": {
+        "company_key": "saic",
+        "year": 2026,
+        "start_month": 1,
+        "end_month": 6,
+        "total_units": 734676,
+        "metric": "overseas",
+        "china_export_units": null,
+        "overseas_production_units": null,
+        "qualifier": "exact",
+        "source_url": "https://www.saicmotor.com/e/investor_relations/sales_volume/index.shtml",
+        "note": "exported vehicles plus vehicles made by overseas bases; components not separated",
+        "derived": false,
+        "coverage_months": 6,
+        "complete": true
+      },
       "latest": {
         "company_key": "saic",
         "company_en": "SAIC",
@@ -108,6 +700,34 @@
       "company_en": "FAW",
       "company_zh": "一汽",
       "group_type": "traditional",
+      "annual_2025": null,
+      "months_2026": [
+        {
+          "month": 1,
+          "data": null
+        },
+        {
+          "month": 2,
+          "data": null
+        },
+        {
+          "month": 3,
+          "data": null
+        },
+        {
+          "month": 4,
+          "data": null
+        },
+        {
+          "month": 5,
+          "data": null
+        },
+        {
+          "month": 6,
+          "data": null
+        }
+      ],
+      "cumulative_2026": null,
       "latest": null
     },
     {
@@ -115,6 +735,135 @@
       "company_en": "Great Wall",
       "company_zh": "长城",
       "group_type": "traditional",
+      "annual_2025": {
+        "company_key": "gwm",
+        "year": 2025,
+        "start_month": 1,
+        "end_month": 12,
+        "total_units": 506066,
+        "metric": "overseas",
+        "china_export_units": null,
+        "overseas_production_units": null,
+        "qualifier": "exact",
+        "source_url": "https://www.gwm-mx.com/es/news-list/2026/GWM-ALCANZA-UN-R-CORD-DE-VENTAS-EN-2025-Y-ACELERA-UN-CRECIMIENTO-GLOBAL-SOSTENIBLE-Y-DE-ALTA-CALIDAD",
+        "note": "international-market sales; local production not separately disclosed as one total",
+        "derived": false,
+        "coverage_months": 12,
+        "complete": true
+      },
+      "months_2026": [
+        {
+          "month": 1,
+          "data": {
+            "company_key": "gwm",
+            "company_en": "GWM",
+            "company_zh": "长城",
+            "group_type": "traditional",
+            "year": 2026,
+            "month": 1,
+            "overseas_units": 40278,
+            "metric": "overseas",
+            "yoy_pct": "",
+            "source_url": "https://cnevpost.com/2026/07/01/gwm-jun-2026-sales/",
+            "note": ""
+          }
+        },
+        {
+          "month": 2,
+          "data": {
+            "company_key": "gwm",
+            "company_en": "GWM",
+            "company_zh": "长城",
+            "group_type": "traditional",
+            "year": 2026,
+            "month": 2,
+            "overseas_units": 42675,
+            "metric": "overseas",
+            "yoy_pct": "",
+            "source_url": "https://cnevpost.com/2026/07/01/gwm-jun-2026-sales/",
+            "note": ""
+          }
+        },
+        {
+          "month": 3,
+          "data": {
+            "company_key": "gwm",
+            "company_en": "GWM",
+            "company_zh": "长城",
+            "group_type": "traditional",
+            "year": 2026,
+            "month": 3,
+            "overseas_units": 47142,
+            "metric": "overseas",
+            "yoy_pct": "",
+            "source_url": "https://cnevpost.com/2026/07/01/gwm-jun-2026-sales/",
+            "note": ""
+          }
+        },
+        {
+          "month": 4,
+          "data": {
+            "company_key": "gwm",
+            "company_en": "GWM",
+            "company_zh": "长城",
+            "group_type": "traditional",
+            "year": 2026,
+            "month": 4,
+            "overseas_units": 50475,
+            "metric": "overseas",
+            "yoy_pct": "",
+            "source_url": "https://cnevpost.com/2026/07/01/gwm-jun-2026-sales/",
+            "note": ""
+          }
+        },
+        {
+          "month": 5,
+          "data": {
+            "company_key": "gwm",
+            "company_en": "GWM",
+            "company_zh": "长城",
+            "group_type": "traditional",
+            "year": 2026,
+            "month": 5,
+            "overseas_units": 50688,
+            "metric": "overseas",
+            "yoy_pct": "",
+            "source_url": "https://cnevpost.com/2026/07/01/gwm-jun-2026-sales/",
+            "note": ""
+          }
+        },
+        {
+          "month": 6,
+          "data": {
+            "company_key": "gwm",
+            "company_en": "GWM",
+            "company_zh": "长城",
+            "group_type": "traditional",
+            "year": 2026,
+            "month": 6,
+            "overseas_units": 60168,
+            "metric": "overseas",
+            "yoy_pct": "50.16",
+            "source_url": "https://cnevpost.com/2026/07/01/gwm-jun-2026-sales/",
+            "note": ""
+          }
+        }
+      ],
+      "cumulative_2026": {
+        "year": 2026,
+        "start_month": 1,
+        "end_month": 6,
+        "total_units": 291426,
+        "metric": "overseas",
+        "china_export_units": null,
+        "overseas_production_units": null,
+        "qualifier": "exact",
+        "source_url": "https://cnevpost.com/2026/07/01/gwm-jun-2026-sales/",
+        "note": "derived from sourced monthly rows",
+        "derived": true,
+        "coverage_months": 6,
+        "complete": true
+      },
       "latest": {
         "company_key": "gwm",
         "company_en": "GWM",
@@ -134,6 +883,76 @@
       "company_en": "GAC",
       "company_zh": "广汽",
       "group_type": "traditional",
+      "annual_2025": {
+        "company_key": "gac",
+        "year": 2025,
+        "start_month": 1,
+        "end_month": 12,
+        "total_units": 130000,
+        "metric": "customs_export",
+        "china_export_units": 130000,
+        "overseas_production_units": null,
+        "qualifier": "more_than",
+        "source_url": "https://www.gacgroup.com/en/news/article/the-30-millionth-complete-vehicle-rolls-off-the-line--witness-gac-s-landmark-milestone-alongside-global-customers-365",
+        "note": "official disclosure says exports exceeded 130000",
+        "derived": false,
+        "coverage_months": 12,
+        "complete": true
+      },
+      "months_2026": [
+        {
+          "month": 1,
+          "data": null
+        },
+        {
+          "month": 2,
+          "data": null
+        },
+        {
+          "month": 3,
+          "data": null
+        },
+        {
+          "month": 4,
+          "data": null
+        },
+        {
+          "month": 5,
+          "data": {
+            "company_key": "gac",
+            "company_en": "GAC",
+            "company_zh": "广汽",
+            "group_type": "traditional",
+            "year": 2026,
+            "month": 5,
+            "overseas_units": 28386,
+            "metric": "customs_export",
+            "yoy_pct": "140",
+            "source_url": "https://www.manilatimes.net/2026/06/04/tmt-newswire/pr-newswire/gac-posts-140-export-growth-in-may-advancing-its-vision-of-sustainable-global-mobility/2358551",
+            "note": "only May sourced"
+          }
+        },
+        {
+          "month": 6,
+          "data": null
+        }
+      ],
+      "cumulative_2026": {
+        "company_key": "gac",
+        "year": 2026,
+        "start_month": 1,
+        "end_month": 6,
+        "total_units": 120000,
+        "metric": "customs_export",
+        "china_export_units": 120000,
+        "overseas_production_units": null,
+        "qualifier": "more_than",
+        "source_url": "https://www.gacgroup.com/en/news/article/the-30-millionth-complete-vehicle-rolls-off-the-line--witness-gac-s-landmark-milestone-alongside-global-customers-365",
+        "note": "official disclosure says H1 exports exceeded 120000",
+        "derived": false,
+        "coverage_months": 6,
+        "complete": true
+      },
       "latest": {
         "company_key": "gac",
         "company_en": "GAC",
@@ -153,6 +972,75 @@
       "company_en": "Dongfeng",
       "company_zh": "东风",
       "group_type": "traditional",
+      "annual_2025": {
+        "company_key": "dongfeng",
+        "year": 2025,
+        "start_month": 1,
+        "end_month": 12,
+        "total_units": 295000,
+        "metric": "customs_export",
+        "china_export_units": 295000,
+        "overseas_production_units": null,
+        "qualifier": "about",
+        "source_url": "https://finance.sina.com.cn/stock/relnews/hk/2026-01-08/doc-inhfqcaz1515865.shtml",
+        "note": "secondary industry ranking; rounded",
+        "derived": false,
+        "coverage_months": 12,
+        "complete": true
+      },
+      "months_2026": [
+        {
+          "month": 1,
+          "data": null
+        },
+        {
+          "month": 2,
+          "data": null
+        },
+        {
+          "month": 3,
+          "data": null
+        },
+        {
+          "month": 4,
+          "data": null
+        },
+        {
+          "month": 5,
+          "data": null
+        },
+        {
+          "month": 6,
+          "data": {
+            "company_key": "dongfeng",
+            "company_en": "Dongfeng",
+            "company_zh": "东风",
+            "group_type": "traditional",
+            "year": 2026,
+            "month": 6,
+            "overseas_units": 20059,
+            "metric": "customs_export",
+            "yoy_pct": "",
+            "source_url": "https://bestsellingcarsblog.com/2026/07/china-exports-june-2026-byd-catches-up-on-chery/",
+            "note": "only Jun sourced"
+          }
+        }
+      ],
+      "cumulative_2026": {
+        "year": 2026,
+        "start_month": 1,
+        "end_month": 6,
+        "total_units": 20059,
+        "metric": "customs_export",
+        "china_export_units": null,
+        "overseas_production_units": null,
+        "qualifier": "exact",
+        "source_url": "https://bestsellingcarsblog.com/2026/07/china-exports-june-2026-byd-catches-up-on-chery/",
+        "note": "derived from sourced monthly rows",
+        "derived": true,
+        "coverage_months": 1,
+        "complete": false
+      },
       "latest": {
         "company_key": "dongfeng",
         "company_en": "Dongfeng",
@@ -172,6 +1060,76 @@
       "company_en": "BAIC",
       "company_zh": "北汽",
       "group_type": "traditional",
+      "annual_2025": {
+        "company_key": "baic",
+        "year": 2025,
+        "start_month": 1,
+        "end_month": 12,
+        "total_units": 308000,
+        "metric": "customs_export",
+        "china_export_units": 308000,
+        "overseas_production_units": null,
+        "qualifier": "exact",
+        "source_url": "https://www.baicglobal.com/news/newsRelease/detail/293",
+        "note": "BAIC Group exports; overseas production not separately disclosed as one total",
+        "derived": false,
+        "coverage_months": 12,
+        "complete": true
+      },
+      "months_2026": [
+        {
+          "month": 1,
+          "data": null
+        },
+        {
+          "month": 2,
+          "data": null
+        },
+        {
+          "month": 3,
+          "data": null
+        },
+        {
+          "month": 4,
+          "data": null
+        },
+        {
+          "month": 5,
+          "data": null
+        },
+        {
+          "month": 6,
+          "data": {
+            "company_key": "baic",
+            "company_en": "BAIC",
+            "company_zh": "北汽",
+            "group_type": "traditional",
+            "year": 2026,
+            "month": 6,
+            "overseas_units": 32000,
+            "metric": "overseas",
+            "yoy_pct": "15.7",
+            "source_url": "https://www.autoreport.cn/zonghexinwen/20260707/17111305717.html",
+            "note": "group overseas-market sales rounded"
+          }
+        }
+      ],
+      "cumulative_2026": {
+        "company_key": "baic",
+        "year": 2026,
+        "start_month": 1,
+        "end_month": 6,
+        "total_units": 184000,
+        "metric": "customs_export",
+        "china_export_units": 184000,
+        "overseas_production_units": null,
+        "qualifier": "about",
+        "source_url": "https://www.autoreport.cn/zonghexinwen/20260707/17111305717.html",
+        "note": "group H1 overseas export/sales disclosure; rounded",
+        "derived": false,
+        "coverage_months": 6,
+        "complete": true
+      },
       "latest": {
         "company_key": "baic",
         "company_en": "BAIC",
@@ -191,6 +1149,108 @@
       "company_en": "NIO",
       "company_zh": "蔚来",
       "group_type": "new_force",
+      "annual_2025": null,
+      "months_2026": [
+        {
+          "month": 1,
+          "data": {
+            "company_key": "nio",
+            "company_en": "NIO",
+            "company_zh": "蔚来",
+            "group_type": "new_force",
+            "year": 2026,
+            "month": 1,
+            "overseas_units": 70,
+            "metric": "customs_export",
+            "yoy_pct": "",
+            "source_url": "https://eletric-vehicles.com/nio/nio-exports-stay-below-100-a-month-despite-ambitious-expansion-target/",
+            "note": ""
+          }
+        },
+        {
+          "month": 2,
+          "data": {
+            "company_key": "nio",
+            "company_en": "NIO",
+            "company_zh": "蔚来",
+            "group_type": "new_force",
+            "year": 2026,
+            "month": 2,
+            "overseas_units": 47,
+            "metric": "customs_export",
+            "yoy_pct": "",
+            "source_url": "https://eletric-vehicles.com/nio/nio-exports-stay-below-100-a-month-despite-ambitious-expansion-target/",
+            "note": ""
+          }
+        },
+        {
+          "month": 3,
+          "data": {
+            "company_key": "nio",
+            "company_en": "NIO",
+            "company_zh": "蔚来",
+            "group_type": "new_force",
+            "year": 2026,
+            "month": 3,
+            "overseas_units": 103,
+            "metric": "customs_export",
+            "yoy_pct": "",
+            "source_url": "https://eletric-vehicles.com/nio/nio-exports-stay-below-100-a-month-despite-ambitious-expansion-target/",
+            "note": ""
+          }
+        },
+        {
+          "month": 4,
+          "data": {
+            "company_key": "nio",
+            "company_en": "NIO",
+            "company_zh": "蔚来",
+            "group_type": "new_force",
+            "year": 2026,
+            "month": 4,
+            "overseas_units": 44,
+            "metric": "customs_export",
+            "yoy_pct": "",
+            "source_url": "https://eletric-vehicles.com/nio/nio-exports-stay-below-100-a-month-despite-ambitious-expansion-target/",
+            "note": ""
+          }
+        },
+        {
+          "month": 5,
+          "data": {
+            "company_key": "nio",
+            "company_en": "NIO",
+            "company_zh": "蔚来",
+            "group_type": "new_force",
+            "year": 2026,
+            "month": 5,
+            "overseas_units": 88,
+            "metric": "customs_export",
+            "yoy_pct": "",
+            "source_url": "https://eletric-vehicles.com/nio/nios-exports-rebound-in-may-on-firefly-strength/",
+            "note": ""
+          }
+        },
+        {
+          "month": 6,
+          "data": null
+        }
+      ],
+      "cumulative_2026": {
+        "year": 2026,
+        "start_month": 1,
+        "end_month": 6,
+        "total_units": 352,
+        "metric": "customs_export",
+        "china_export_units": null,
+        "overseas_production_units": null,
+        "qualifier": "exact",
+        "source_url": "",
+        "note": "derived from sourced monthly rows",
+        "derived": true,
+        "coverage_months": 5,
+        "complete": false
+      },
       "latest": {
         "company_key": "nio",
         "company_en": "NIO",
@@ -210,6 +1270,99 @@
       "company_en": "XPeng",
       "company_zh": "小鹏",
       "group_type": "new_force",
+      "annual_2025": {
+        "company_key": "xpeng",
+        "year": 2025,
+        "start_month": 1,
+        "end_month": 12,
+        "total_units": 45008,
+        "metric": "overseas",
+        "china_export_units": null,
+        "overseas_production_units": null,
+        "qualifier": "exact",
+        "source_url": "https://www.prnewswire.com/news-releases/xpeng-announces-vehicle-delivery-results-for-december-and-full-year-2025-302651514.html",
+        "note": "overseas-market deliveries; local production not separately disclosed",
+        "derived": false,
+        "coverage_months": 12,
+        "complete": true
+      },
+      "months_2026": [
+        {
+          "month": 1,
+          "data": null
+        },
+        {
+          "month": 2,
+          "data": null
+        },
+        {
+          "month": 3,
+          "data": null
+        },
+        {
+          "month": 4,
+          "data": {
+            "company_key": "xpeng",
+            "company_en": "XPeng",
+            "company_zh": "小鹏",
+            "group_type": "new_force",
+            "year": 2026,
+            "month": 4,
+            "overseas_units": 6006,
+            "metric": "customs_export",
+            "yoy_pct": "62",
+            "source_url": "https://electrek.co/2026/05/14/xpeng-talks-buy-volkswagen-plant-europe-expansion/",
+            "note": ""
+          }
+        },
+        {
+          "month": 5,
+          "data": {
+            "company_key": "xpeng",
+            "company_en": "XPeng",
+            "company_zh": "小鹏",
+            "group_type": "new_force",
+            "year": 2026,
+            "month": 5,
+            "overseas_units": 6503,
+            "metric": "customs_export",
+            "yoy_pct": "",
+            "source_url": "https://eletric-vehicles.com/xpeng/xpeng-exports-hit-record-6503-units-in-may-as-g6-drives-80-surge/",
+            "note": ""
+          }
+        },
+        {
+          "month": 6,
+          "data": {
+            "company_key": "xpeng",
+            "company_en": "XPeng",
+            "company_zh": "小鹏",
+            "group_type": "new_force",
+            "year": 2026,
+            "month": 6,
+            "overseas_units": 7533,
+            "metric": "customs_export",
+            "yoy_pct": "99.3",
+            "source_url": "https://eletric-vehicles.com/xpeng/xpeng-sees-european-registrations-triple-in-june-ahead-of-l03-launch/",
+            "note": ""
+          }
+        }
+      ],
+      "cumulative_2026": {
+        "year": 2026,
+        "start_month": 1,
+        "end_month": 6,
+        "total_units": 20042,
+        "metric": "customs_export",
+        "china_export_units": null,
+        "overseas_production_units": null,
+        "qualifier": "exact",
+        "source_url": "",
+        "note": "derived from sourced monthly rows",
+        "derived": true,
+        "coverage_months": 3,
+        "complete": false
+      },
       "latest": {
         "company_key": "xpeng",
         "company_en": "XPeng",
@@ -229,6 +1382,34 @@
       "company_en": "Li Auto",
       "company_zh": "理想",
       "group_type": "new_force",
+      "annual_2025": null,
+      "months_2026": [
+        {
+          "month": 1,
+          "data": null
+        },
+        {
+          "month": 2,
+          "data": null
+        },
+        {
+          "month": 3,
+          "data": null
+        },
+        {
+          "month": 4,
+          "data": null
+        },
+        {
+          "month": 5,
+          "data": null
+        },
+        {
+          "month": 6,
+          "data": null
+        }
+      ],
+      "cumulative_2026": null,
       "latest": null
     },
     {
@@ -236,6 +1417,75 @@
       "company_en": "Leapmotor",
       "company_zh": "零跑",
       "group_type": "new_force",
+      "annual_2025": {
+        "company_key": "leapmotor",
+        "year": 2025,
+        "start_month": 1,
+        "end_month": 12,
+        "total_units": 67000,
+        "metric": "customs_export",
+        "china_export_units": 67000,
+        "overseas_production_units": null,
+        "qualifier": "about",
+        "source_url": "https://autonews.gasgoo.com/articles/news/leapmotor-steps-up-global-expansion-2074508868091432961",
+        "note": "secondary report quoting annual overseas sales; rounded",
+        "derived": false,
+        "coverage_months": 12,
+        "complete": true
+      },
+      "months_2026": [
+        {
+          "month": 1,
+          "data": null
+        },
+        {
+          "month": 2,
+          "data": null
+        },
+        {
+          "month": 3,
+          "data": null
+        },
+        {
+          "month": 4,
+          "data": null
+        },
+        {
+          "month": 5,
+          "data": null
+        },
+        {
+          "month": 6,
+          "data": {
+            "company_key": "leapmotor",
+            "company_en": "Leapmotor",
+            "company_zh": "零跑",
+            "group_type": "new_force",
+            "year": 2026,
+            "month": 6,
+            "overseas_units": 21102,
+            "metric": "customs_export",
+            "yoy_pct": "",
+            "source_url": "https://bestsellingcarsblog.com/2026/07/china-exports-june-2026-byd-catches-up-on-chery/",
+            "note": "China-made export; Stellantis-channel differs"
+          }
+        }
+      ],
+      "cumulative_2026": {
+        "year": 2026,
+        "start_month": 1,
+        "end_month": 6,
+        "total_units": 21102,
+        "metric": "customs_export",
+        "china_export_units": null,
+        "overseas_production_units": null,
+        "qualifier": "exact",
+        "source_url": "https://bestsellingcarsblog.com/2026/07/china-exports-june-2026-byd-catches-up-on-chery/",
+        "note": "derived from sourced monthly rows",
+        "derived": true,
+        "coverage_months": 1,
+        "complete": false
+      },
       "latest": {
         "company_key": "leapmotor",
         "company_en": "Leapmotor",
@@ -255,6 +1505,34 @@
       "company_en": "Xiaomi",
       "company_zh": "小米",
       "group_type": "new_force",
+      "annual_2025": null,
+      "months_2026": [
+        {
+          "month": 1,
+          "data": null
+        },
+        {
+          "month": 2,
+          "data": null
+        },
+        {
+          "month": 3,
+          "data": null
+        },
+        {
+          "month": 4,
+          "data": null
+        },
+        {
+          "month": 5,
+          "data": null
+        },
+        {
+          "month": 6,
+          "data": null
+        }
+      ],
+      "cumulative_2026": null,
       "latest": null
     }
   ]

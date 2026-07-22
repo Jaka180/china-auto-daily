@@ -1,0 +1,16 @@
+company_key,year,start_month,end_month,total_units,metric,china_export_units,overseas_production_units,qualifier,source_url,note
+byd,2025,1,12,1046083,overseas,,,exact,https://cnevpost.com/2026/01/01/byd-nev-sales-dec-2025/,overseas passenger NEV sales; includes locally produced vehicles where reported
+geely,2025,1,12,420097,customs_export,420097,,exact,https://www1.hkexnews.hk/listedco/listconews/sehk/2026/0427/2026042700756.pdf,Geely Automobile Holdings export sales; overseas local-plant output not disclosed as one total
+chery,2025,1,12,1344020,customs_export,1344020,,exact,https://www.cheryholding.com/article/1085.html,Chery Group exports
+changan,2025,1,12,637280,overseas,,9485,exact,https://static.cninfo.com.cn/finalpage/2026-04-11/1225093379.PDF,overseas-region sales and production are separately reported but are not additive; China-origin exports not separately disclosed
+saic,2025,1,12,1071000,overseas,,,about,https://www.saicmotor.com/e/latest_news/saic_motor/63550.shtml,overseas sales include exported vehicles and overseas-base output; components not separately disclosed as annual totals
+gwm,2025,1,12,506066,overseas,,,exact,https://www.gwm-mx.com/es/news-list/2026/GWM-ALCANZA-UN-R-CORD-DE-VENTAS-EN-2025-Y-ACELERA-UN-CRECIMIENTO-GLOBAL-SOSTENIBLE-Y-DE-ALTA-CALIDAD,international-market sales; local production not separately disclosed as one total
+gac,2025,1,12,130000,customs_export,130000,,more_than,https://www.gacgroup.com/en/news/article/the-30-millionth-complete-vehicle-rolls-off-the-line--witness-gac-s-landmark-milestone-alongside-global-customers-365,official disclosure says exports exceeded 130000
+dongfeng,2025,1,12,295000,customs_export,295000,,about,https://finance.sina.com.cn/stock/relnews/hk/2026-01-08/doc-inhfqcaz1515865.shtml,secondary industry ranking; rounded
+baic,2025,1,12,308000,customs_export,308000,,exact,https://www.baicglobal.com/news/newsRelease/detail/293,BAIC Group exports; overseas production not separately disclosed as one total
+xpeng,2025,1,12,45008,overseas,,,exact,https://www.prnewswire.com/news-releases/xpeng-announces-vehicle-delivery-results-for-december-and-full-year-2025-302651514.html,overseas-market deliveries; local production not separately disclosed
+leapmotor,2025,1,12,67000,customs_export,67000,,about,https://autonews.gasgoo.com/articles/news/leapmotor-steps-up-global-expansion-2074508868091432961,secondary report quoting annual overseas sales; rounded
+chery,2026,1,6,943817,customs_export,943817,,exact,https://www.chery-eg.com/en/news/chery-group-h1-sales-exceed-135-million-units-po,Chery Group H1 exports
+saic,2026,1,6,734676,overseas,,,exact,https://www.saicmotor.com/e/investor_relations/sales_volume/index.shtml,exported vehicles plus vehicles made by overseas bases; components not separated
+gac,2026,1,6,120000,customs_export,120000,,more_than,https://www.gacgroup.com/en/news/article/the-30-millionth-complete-vehicle-rolls-off-the-line--witness-gac-s-landmark-milestone-alongside-global-customers-365,official disclosure says H1 exports exceeded 120000
+baic,2026,1,6,184000,customs_export,184000,,about,https://www.autoreport.cn/zonghexinwen/20260707/17111305717.html,group H1 overseas export/sales disclosure; rounded
