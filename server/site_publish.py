@@ -38,6 +38,11 @@ SITE_REPO = os.path.expanduser(os.environ.get("SITE_REPO_DIR", "~/tochinacar"))
 SITE_REPO_URL = os.environ.get("SITE_REPO_URL", "git@github.com:Jaka180/tochinacar.git")
 MODEL = os.environ.get("ANTHROPIC_MODEL", "claude-sonnet-4-6")
 API_KEY = os.environ.get("ANTHROPIC_API_KEY")
+BEIJING_TZ = datetime.timezone(datetime.timedelta(hours=8))
+
+
+def beijing_now():
+    return datetime.datetime.now(BEIJING_TZ)
 
 if not API_KEY:
     sys.exit("未设置 ANTHROPIC_API_KEY")
@@ -52,7 +57,7 @@ with open(meta_path, encoding="utf-8") as f:
 with open(html_path, encoding="utf-8") as f:
     briefing_html = f.read()
 
-date = meta.get("date") or datetime.date.today().isoformat()
+date = meta.get("date") or beijing_now().date().isoformat()
 slug = f"{date}-china-auto-daily"
 
 
@@ -204,6 +209,8 @@ if events_raw:
 
 article = {
     "slug": slug, "date": date,
+    # 精确发布时间（ISO 8601，北京时区）——供 sitemap-news 的 publication_date 使用
+    "published_at": beijing_now().isoformat(timespec="seconds"),
     "tag_en": "China Auto Overseas Daily", "tag_zh": "中国车企出海日报",
     "title_en": meta_obj.get("title_en", ""), "title_zh": meta_obj.get("title_zh", ""),
     "excerpt_en": meta_obj.get("excerpt_en", ""), "excerpt_zh": meta_obj.get("excerpt_zh", ""),

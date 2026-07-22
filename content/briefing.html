@@ -1,342 +1,38 @@
-<!DOCTYPE html><script type="application/json" id="cowork-artifact-meta">
-{
-  "name": "China Auto Overseas",
-  "schemaVersion": 1,
-  "description": "中国车企出海动态仪表板 — 每天 06:00 自动更新，覆盖 8 大传统 OEM、5 大新势力及华为汽车的海外销量、经销商合作、海外投资设厂情况。"
-}
-</script>
-<html lang="zh-CN">
-<head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>中国车企出海日报 / China Auto Overseas Briefing</title>
-<style>
-:root { color-scheme: light; }
-* { box-sizing: border-box; margin: 0; padding: 0; }
-body { background: #eceef1; font-family: -apple-system, BlinkMacSystemFont, 'PingFang SC', 'Hiragino Sans GB', 'Segoe UI', Georgia, serif; color: #1c1c1e; font-size: 14px; line-height: 1.7; padding: 16px 12px 40px; }
-.email-wrap { max-width: 660px; margin: 0 auto; background: white; border-radius: 8px; overflow: hidden; box-shadow: 0 2px 12px rgba(0,0,0,0.08); }
-.email-header { background: #111827; color: white; padding: 22px 28px 18px; border-bottom: 3px solid #dc2626; }
-.email-title { font-size: 18px; font-weight: 700; }
-.email-title .slash { color: #dc2626; margin: 0 6px; }
-.email-date { font-size: 13px; color: #9ca3af; margin-top: 4px; }
-.email-meta { margin-top: 10px; display: flex; flex-wrap: wrap; gap: 6px; }
-.meta-chip { font-size: 11px; background: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.15); color: #d1d5db; padding: 2px 9px; border-radius: 20px; }
-.company-roster { margin-top: 14px; padding-top: 12px; border-top: 1px solid rgba(255,255,255,0.1); }
-.roster-group { margin-bottom: 6px; font-size: 11.5px; line-height: 1.6; }
-.roster-label { font-size: 10px; font-weight: 700; letter-spacing: 0.6px; text-transform: uppercase; color: #6b7280; margin-right: 6px; }
-.roster-names { color: #d1d5db; }
-.email-body { padding: 0 28px 28px; }
-.exec-summary { margin: 24px 0 0; border: 1px solid #e5e7eb; border-radius: 8px; overflow: hidden; }
-.exec-label { background: #f9fafb; padding: 9px 16px; font-size: 11px; font-weight: 700; letter-spacing: 0.7px; text-transform: uppercase; color: #6b7280; border-bottom: 1px solid #e5e7eb; }
-.exec-zh { padding: 14px 16px 10px; font-size: 13.5px; color: #374151; line-height: 1.7; border-bottom: 1px solid #f3f4f6; }
-.exec-zh::before { content: '中文  '; font-weight: 700; font-size: 11px; color: #9ca3af; letter-spacing: 1px; }
-.exec-en { padding: 10px 16px 14px; font-size: 13.5px; color: #374151; line-height: 1.65; }
-.exec-en::before { content: 'EN  '; font-weight: 700; font-size: 11px; color: #9ca3af; letter-spacing: 1px; }
-.section-title { font-size: 11px; font-weight: 700; letter-spacing: 0.8px; text-transform: uppercase; color: #9ca3af; margin: 28px 0 0; padding-bottom: 8px; border-bottom: 2px solid #f3f4f6; }
-.company-block { margin-top: 22px; padding-bottom: 22px; border-bottom: 1px solid #f3f4f6; }
-.company-block:last-child { border-bottom: none; }
-.company-heading { display: flex; align-items: baseline; gap: 8px; margin-bottom: 10px; }
-.company-num { font-size: 13px; font-weight: 700; color: #dc2626; flex-shrink: 0; }
-.company-name-cn { font-size: 16px; font-weight: 700; color: #111827; }
-.company-name-en { font-size: 13px; color: #9ca3af; font-weight: 400; }
-.sub-brand { margin: 12px 0 8px; display: flex; align-items: center; }
-.sub-brand-tree { font-size: 13px; color: #d1d5db; margin-right: 8px; }
-.sub-brand-label { font-size: 11px; font-weight: 700; color: #9ca3af; text-transform: uppercase; letter-spacing: 0.3px; margin-right: 6px; }
-.sub-brand-name { font-size: 13px; font-weight: 600; color: #374151; }
-.moves-label { font-size: 11px; font-weight: 700; color: #9ca3af; text-transform: uppercase; letter-spacing: 0.5px; margin: 8px 0 6px; }
-.bullet-list { list-style: none; padding: 0; margin: 0; }
-.bullet-item { display: flex; gap: 8px; padding: 3px 0; font-size: 13.5px; color: #374151; line-height: 1.65; }
-.bullet-dot { color: #dc2626; flex-shrink: 0; margin-top: 1px; }
-.bullet-text { flex: 1; }
-.src { color: #3b82f6; font-size: 12px; text-decoration: none; margin-left: 3px; }
-.strategic-read { margin-top: 12px; padding: 11px 14px; background: #f9fafb; border-left: 3px solid #dc2626; border-radius: 0 6px 6px 0; }
-.strategic-label { font-size: 10.5px; font-weight: 700; color: #dc2626; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 4px; }
-.strategic-text { font-size: 13px; color: #4b5563; line-height: 1.65; font-style: italic; }
-.quiet-block { margin-top: 22px; padding: 13px 16px; background: #f9fafb; border-radius: 6px; border: 1px solid #e5e7eb; }
-.quiet-text { font-size: 13px; color: #6b7280; line-height: 1.65; }
-.theme-block { margin-top: 16px; }
-.theme-item { margin-bottom: 14px; padding-bottom: 14px; border-bottom: 1px dashed #e5e7eb; }
-.theme-item:last-child { border-bottom: none; margin-bottom: 0; padding-bottom: 0; }
-.theme-num { font-size: 12px; font-weight: 700; color: #dc2626; margin-bottom: 3px; }
-.theme-title { font-size: 14px; font-weight: 700; color: #111827; margin-bottom: 5px; }
-.theme-text { font-size: 13px; color: #4b5563; line-height: 1.65; }
-.email-footer { background: #f9fafb; border-top: 1px solid #e5e7eb; padding: 14px 28px; font-size: 11.5px; color: #9ca3af; text-align: center; line-height: 1.6; }
-</style>
-</head>
-<body>
-<div class="email-wrap">
+<!DOCTYPE html><html lang=zh-CN><head><meta charset=UTF-8><meta name=viewport content='width=device-width,initial-scale=1'><title>中国车企出海日报 | 2026年7月22日:比亚迪巴西第10万辆下线、进军日本K-car,小鹏L03慕尼黑首发</title></head><body style='background:#eceef1;margin:0;padding:16px;'><section style="max-width:677px;margin:0 auto;font-family:-apple-system,'PingFang SC',sans-serif;color:#1c1c1e;font-size:15px;line-height:1.8;">
+<section style="background:#111827;border-bottom:4px solid #dc2626;padding:22px 20px;">
+<p style="margin:0;color:#ffffff;font-size:20px;font-weight:bold;">中国车企出海日报 <span style="color:#9ca3af;font-size:14px;">/ China Auto Overseas Briefing</span></p>
+<p style="margin:6px 0 0;color:#f87171;font-size:13px;">2026年7月22日 · 早间版</p>
+<p style="margin:10px 0 0;color:#9ca3af;font-size:12px;">追踪:比亚迪 · 吉利 · 奇瑞 · 长安 · 上汽 · 长城 · 广汽 · 东风 · 蔚来 · 小鹏 · 零跑 · 小米 · 华为鸿蒙智行 等</p>
+</section>
 
-  <div class="email-header">
-    <div class="email-title">中国车企出海日报<span class="slash">/</span>China Auto Overseas Briefing</div>
-    <div class="email-date">2026年6月9日 星期二 · 早间版 / Tuesday, June 9, 2026 · Morning Edition</div>
-    <div class="email-meta">
-      <span class="meta-chip">14家车企</span>
-      <span class="meta-chip">动态驱动</span>
-      <span class="meta-chip">中英双语</span>
-      <span class="meta-chip">每日06:00自动更新</span>
-    </div>
-    <div class="company-roster">
-      <div class="roster-group"><span class="roster-label">传统OEM</span><span class="roster-names">比亚迪 · 上汽 · 奇瑞 · 长安 · 长城 · 东风 · 广汽 · 北汽</span></div>
-      <div class="roster-group"><span class="roster-label">新势力</span><span class="roster-names">蔚来 · 理想 · 小鹏 · 零跑 · 小米汽车</span></div>
-      <div class="roster-group"><span class="roster-label">华为汽车</span><span class="roster-names">鸿蒙智行（问界 · 智界 · 享界 · 尊界 · 尚界）</span></div>
-    </div>
-  </div>
+<section style="padding:18px 20px 6px;">
+<p style="margin:0 0 8px;font-size:16px;font-weight:bold;color:#111827;">摘要 Executive Summary</p>
+<p style="margin:0 0 10px;color:#374151;"><span style="color:#dc2626;font-weight:bold;">中文 · </span>今日出海主线在比亚迪。7月16日,比亚迪巴西卡马萨里工厂第10万辆电动车(海豚Mini)下线,该厂已雇员超5,500人、投资55亿雷亚尔,正赶在巴西进口关税年内升至35%前扩产本地化;同时比亚迪签下法甲豪门巴黎圣日耳曼(PSG)冠名合作,并宣布7月28日以微型车Racco进军日本K-car市场(约合1.77万美元,续航最高320km),直接叫板铃木、本田。另一边,小鹏L03已于7月16日在慕尼黑全球首发、海外去掉"MONA"标独立命名,10月还将向欧洲投放高端SUV。政策面,欧盟对华插混(PHEV)反补贴税正逼近落地,矛头指向比亚迪、奇瑞、上汽。</p>
+<p style="margin:0 0 6px;color:#374151;"><span style="color:#dc2626;font-weight:bold;">EN · </span>BYD dominates today's overseas news: its Brazil plant built its 100,000th EV on July 16, it signed a PSG sponsorship, and it will enter Japan's kei-car segment with the Racco on July 28. XPeng's L03 went on sale globally from Munich on July 16 under a standalone name, with a premium SUV due in Europe in October. Looming over all of it: the EU is preparing countervailing duties on Chinese PHEVs.</p>
+</section>
 
-  <div class="email-body">
+<section style="padding:8px 20px 0;">
+<p style="margin:0 0 10px;font-size:16px;font-weight:bold;color:#111827;border-left:4px solid #dc2626;padding-left:10px;">今日重点 TODAY'S MOVERS</p>
 
-    <!-- EXECUTIVE SUMMARY -->
-    <div class="exec-summary">
-      <div class="exec-label">Executive Summary / 摘要</div>
-      <div class="exec-zh">周二的主线从"卖多少"转向"卖多贵、在哪造"。其一，比亚迪高端化出海加速：腾势Denza在德国汉堡高档城区开出首家德国门店，旗舰Z9 GT起售价超10万欧元、直插保时捷与奔驰腹地，并定下年底覆盖30+欧洲国家、150+门店、欧洲建3,000座闪充站的目标。其二，本地化从"建整车厂"深入到"供应链"：零跑西班牙B10的底盘件由Lieder（多利科技与西班牙Fagor Ederlan合资）7月起本地供货，奇瑞被曝洽谈英国JLR海伍德工厂与日产桑德兰产能、小鹏将在欧洲与东南亚组建本地供应链团队。其三，新势力出海路线分化：零跑、小鹏激进扩张，蔚来则放缓海外节奏、回防国内盈利。</div>
-      <div class="exec-en">Tuesday's storyline shifts from "how many" to "how premium, and where built." First, BYD's up-market push accelerates: Denza opened its first German store in an upscale Hamburg district, with the flagship Z9 GT priced above €100,000 — aimed squarely at Porsche and Mercedes — alongside a target of 30+ European countries, 150+ stores and 3,000 flash-charging stations in Europe by year-end. Second, localization is moving from car plants down to the supply chain: chassis parts for Leapmotor's Spanish B10 will be made locally from July by Lieder (a Duoli–Fagor Ederlan JV), Chery is reportedly in talks over JLR's Halewood and Nissan's Sunderland capacity in the UK, and XPeng will stand up local supply-chain teams in Europe and Southeast Asia. Third, the new-force playbooks are diverging — Leapmotor and XPeng push hard while NIO slows its overseas pace to defend domestic profitability.</div>
-    </div>
+<p style="margin:14px 0 4px;font-size:15px;font-weight:bold;color:#111827;">01 比亚迪 BYD(含腾势/方程豹/仰望)</p>
+<p style="margin:2px 0;color:#374151;"><span style="color:#dc2626;">▸</span> 巴西:7月16日卡马萨里工厂第10万辆电动车(海豚Mini)下线;该厂雇员逾5,500、投资约55亿雷亚尔,赶在巴西EV进口税年内升至35%前加速本地化。<a href="https://www.ad-hoc-news.de/boerse/news/ueberblick/byd-s-global-push-a-100-000th-ev-in-brazil-a-psg-partnership-and-a/69809725" style="color:#3b82f6;font-size:12px;text-decoration:none;">[ad-hoc-news]</a></p>
+<p style="margin:2px 0;color:#374151;"><span style="color:#dc2626;">▸</span> 日本:7月20日宣布首款纯电微型车Racco将于7月28日开售,车长3,395mm、WLTC续航最高320km、支持50kW快充,起售价约1.77万美元,分200/300 Plus/300 Premium三配置,直接进入铃木、本田主导的K-car腹地。<a href="https://carnewschina.com/2026/07/13/byd-racco-brings-320-km-electric-range-mirocar-to-japan-on-july-28-to-challenge-suzuki/" style="color:#3b82f6;font-size:12px;text-decoration:none;">[CarNewsChina]</a> <a href="https://paultan.org/2026/07/10/byd-racco-specifications-revealed-for-japan/" style="color:#3b82f6;font-size:12px;text-decoration:none;">[paultan]</a></p>
+<p style="margin:2px 0;color:#374151;"><span style="color:#dc2626;">▸</span> 品牌:签下法甲豪门巴黎圣日耳曼(PSG)冠名合作,加码欧洲体育营销。<a href="https://www.ad-hoc-news.de/boerse/news/ueberblick/byd-s-global-push-a-100-000th-ev-in-brazil-a-psg-partnership-and-a/69809725" style="color:#3b82f6;font-size:12px;text-decoration:none;">[ad-hoc-news]</a></p>
+<section style="border-left:3px solid #dc2626;background:#f9fafb;font-style:italic;padding:8px 12px;margin:8px 0;color:#374151;">Strategic Read:比亚迪把"造在当地、卖在当地"从欧洲复制到南美与日本。巴西赶关税、日本啃最难的K-car细分、PSG做品牌,三条线同日推进,显示其出海已从"卖车"升级为"落地生态"。风险在于日本K-car对成本与本地服务极为苛刻,首战象征意义大于销量。</section>
 
-    <!-- TODAY'S MOVERS -->
-    <div class="section-title">Today's Movers / 今日重点</div>
+<p style="margin:14px 0 4px;font-size:15px;font-weight:bold;color:#111827;">02 小鹏 XPeng</p>
+<p style="margin:2px 0;color:#374151;"><span style="color:#dc2626;">▸</span> 7月16日L03在慕尼黑全球首发,海外去掉"MONA"标、以"XPeng L03"独立命名,与中国市场同步开卖;对标BYD Sealion 7、MG S6、吉利EX5、零跑C10。<a href="https://eletric-vehicles.com/xpeng/xpeng-to-launch-mona-l03-and-flagship-suv-gx-in-europe-from-july/" style="color:#3b82f6;font-size:12px;text-decoration:none;">[eletric-vehicles]</a></p>
+<p style="margin:2px 0;color:#374151;"><span style="color:#dc2626;">▸</span> 10月将向欧洲追加投放一款高端SUV,延续"以欧洲为主场"的品牌策略。<a href="https://eletric-vehicles.com/xpeng/xpeng-to-launch-mona-l03-and-flagship-suv-gx-in-europe-from-july/" style="color:#3b82f6;font-size:12px;text-decoration:none;">[eletric-vehicles]</a></p>
+<section style="border-left:3px solid #dc2626;background:#f9fafb;font-style:italic;padding:8px 12px;margin:8px 0;color:#374151;">Strategic Read:选择慕尼黑而非北京首发,并弃用MONA子品牌名,说明小鹏想在欧洲建立"XPeng"统一高端心智,而非低价跟随。能否站稳,取决于渠道与售后铺设速度。</section>
+</section>
 
-    <!-- 01 BYD -->
-    <div class="company-block">
-      <div class="company-heading">
-        <span class="company-num">01</span>
-        <span class="company-name-cn">比亚迪</span>
-        <span class="company-name-en">BYD</span>
-      </div>
-      <div class="sub-brand">
-        <span class="sub-brand-tree">└</span>
-        <span class="sub-brand-label">子品牌 / Sub-brand:</span>
-        <span class="sub-brand-name">腾势 / Denza</span>
-      </div>
-      <div class="moves-label">Key Moves / 关键动作</div>
-      <ul class="bullet-list">
-        <li class="bullet-item"><span class="bullet-dot">▸</span><span class="bullet-text">腾势Denza于6月初在德国汉堡高档城区开出首家德国门店，旗舰Z9 GT提供952马力纯电与858马力插混两版本，德国起售价均超10万欧元，公开对标保时捷、奔驰。<a class="src" href="https://www.autonews.com/byd/ane-denza-debut-germany-0604/">Automotive News</a></span></li>
-        <li class="bullet-item"><span class="bullet-dot">▸</span><span class="bullet-text">腾势计划2026年底前覆盖30+欧洲国家、开设150+零售门店，Z9 GT率先在法、德、意、西、英开售；比亚迪同步计划年底前在海外建成6,000座闪充站，其中3,000座位于欧洲。<a class="src" href="https://cnevpost.com/2026/04/09/denza-enters-europe-byd-debuts-flash-charging/">CnEVPost</a></span></li>
-        <li class="bullet-item"><span class="bullet-dot">▸</span><span class="bullet-text">5月海外销量160,177辆、同比＋81%，占当月总销量约42.6%，连续创单月历史新高；向分析师指引2026年海外目标150万辆（较年初130万辆上调15%）。<a class="src" href="https://eletric-vehicles.com/byd/byd-overseas-sales-hit-new-record-in-may-exceed-40-of-total-volume/">EV</a></span></li>
-      </ul>
-      <div class="strategic-read">
-        <div class="strategic-label">Strategic Read / 战略解读</div>
-        <div class="strategic-text">比亚迪在主流市场已用规模站稳后，正把战线推向高利润的豪华段——腾势Z9 GT定价超10万欧元，是中国品牌少有的"向上打"姿态，意在摆脱"便宜量大"的标签、撬动BBA与保时捷的客群与溢价。但豪华品牌靠的是几十年沉淀的品牌资产与服务体验，单靠技术参数与门店扩张难以速成；这步棋赢面在于改写中国车形象，风险在于高端渠道与售后跟不上，反而稀释品牌。</div>
-      </div>
-    </div>
+<section style="padding:6px 20px 0;">
+<p style="margin:0 0 8px;font-size:16px;font-weight:bold;color:#111827;border-left:4px solid #9ca3af;padding-left:10px;">今日无显著新增 TODAY'S QUIET</p>
+<p style="margin:2px 0;color:#9ca3af;font-size:14px;">吉利 / 奇瑞 / 长安 / 上汽MG / 长城 / 广汽 / 东风 / 蔚来 / 零跑 / 小米:过去24-72小时未检索到可确认的海外新增硬信号(6月出口与H1数据前期已报)。</p>
+</section>
 
-    <!-- 02 Chery -->
-    <div class="company-block">
-      <div class="company-heading">
-        <span class="company-num">02</span>
-        <span class="company-name-cn">奇瑞</span>
-        <span class="company-name-en">Chery</span>
-      </div>
-      <div class="sub-brand">
-        <span class="sub-brand-tree">└</span>
-        <span class="sub-brand-label">子品牌 / Sub-brand:</span>
-        <span class="sub-brand-name">OMODA / JAECOO</span>
-      </div>
-      <div class="moves-label">Key Moves / 关键动作</div>
-      <ul class="bullet-list">
-        <li class="bullet-item"><span class="bullet-dot">▸</span><span class="bullet-text">据S&P Global，奇瑞正推进英国本地制造：被曝与捷豹路虎（JLR）海伍德（Halewood）工厂关联，并就接入日产桑德兰（Sunderland）产能与日产洽谈，欲在英国就地造车绕开欧盟关税。<a class="src" href="https://www.spglobal.com/automotive-insights/en/blogs/2026/05/chinese-automakers-manufacturing-localization-europe">S&P Global</a></span></li>
-        <li class="bullet-item"><span class="bullet-dot">▸</span><span class="bullet-text">5月海外交付约181,571辆、同比＋81%，占当月总销量约73%，继续领跑中国车企出口榜；OMODA & JAECOO累计全球销量已破100万辆，目标2027年覆盖108国。<a class="src" href="https://www.indexbox.io/blog/chinese-carmakers-see-overseas-sales-surge-as-domestic-demand-weakens/">IndexBox</a></span></li>
-        <li class="bullet-item"><span class="bullet-dot">▸</span><span class="bullet-text">前两月对欧出口68,677辆、同比＋215%，居中国品牌对欧出口首位；JAECOO 7在英细分市场登顶。<a class="src" href="https://autonews.gasgoo.com/articles/news/jan-feb-2026-china-passenger-car-exports-who-is-leading-chery-leads-in-europe-central-and-south-america-see-all-round-growth-gasgoo-automotive-research-institute-2041859748876435456">Gasgoo</a></span></li>
-      </ul>
-      <div class="strategic-read">
-        <div class="strategic-label">Strategic Read / 战略解读</div>
-        <div class="strategic-text">奇瑞选择英国而非西班牙作为欧洲制造落点，是一步精算：英国不在欧盟反补贴税框架内，借用JLR或日产的闲置产能可以最快、最低风险地实现"欧洲制造"。这与比亚迪/上汽/零跑扎堆西班牙形成对照，说明中国车企的欧洲本地化正从"集中一地"走向"按关税与产能机会分散布点"。变数在于英国脱欧后对欧盟出口仍有规则成本，且代工模式下品质与产能调度受制于人。</div>
-      </div>
-    </div>
-
-    <!-- 03 Leapmotor -->
-    <div class="company-block">
-      <div class="company-heading">
-        <span class="company-num">03</span>
-        <span class="company-name-cn">零跑</span>
-        <span class="company-name-en">Leapmotor</span>
-      </div>
-      <div class="sub-brand">
-        <span class="sub-brand-tree">└</span>
-        <span class="sub-brand-label">子品牌 / Sub-brand:</span>
-        <span class="sub-brand-name">Leapmotor International（Stellantis合资）</span>
-      </div>
-      <div class="moves-label">Key Moves / 关键动作</div>
-      <ul class="bullet-list">
-        <li class="bullet-item"><span class="bullet-dot">▸</span><span class="bullet-text">西班牙本地化深入到零部件层级：Lieder Automotive（中国多利科技与西班牙Fagor Ederlan合资）将于2026年7月起为零跑B10本地生产底盘件，B10将于下半年在萨拉戈萨Figueruelas工厂下线。<a class="src" href="https://www.indexbox.io/blog/leapmotor-and-stellantis-to-produce-electric-suvs-at-former-opel-plant-in-spain/">IndexBox</a></span></li>
-        <li class="bullet-item"><span class="bullet-dot">▸</span><span class="bullet-text">B10为首款西班牙本地造的零跑车型，B05、A10、A05计划自2027年起在同厂投产；Stellantis持零跑21%股权、合资公司Leapmotor International中零跑占49%。<a class="src" href="https://www.electrive.com/2026/03/03/stellantis-confirms-leapmotor-production-in-spain/">electrive</a></span></li>
-        <li class="bullet-item"><span class="bullet-dot">▸</span><span class="bullet-text">5月交付81,600辆创历史新高、同比＋80%、环比＋14%，跻身在欧纯电中国品牌前三；一季度对欧出口同比＋397%。<a class="src" href="https://autonews.gasgoo.com/articles/news/q1-2026-chinese-passenger-vehicle-exports-leapmotor-soars-397-in-europe-geely-surges-489-in-central-and-south-america-gasgoo-automotive-research-institute-2053858881254617089">Gasgoo</a></span></li>
-      </ul>
-      <div class="strategic-read">
-        <div class="strategic-label">Strategic Read / 战略解读</div>
-        <div class="strategic-text">零跑的西班牙项目正从"整车组装"向"零部件本地化"纵深推进——Lieder这类中西合资供应商落地，意味着关税合规要求的"本地增值比例"将更扎实地满足，也把中国零部件链一同带入欧洲。这是比单纯总装更深的护城河。代价是零跑在合资框架内的话语权问题依旧存在：当产品、产线、供应链都嵌入Stellantis体系，长期的定价权与技术主导权能否守住，仍是这套"借船出海"模式的核心悬念。</div>
-      </div>
-    </div>
-
-    <!-- 04 XPeng -->
-    <div class="company-block">
-      <div class="company-heading">
-        <span class="company-num">04</span>
-        <span class="company-name-cn">小鹏汽车</span>
-        <span class="company-name-en">XPeng</span>
-      </div>
-      <div class="moves-label">Key Moves / 关键动作</div>
-      <ul class="bullet-list">
-        <li class="bullet-item"><span class="bullet-dot">▸</span><span class="bullet-text">继2025年在欧洲与东南亚启动本地生产后，小鹏计划2026年在两地组建独立运营的本地化供应链团队，深化"就地造车"。<a class="src" href="https://autonews.gasgoo.com/articles/news/chinese-ev-startups-get-serious-about-europe-2029139422052720641">Gasgoo</a></span></li>
-        <li class="bullet-item"><span class="bullet-dot">▸</span><span class="bullet-text">海外销售网络已超1,000家门店、覆盖60国，其中欧洲覆盖28国、290家门店，欧洲贡献了小鹏海外销量的近一半；正与大众洽谈收购一座欧洲工厂以补产能。<a class="src" href="https://cnevpost.com/2026/01/20/xpeng-sales-outlets-surpass-1000-global-footprint-60-countries/">CnEVPost</a></span></li>
-      </ul>
-      <div class="strategic-read">
-        <div class="strategic-label">Strategic Read / 战略解读</div>
-        <div class="strategic-text">小鹏与零跑代表新势力出海的"激进派"：不满足于出口，而是把供应链、产能一并向海外迁移。组建本地供应链团队是从"卖车"到"经营当地体系"的关键一跃，能降低物流与汇率风险、贴近本地法规。难点在于小鹏体量有限，海外多线投入（产能收购＋供应链团队＋渠道）对现金流是不小考验，需要海外销量持续放量来支撑这套重资产打法。</div>
-      </div>
-    </div>
-
-    <!-- 05 NIO -->
-    <div class="company-block">
-      <div class="company-heading">
-        <span class="company-num">05</span>
-        <span class="company-name-cn">蔚来</span>
-        <span class="company-name-en">NIO</span>
-      </div>
-      <div class="sub-brand">
-        <span class="sub-brand-tree">└</span>
-        <span class="sub-brand-label">子品牌 / Sub-brand:</span>
-        <span class="sub-brand-name">萤火虫 / Firefly</span>
-      </div>
-      <div class="moves-label">Key Moves / 关键动作</div>
-      <ul class="bullet-list">
-        <li class="bullet-item"><span class="bullet-dot">▸</span><span class="bullet-text">蔚来确认放缓海外扩张节奏、回防国内市场与盈利，但强调不退出已进入的海外市场。<a class="src" href="https://cnevpost.com/2026/05/23/nio-slows-overseas-expansion-focus-domestic-market/">CnEVPost</a></span></li>
-        <li class="bullet-item"><span class="bullet-dot">▸</span><span class="bullet-text">将以萤火虫Firefly品牌推出专供海外的插混（PHEV）车型，瞄准中东、北非与欧洲；Firefly已在挪威、荷兰、比利时、丹麦等欧洲市场启动交付。<a class="src" href="https://carnewschina.com/2025/12/10/nios-firefly-enters-greece-denmark-austria-and-portugal-as-it-pushes-its-overseas-strategy/">CarNewsChina</a></span></li>
-      </ul>
-      <div class="strategic-read">
-        <div class="strategic-label">Strategic Read / 战略解读</div>
-        <div class="strategic-text">蔚来踩下出海刹车，与零跑、小鹏的"猛踩油门"形成鲜明分化。其换电＋纯电的重模式在海外铺设成本极高，在集团仍未盈利、现金承压的背景下，收缩海外、聚焦国内基本盘是务实的自保。用Firefly插混切海外，则是承认纯电＋换电难以快速适配充电基建不足的中东/北非。这一退一进，反映新势力已开始按各自财务承受力，给全球化排出不同的优先级。</div>
-      </div>
-    </div>
-
-    <!-- 06 SAIC -->
-    <div class="company-block">
-      <div class="company-heading">
-        <span class="company-num">06</span>
-        <span class="company-name-cn">上汽集团</span>
-        <span class="company-name-en">SAIC Motor</span>
-      </div>
-      <div class="sub-brand">
-        <span class="sub-brand-tree">└</span>
-        <span class="sub-brand-label">子品牌 / Sub-brand:</span>
-        <span class="sub-brand-name">MG / 名爵</span>
-      </div>
-      <div class="moves-label">Key Moves / 关键动作</div>
-      <ul class="bullet-list">
-        <li class="bullet-item"><span class="bullet-dot">▸</span><span class="bullet-text">MG首座欧洲工厂落户西班牙加利西亚（费罗尔港），年产能12万辆、初期投资约2亿欧元，2028年底投产，预计创造约2,000个岗位。<a class="src" href="https://cnevpost.com/2026/06/03/saic-mg-to-build-its-first-european-auto-plant/">CnEVPost</a></span></li>
-        <li class="bullet-item"><span class="bullet-dot">▸</span><span class="bullet-text">上汽面临EU 35.3%反补贴税加10%基础关税（合计约45.3%），为现有车企中最高，本地化绕关税的紧迫性最强。<a class="src" href="https://www.bloomberg.com/news/articles/2026-06-01/china-s-saic-to-make-mg-cars-at-first-european-factory-in-spain">Bloomberg</a></span></li>
-      </ul>
-      <div class="strategic-read">
-        <div class="strategic-label">Strategic Read / 战略解读</div>
-        <div class="strategic-text">上汽关税壁垒最高（35.3% vs 比亚迪17%），本地建厂的紧迫性也最强。但工厂2028年底才投产，意味着未来两年半MG在欧洲仍要硬扛高关税、短期盈利继续承压。加利西亚选址兼顾欧盟零关税与本地采购，方向正确，但"远水"能否解"近渴"，取决于MG现有车型在高关税下的市场韧性。</div>
-      </div>
-    </div>
-
-    <!-- 07 Changan -->
-    <div class="company-block">
-      <div class="company-heading">
-        <span class="company-num">07</span>
-        <span class="company-name-cn">长安汽车</span>
-        <span class="company-name-en">Changan</span>
-      </div>
-      <div class="sub-brand">
-        <span class="sub-brand-tree">└</span>
-        <span class="sub-brand-label">子品牌 / Sub-brand:</span>
-        <span class="sub-brand-name">深蓝 / Deepal · 阿维塔 / Avatr</span>
-      </div>
-      <div class="moves-label">Key Moves / 关键动作</div>
-      <ul class="bullet-list">
-        <li class="bullet-item"><span class="bullet-dot">▸</span><span class="bullet-text">长安规划到2030年在欧洲投放3个品牌共8款新车，投资约20亿欧元，建成约1,000个欧洲销售触点，应对关税挑战。<a class="src" href="https://www.marklines.com/en/report/rep2758_202411">MarkLines</a></span></li>
-        <li class="bullet-item"><span class="bullet-dot">▸</span><span class="bullet-text">累计海外销量首破60万辆，泰国罗勇（Rayong）工厂投产并定位为主要海外EV基地；深蓝S05已登陆英国（WLTP续航303英里）。<a class="src" href="https://www.nationthailand.com/business/automobile/40040986">The Nation Thailand</a></span></li>
-      </ul>
-      <div class="strategic-read">
-        <div class="strategic-label">Strategic Read / 战略解读</div>
-        <div class="strategic-text">长安走的是"先东南亚、后欧洲"的稳健路线，以泰国为右舵与出口支点，再以20亿欧元、8款车、千个触点的方式系统性切欧洲。这种"先规划体系、再放量"的打法不抢眼但更耐久。关键变量是年底阿维塔与深蓝的整合能否真正释放高端电动的合力，避免双品牌在海外重复内耗。</div>
-      </div>
-    </div>
-
-    <!-- 08 Dongfeng -->
-    <div class="company-block">
-      <div class="company-heading">
-        <span class="company-num">08</span>
-        <span class="company-name-cn">东风集团</span>
-        <span class="company-name-en">Dongfeng</span>
-      </div>
-      <div class="sub-brand">
-        <span class="sub-brand-tree">└</span>
-        <span class="sub-brand-label">子品牌 / Sub-brand:</span>
-        <span class="sub-brand-name">岚图 / Voyah</span>
-      </div>
-      <div class="moves-label">Key Moves / 关键动作</div>
-      <ul class="bullet-list">
-        <li class="bullet-item"><span class="bullet-dot">▸</span><span class="bullet-text">东风与Stellantis签署非约束性备忘录，拟成立Stellantis主导的51/49欧洲合资公司，负责岚图Voyah高端新能源车在欧洲指定市场的销售分销，并设想在法国雷恩（Rennes）本地生产。<a class="src" href="https://www.stellantis.com/en/news/press-releases/2026/may/stellantis-and-dongfeng-announce-their-intention-to-form-a-european-joint-venture-for-shared-sales-and-distribution-manufacturing-purchasing-and-engineering-activities">Stellantis</a></span></li>
-        <li class="bullet-item"><span class="bullet-dot">▸</span><span class="bullet-text">岚图已进入40余国、设240+海外网点，下半年将推右舵版岚图梦想家。<a class="src" href="https://carnewschina.com/2026/05/20/stellantis-and-dongfeng-to-establish-european-joint-venture-for-voyahs-global-expansion/">CarNewsChina</a></span></li>
-      </ul>
-      <div class="strategic-read">
-        <div class="strategic-label">Strategic Read / 战略解读</div>
-        <div class="strategic-text">东风与零跑同选Stellantis为入欧通道，但以高端岚图切入、瞄准法国本地生产。51/49股权意味着话语权由Stellantis主导，对东风是"以渠道换速度"的务实选择；对Stellantis则是把多家中国品牌纳入其欧洲产能体系，"中欧混合生产"范式正在成形。风险同样在于：多个中国品牌共用一个欧洲伙伴，彼此渠道与定价可能相互挤压。</div>
-      </div>
-    </div>
-
-    <!-- 09 GAC -->
-    <div class="company-block">
-      <div class="company-heading">
-        <span class="company-num">09</span>
-        <span class="company-name-cn">广汽集团</span>
-        <span class="company-name-en">GAC</span>
-      </div>
-      <div class="sub-brand">
-        <span class="sub-brand-tree">└</span>
-        <span class="sub-brand-label">子品牌 / Sub-brand:</span>
-        <span class="sub-brand-name">埃安 / Aion · Hyptec</span>
-      </div>
-      <div class="moves-label">Key Moves / 关键动作</div>
-      <ul class="bullet-list">
-        <li class="bullet-item"><span class="bullet-dot">▸</span><span class="bullet-text">5月自主品牌出口28,386辆、同比＋140%；1–5月累计出口98,861辆、同比＋135%，增速居行业前列。<a class="src" href="https://www.prnewswire.com/news-releases/gac-posts-140-export-growth-in-may-advancing-its-vision-of-sustainable-global-mobility-302791347.html">PR Newswire</a></span></li>
-        <li class="bullet-item"><span class="bullet-dot">▸</span><span class="bullet-text">正式进入巴基斯坦（一次性投放AION V、AION UT、Hyptec HT等四款车型并公布本地化路线图）；同时进入英国，AION V于5月28日在英上市。<a class="src" href="https://www.pakwheels.com/blog/gac-aion-hyptec-evs-launched-pakistan-lmc/">PakWheels</a></span></li>
-      </ul>
-      <div class="strategic-read">
-        <div class="strategic-label">Strategic Read / 战略解读</div>
-        <div class="strategic-text">广汽体量不及头部，但增速三位数、加速度最猛。它同时押注成本敏感、本地组装友好的巴基斯坦，与高利润、绕开欧盟整车关税的英国，是典型的"两端押注、分散风险"。四车型齐发巴基斯坦的打法激进，能否在售后与零部件本地化上跟上铺货节奏，将决定这是真正扎根还是昙花一现。</div>
-      </div>
-    </div>
-
-    <!-- TODAY'S QUIET -->
-    <div class="section-title">Today's Quiet / 今日无显著动态</div>
-    <div class="quiet-block">
-      <div class="quiet-text">
-        <strong>长城汽车 / GWM（Haval · Tank）：</strong>无24–48小时内的海外重大新闻。背景：泰国罗勇工厂（年产能13.5万辆）与巴西圣保罗工厂已投产，累计出口170+国家、海外渠道1,000+，2030年目标海外销量破百万。<br><br>
-        <strong>理想汽车 / Li Auto：</strong>今日无新增硬新闻。背景：已与UAE的Al Fahim Motors、沙特的Mohamed Yousuf Naghi Motors签经销协议，以L系列增程车进入中东；纯电i系列及Li Mega将进入欧洲，确认参加2026巴黎车展，目标2030年海外占比30%。<br><br>
-        <strong>北汽集团 / BAIC：</strong>今日无新增动态。背景：计划自2026年年中起以"Santana"品牌在西班牙SKD组装BJ40/BJ30；1月已在智利圣地亚哥发布BJ30/U5P/X55。<br><br>
-        <strong>小米汽车 / Xiaomi Auto：</strong>暂无海外销售，仍以国内为主。背景：欧洲路测车已被曝光，官方确认2027年为"出海元年"，已在德国慕尼黑设研发中心；CEO雷军重申暂无进入美国计划。<br><br>
-        <strong>华为汽车 / 鸿蒙智行（问界AITO 等）：</strong>今日无新增海外硬新闻。背景：问界AITO已与阿布扎比Abu Dhabi Motors签战略合作，M9/M7主攻中东高端市场；赛力斯方面称欧洲用户偏好自驾、对高阶智驾兴趣有限，欧洲当前以"沟通学习"为主、中东为主力落点。</div>
-    </div>
-
-    <!-- CROSS-CUTTING THEMES -->
-    <div class="section-title">Cross-Cutting Themes / 跨公司趋势</div>
-    <div class="theme-block">
-      <div class="theme-item">
-        <div class="theme-num">①</div>
-        <div class="theme-title">出海2.0：从"以价取量"转向"向上突破"高端段</div>
-        <div class="theme-text">在主流市场用规模站稳后，头部中企开始攻打高利润豪华段：比亚迪腾势Z9 GT在德国定价超10万欧元、直插保时捷/奔驰腹地，仰望也计划年内入欧；东风以高端岚图、华为问界M9主攻中东高端。这标志中国车出海进入"2.0阶段"——不再只比性价比，而是争夺品牌溢价与高端用户心智。难点是豪华品牌资产非一日之功，技术参数与门店扩张能否转化为真正的溢价认可，仍待市场检验。</div>
-      </div>
-      <div class="theme-item">
-        <div class="theme-num">②</div>
-        <div class="theme-title">本地化纵深：从"建整车厂"深入到"供应链 + 多国布点"</div>
-        <div class="theme-text">欧洲本地化正从总装向更深处推进：零跑西班牙B10的底盘件由中西合资的Lieder本地供货、小鹏组建欧洲与东南亚本地供应链团队，意味着关税合规的"本地增值比例"被更扎实满足。同时落点从扎堆西班牙走向分散——奇瑞转向英国（借JLR/日产产能、避开欧盟反补贴税）、东风瞄准法国雷恩，中国车企正按"关税洼地＋闲置产能"在欧洲多点布局。</div>
-      </div>
-      <div class="theme-item">
-        <div class="theme-num">③</div>
-        <div class="theme-title">新势力出海分化：零跑/小鹏猛攻 vs 蔚来收缩回防</div>
-        <div class="theme-text">同为新势力，出海节奏开始分道扬镳：零跑、小鹏把产能与供应链一并向海外迁移、激进扩张；蔚来则明确放缓海外、回防国内盈利，仅以Firefly插混轻量试水中东/北非。这一进一退的背后是各自现金流与盈利能力的差异——全球化不再是新势力的"统一动作"，而是要按财务承受力排定优先级的战略选择。</div>
-      </div>
-    </div>
-
-  </div>
-
-  <div class="email-footer">
-    中国车企出海日报 · 波波哥的小酒馆 · 每日06:00自动更新<br>
-    数据动态抓取自公开新闻，仅供参考，不构成投资建议
-  </div>
-
-</div>
-</body>
-</html>
+<section style="padding:6px 20px 18px;">
+<p style="margin:0 0 8px;font-size:16px;font-weight:bold;color:#111827;border-left:4px solid #dc2626;padding-left:10px;">跨公司趋势 CROSS-CUTTING THEMES</p>
+<p style="margin:2px 0;color:#374151;"><span style="color:#dc2626;">▸</span> <strong>关税倒逼本地化:</strong>比亚迪巴西赶35%关税扩产、欧盟酝酿对华PHEV反补贴税(矛头指向比亚迪、奇瑞、上汽),同一逻辑在南美与欧洲同时上演——出口红利见顶,建厂与规避成为主线。<a href="https://cnevpost.com/2026/06/20/eu-readies-tariffs-chinese-phevs/" style="color:#3b82f6;font-size:12px;text-decoration:none;">[CnEVPost]</a></p>
+</section>
+</section></body></html>
