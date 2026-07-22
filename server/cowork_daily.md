@@ -54,7 +54,7 @@ title ≤ 64 字，digest ≤ 110 字。
 - 顶部深色 header（背景 `#111827`，红色底边）放标题「中国车企出海日报 / China Auto Overseas Briefing」、日期「<DATE_CN> · 早间版」。
 - 结构：Executive Summary 摘要（中文段在上、英文段在下）→ **15家车厂出口与海外生产数据（强制，每期都要有）** → TODAY'S MOVERS 今日重点（每家：编号+中文名+英文名、子品牌、Key Moves 以红色 `▸` 开头 bullet 含数字/日期/来源链接、Strategic Read 用左红边框浅底斜体块 `border-left:3px solid #dc2626;background:#f9fafb;font-style:italic`）→ TODAY'S QUIET（只列公司名+一行说明，≤35字）→ CROSS-CUTTING THEMES（最多2个，须由今天≥2个新增事件支撑，否则写「今日新增信号不足以形成新趋势」）。
 - 月度出口数据固定覆盖10家传统集团（比亚迪、吉利、奇瑞、长安、上汽、一汽、长城、广汽、东风、北汽）+5家新势力（蔚来、小鹏、理想、零跑、小米）。旗下20个子品牌全部并入母集团，**不单列、不重复计算**。
-- 用两张紧凑表分别展示传统车企与新势力；每家固定四列：`车厂 | 2025全年 | 2026逐月 | 2026累计/口径`。2026逐月必须列出截至上一个完整月的每个月，缺月写“—”。
+- 用两张紧凑表分别展示传统车企与新势力。每家使用两行数据块：第一行突出`车厂 | 2025全年 | 2026累计/口径`，第二行将截至上一个完整月的每个月横向等宽排列；缺月写“—”。数值本身链接来源，不重复显示“[来源]”，避免邮件窄列换行。
 - `customs_export` 显示为“中国出口”；`overseas` 显示为“海外总量（含海外生产，未拆分）”。只有来源明确拆分时才分别显示中国出口与海外生产，禁止用海外总量相减推算。
 - 2025全年及2026官方累计维护在 `data/overseas-period-totals.csv`。没有官方累计时，只能把有来源的月度值标为“已披露 n/m 个月小计”，不得冒充完整累计。
 - 若暂无数字也必须保留该车厂并写“未披露”，绝不编造；不同口径必须明确提示不可直接横比。
@@ -82,7 +82,7 @@ title ≤ 64 字，digest ≤ 110 字。
 ```
 - **html_en 只能是英文**（含来源标签也用英文），**html_zh 只能是中文**。两者用固定结构：先 1–2 句 lede（无标题），然后 `<h2>What happened</h2>`（事实+数字+内联 `<a href>[Source]</a>）、`<h2>Why it matters</h2>`、`<h2>Market context</h2>`、`<h2>Impact on Chinese automakers</h2>`、`<h2>What to watch next</h2>`。中文版对应「发生了什么/为何重要/市场背景/对中国车企的影响/后续关注」。
 - lede 后、`What happened / 发生了什么` 前必须插入“15家车厂出口与海外生产数据”板块；该板块由最后的自动注入命令生成，避免漏项。
-- 正文生成阶段只用干净语义标签：`<p><h2><ul><li><a><em><strong>`。自动注入的数据板块会额外使用 `<table><thead><tbody><tr><th><td><small><br>`。无内联样式、无 `<section>`、无图片。
+- 正文生成阶段只用干净语义标签：`<p><h2><ul><li><a><em><strong>`。自动注入的数据板块会额外使用带邮件兼容内联样式的 `<table><tbody><tr><td><span><small><br>`。无 `<style>`、无图片。
 - **events**：必填。文章里每一条独立新闻对应一条结构化记录（6 段的文章通常 8–20 条）。每条：`{"company":"<母公司英文>","brand":"<品牌英文或null>","market":"<国家/地区英文或'Global'>","action":"<sales_figures|plant|dealer_network|market_entry|product_launch|pricing|partnership|policy|other>","summary_en":"<含数字的一句话>","source_url":"<url或null>"}`。只有当日确实零新闻时 events 才可为空数组。
 
 ## 顺带维护:出口/海外销量数据底座（data/overseas-sales.csv + overseas-period-totals.csv）

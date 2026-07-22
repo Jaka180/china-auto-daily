@@ -212,7 +212,7 @@ def linked_value(value, url, lang, inline=False):
     if not escaped:
         return value
     if inline:
-        return f'<a href="{escaped}" style="color:#1d4ed8;text-decoration:none;">{value}</a>'
+        return f'<a href="{escaped}" style="color:#1d4ed8;text-decoration:none;font-weight:700;">{value}</a>'
     return f'<strong>{value}</strong> <a href="{escaped}">[{label}]</a>'
 
 
@@ -245,66 +245,119 @@ def period_cell(period, lang, is_cumulative=False, inline=False):
     return "<br>".join(lines)
 
 
-def monthly_cell(record, lang, inline=False):
-    parts = []
-    for item in record["months_2026"]:
-        month = item["month"]
-        row = item["data"]
-        month_label = f"{month}月" if lang == "zh" else dt.date(2000, month, 1).strftime("%b")
-        if not row:
-            parts.append(f"{month_label} —")
-            continue
-        value = f'{row["overseas_units"]:,}'
-        value = linked_value(value, row.get("source_url"), lang, inline=inline)
-        parts.append(f'{month_label} {value}（{metric_short(row.get("metric"), lang)}）')
-    return "<br>".join(parts)
-
-
 def brand_url(key, zh=False):
     lang = "/zh" if zh else ""
     return f"https://www.topchinacar.com{lang}/chinese-car-brands/{key}"
 
 
-def table_row(record, lang, inline=False):
+def compact_metric(metric, lang):
     if lang == "zh":
-        name = f'{record["company_zh"]}<br><small>{record["company_en"]}</small>'
+        return {
+            "overseas": "海外总量 · 未拆分",
+            "customs_export": "中国出口",
+            "mixed": "混合口径",
+        }.get(metric, "口径未披露")
+    return {
+        "overseas": "overseas total · unsplit",
+        "customs_export": "exports from China",
+        "mixed": "mixed metrics",
+    }.get(metric, "metric undisclosed")
+
+
+def summary_period(period, lang, label, is_cumulative=False):
+    label_html = (
+        f'<small style="display:block;margin-bottom:3px;color:#6b7280;font-size:10px;line-height:1.3;letter-spacing:.04em;">{label}</small>'
+    )
+    if not period:
+        missing = "未披露" if lang == "zh" else "not disclosed"
+        return label_html + f'<strong style="font-size:15px;color:#9ca3af;">—</strong><br><small style="color:#9ca3af;font-size:10px;">{missing}</small>'
+
+    value = linked_value(qualified_number(period, lang), period.get("source_url"), lang, inline=True)
+    lines = [label_html + f'<span style="font-size:15px;line-height:1.25;">{value}</span>']
+    lines.append(f'<small style="display:block;margin-top:3px;color:#4b5563;font-size:10px;line-height:1.35;">{compact_metric(period.get("metric"), lang)}</small>')
+
+    if period.get("china_export_units") is not None and period.get("metric") != "customs_export":
+        exports = f'{period["china_export_units"]:,}'
+        detail = f"中国出口 {exports}" if lang == "zh" else f"China exports {exports}"
+        lines.append(f'<small style="display:block;color:#4b5563;font-size:10px;line-height:1.35;">{detail}</small>')
+    if period.get("overseas_production_units") is not None:
+        production = f'{period["overseas_production_units"]:,}'
+        detail = (
+            f"海外生产 {production}（不可相加）" if lang == "zh"
+            else f"overseas output {production} (not additive)"
+        )
+        lines.append(f'<small style="display:block;color:#4b5563;font-size:10px;line-height:1.35;">{detail}</small>')
+
+    if is_cumulative:
+        if period.get("derived") and not period.get("complete"):
+            covered = period.get("coverage_months", 0)
+            total = period["end_month"] - period["start_month"] + 1
+            status = f"已披露 {covered}/{total} 月小计" if lang == "zh" else f"subtotal: {covered}/{total} months disclosed"
+            color = "#b45309"
+        else:
+            status = f'1–{period["end_month"]}月累计' if lang == "zh" else f'Jan–{period["end_month"]} cumulative'
+            color = "#047857"
+        lines.append(f'<small style="display:block;margin-top:3px;color:{color};font-size:10px;font-weight:700;line-height:1.35;">{status}</small>')
+    return "".join(lines)
+
+
+def monthly_td(item, lang):
+    month = item["month"]
+    row = item["data"]
+    month_label = f"{month}月" if lang == "zh" else dt.date(2000, month, 1).strftime("%b")
+    base = 'width:16.666%;min-width:0;border:1px solid #e5e7eb;padding:7px 3px;vertical-align:top;text-align:center;background:#ffffff;line-height:1.3;'
+    month_html = f'<small style="display:block;margin-bottom:4px;color:#6b7280;font-size:10px;font-weight:700;">{month_label}</small>'
+    if not row:
+        missing = "未披露" if lang == "zh" else "n/a"
+        return f'<td style="{base}">{month_html}<strong style="color:#9ca3af;font-size:13px;">—</strong><br><small style="color:#9ca3af;font-size:9px;">{missing}</small></td>'
+
+    value = f'{row["overseas_units"]:,}'
+    value = linked_value(value, row.get("source_url"), lang, inline=True)
+    metric = metric_short(row.get("metric"), lang)
+    if row.get("metric") == "customs_export":
+        badge = "background:#fff1f2;color:#be123c;"
     else:
-        name = record["company_en"]
-    link = brand_url(record["company_key"], zh=(lang == "zh"))
-    if inline:
-        td = ' style="border:1px solid #e5e7eb;padding:7px 6px;vertical-align:top;text-align:left;line-height:1.55;"'
-        name_html = f'<a href="{link}" style="color:#111827;text-decoration:none;font-weight:bold;">{name}</a>'
-    else:
-        td = ""
-        name_html = f'<strong><a href="{link}">{name}</a></strong>'
+        badge = "background:#eff6ff;color:#1d4ed8;"
     return (
-        "<tr>"
-        f"<td{td}>{name_html}</td>"
-        f'<td{td}>{period_cell(record["annual_2025"], lang, inline=inline)}</td>'
-        f'<td{td}>{monthly_cell(record, lang, inline=inline)}</td>'
-        f'<td{td}>{period_cell(record["cumulative_2026"], lang, is_cumulative=True, inline=inline)}</td>'
-        "</tr>"
+        f'<td style="{base}">{month_html}'
+        f'<span style="display:block;white-space:nowrap;font-size:12px;color:#111827;">{value}</span>'
+        f'<small style="display:inline-block;margin-top:4px;padding:1px 5px;border-radius:8px;{badge}font-size:9px;font-weight:700;line-height:1.4;">{metric}</small>'
+        "</td>"
     )
 
 
-def build_table(records, lang, inline=False):
+def table_rows(record, lang, add_spacer=True):
     if lang == "zh":
-        headers = ("车厂", "2025全年", "2026逐月", "2026累计 / 口径")
+        name = record["company_zh"]
+        subname = record["company_en"]
+        annual_label = "2025全年"
+        cumulative_label = "2026累计"
     else:
-        headers = ("Automaker", "2025 full year", "2026 by month", "2026 YTD / metric")
-    if inline:
-        table_style = ' style="width:100%;border-collapse:collapse;table-layout:fixed;margin:6px 0 14px;font-size:11px;color:#374151;"'
-        widths = ("18%", "22%", "32%", "28%")
-        head = "".join(
-            f'<th style="width:{width};border:1px solid #d1d5db;padding:7px 6px;text-align:left;vertical-align:top;background:#f3f4f6;color:#111827;">{label}</th>'
-            for label, width in zip(headers, widths)
-        )
-    else:
-        table_style = ""
-        head = "".join(f"<th>{label}</th>" for label in headers)
+        name = record["company_en"]
+        subname = ""
+        annual_label = "2025 FULL YEAR"
+        cumulative_label = "2026 YTD"
+    link = brand_url(record["company_key"], zh=(lang == "zh"))
+    name_html = f'<a href="{link}" style="color:#ffffff;text-decoration:none;font-size:16px;font-weight:800;line-height:1.25;">{html.escape(name)}</a>'
+    if subname:
+        name_html += f'<small style="display:block;margin-top:3px;color:#d1d5db;font-size:10px;line-height:1.2;">{html.escape(subname)}</small>'
+    header = (
+        '<tr>'
+        f'<td colspan="2" style="width:33.333%;min-width:0;border:1px solid #111827;border-left:4px solid #dc2626;padding:10px 10px;vertical-align:top;text-align:left;background:#111827;">{name_html}</td>'
+        f'<td colspan="2" style="width:33.333%;min-width:0;border:1px solid #d1d5db;padding:9px 10px;vertical-align:top;text-align:left;background:#f8fafc;">{summary_period(record["annual_2025"], lang, annual_label)}</td>'
+        f'<td colspan="2" style="width:33.333%;min-width:0;border:1px solid #d1d5db;padding:9px 10px;vertical-align:top;text-align:left;background:#f8fafc;">{summary_period(record["cumulative_2026"], lang, cumulative_label, is_cumulative=True)}</td>'
+        '</tr>'
+    )
+    months = '<tr>' + "".join(monthly_td(item, lang) for item in record["months_2026"]) + '</tr>'
+    spacer = '<tr><td colspan="6" style="height:10px;border:0;padding:0;background:#ffffff;font-size:0;line-height:0;">&nbsp;</td></tr>' if add_spacer else ""
+    return header + months + spacer
+
+
+def build_table(records, lang):
+    table_style = ' style="width:100%;max-width:100%;border-collapse:collapse;table-layout:fixed;margin:6px 0 16px;font-family:-apple-system,BlinkMacSystemFont,Segoe UI,Arial,sans-serif;font-size:11px;color:#374151;"'
     return (
-        f"<table{table_style}><thead><tr>{head}</tr></thead><tbody>"
-        + "".join(table_row(r, lang, inline=inline) for r in records)
+        f"<table{table_style}><tbody>"
+        + "".join(table_rows(r, lang, add_spacer=(index < len(records) - 1)) for index, r in enumerate(records))
         + "</tbody></table>"
     )
 
@@ -316,7 +369,7 @@ def build_site(records, lang):
         intro = (
             "<h2>15家车厂出口与海外生产数据</h2>"
             "<p>子品牌并入母集团。表中“出”=中国出口；“总”=海外销量口径，通常包括中国出口车与海外本地产销，但来源未拆分两部分。"
-            "缺月以“—”表示；累计若缺月，只列已披露月份小计，绝不补算。</p>"
+            "缺月以“—”表示；累计若缺月，只列已披露月份小计，绝不补算。蓝色数值可打开原始来源。</p>"
             "<p><strong>传统车企集团（10）</strong></p>"
         )
         middle = "<p><strong>造车新势力（5）</strong></p>"
@@ -324,7 +377,7 @@ def build_site(records, lang):
         intro = (
             "<h2>Exports and overseas output: 15 automakers</h2>"
             "<p>Subsidiary brands are consolidated into their parent groups. “Export” means exports from China; “total” means overseas volume that may include local output when the source does not split the two. "
-            "A dash marks an undisclosed month; an incomplete YTD is explicitly shown as a disclosed-month subtotal.</p>"
+            "A dash marks an undisclosed month; an incomplete YTD is explicitly shown as a disclosed-month subtotal. Blue figures link to their original sources.</p>"
             "<p><strong>Traditional auto groups (10)</strong></p>"
         )
         middle = "<p><strong>EV startups (5)</strong></p>"
@@ -338,11 +391,11 @@ def build_wechat(records):
         START
         + '<section style="padding:8px 12px 10px;">'
         + '<p style="margin:0 0 8px;font-size:16px;font-weight:bold;color:#111827;border-left:4px solid #dc2626;padding-left:10px;">15家车厂出口与海外生产数据</p>'
-        + '<p style="margin:0 0 10px;color:#6b7280;font-size:12px;line-height:1.65;">子品牌并入母集团。“出”=中国出口；“总”=通常含中国出口车与海外本地产销的海外销量、来源未拆分。缺月以“—”表示；不完整累计仅为已披露月份小计。</p>'
+        + '<p style="margin:0 0 10px;color:#6b7280;font-size:12px;line-height:1.65;">子品牌并入母集团。“出”=中国出口；“总”=通常含中国出口车与海外本地产销的海外销量、来源未拆分。缺月以“—”表示；不完整累计仅为已披露月份小计。蓝色数值可打开原始来源。</p>'
         + '<p style="margin:8px 0 4px;color:#dc2626;font-size:12px;font-weight:bold;">传统车企集团 · 10</p>'
-        + build_table(traditional, "zh", inline=True)
+        + build_table(traditional, "zh")
         + '<p style="margin:10px 0 4px;color:#dc2626;font-size:12px;font-weight:bold;">造车新势力 · 5</p>'
-        + build_table(startups, "zh", inline=True)
+        + build_table(startups, "zh")
         + "</section>"
         + END
     )
