@@ -231,6 +231,9 @@ def main():
         or meta.get("title")
         or f"China Auto Overseas Daily | {date_str}"
     )
+    subject_prefix = os.environ.get("EMAIL_SUBJECT_PREFIX", "").strip()
+    if subject_prefix:
+        subject = f"{subject_prefix} {subject}"
     html = (
         build_article_email(article, meta, body_html, include_unsubscribe=bool(segment_id))
         if article

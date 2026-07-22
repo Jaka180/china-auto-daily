@@ -683,6 +683,22 @@
         }
       ]
     },
+    "baic": {
+      "company_en": "BAIC",
+      "company_zh": "北汽",
+      "group_type": "traditional",
+      "data": [
+        {
+          "year": 2026,
+          "month": 6,
+          "overseas_units": 32000,
+          "metric": "overseas",
+          "yoy_pct": 15.7,
+          "source_url": "https://www.autoreport.cn/zonghexinwen/20260707/17111305717.html",
+          "note": "group overseas-market sales rounded"
+        }
+      ]
+    },
     "nio": {
       "company_en": "NIO",
       "company_zh": "蔚来",

@@ -1,0 +1,261 @@
+{
+  "generated_at": "2026-07-22",
+  "date": "2026-07-22",
+  "counts": {
+    "traditional": 10,
+    "new_force": 5,
+    "automakers": 15
+  },
+  "scope": "subsidiary brands consolidated into parent automaker groups",
+  "automakers": [
+    {
+      "company_key": "byd",
+      "company_en": "BYD",
+      "company_zh": "比亚迪",
+      "group_type": "traditional",
+      "latest": {
+        "company_key": "byd",
+        "company_en": "BYD",
+        "company_zh": "比亚迪",
+        "group_type": "traditional",
+        "year": 2026,
+        "month": 6,
+        "overseas_units": 175349,
+        "metric": "overseas",
+        "yoy_pct": "94.73",
+        "source_url": "https://cnevpost.com/2026/07/01/byd-jun-2026-sales/",
+        "note": ""
+      }
+    },
+    {
+      "company_key": "geely",
+      "company_en": "Geely",
+      "company_zh": "吉利",
+      "group_type": "traditional",
+      "latest": {
+        "company_key": "geely",
+        "company_en": "Geely",
+        "company_zh": "吉利",
+        "group_type": "traditional",
+        "year": 2026,
+        "month": 6,
+        "overseas_units": 102874,
+        "metric": "customs_export",
+        "yoy_pct": "157.11",
+        "source_url": "https://cnevpost.com/2026/07/01/geely-jun-2026-sales/",
+        "note": ""
+      }
+    },
+    {
+      "company_key": "chery",
+      "company_en": "Chery",
+      "company_zh": "奇瑞",
+      "group_type": "traditional",
+      "latest": {
+        "company_key": "chery",
+        "company_en": "Chery",
+        "company_zh": "奇瑞",
+        "group_type": "traditional",
+        "year": 2026,
+        "month": 6,
+        "overseas_units": 191062,
+        "metric": "customs_export",
+        "yoy_pct": "79.7",
+        "source_url": "https://autonews.gasgoo.com/articles/news/chery-groups-h1-2026-exports-exceed-940000-units-2074841180641480704",
+        "note": "Mar not sourced"
+      }
+    },
+    {
+      "company_key": "changan",
+      "company_en": "Changan",
+      "company_zh": "长安",
+      "group_type": "traditional",
+      "latest": {
+        "company_key": "changan",
+        "company_en": "Changan",
+        "company_zh": "长安",
+        "group_type": "traditional",
+        "year": 2026,
+        "month": 6,
+        "overseas_units": 91065,
+        "metric": "overseas",
+        "yoy_pct": "",
+        "source_url": "https://finance.biggo.com/news/8d02c767-3077-48a9-b363-f4bb13204e03",
+        "note": "low-confidence mixed base; Feb/May not sourced"
+      }
+    },
+    {
+      "company_key": "saic",
+      "company_en": "SAIC",
+      "company_zh": "上汽",
+      "group_type": "traditional",
+      "latest": {
+        "company_key": "saic",
+        "company_en": "SAIC",
+        "company_zh": "上汽",
+        "group_type": "traditional",
+        "year": 2026,
+        "month": 6,
+        "overseas_units": 146000,
+        "metric": "overseas",
+        "yoy_pct": "61.2",
+        "source_url": "https://autonews.gasgoo.com/articles/news/gasgoo-daily-gsa-2026-opens-saic-motor-tops-2m-units-in-h1-sales-catl-partners-jt-express-2072628085332426752",
+        "note": "company-rounded; Feb/Mar not sourced"
+      }
+    },
+    {
+      "company_key": "faw",
+      "company_en": "FAW",
+      "company_zh": "一汽",
+      "group_type": "traditional",
+      "latest": null
+    },
+    {
+      "company_key": "gwm",
+      "company_en": "Great Wall",
+      "company_zh": "长城",
+      "group_type": "traditional",
+      "latest": {
+        "company_key": "gwm",
+        "company_en": "GWM",
+        "company_zh": "长城",
+        "group_type": "traditional",
+        "year": 2026,
+        "month": 6,
+        "overseas_units": 60168,
+        "metric": "overseas",
+        "yoy_pct": "50.16",
+        "source_url": "https://cnevpost.com/2026/07/01/gwm-jun-2026-sales/",
+        "note": ""
+      }
+    },
+    {
+      "company_key": "gac",
+      "company_en": "GAC",
+      "company_zh": "广汽",
+      "group_type": "traditional",
+      "latest": {
+        "company_key": "gac",
+        "company_en": "GAC",
+        "company_zh": "广汽",
+        "group_type": "traditional",
+        "year": 2026,
+        "month": 5,
+        "overseas_units": 28386,
+        "metric": "customs_export",
+        "yoy_pct": "140",
+        "source_url": "https://www.manilatimes.net/2026/06/04/tmt-newswire/pr-newswire/gac-posts-140-export-growth-in-may-advancing-its-vision-of-sustainable-global-mobility/2358551",
+        "note": "only May sourced"
+      }
+    },
+    {
+      "company_key": "dongfeng",
+      "company_en": "Dongfeng",
+      "company_zh": "东风",
+      "group_type": "traditional",
+      "latest": {
+        "company_key": "dongfeng",
+        "company_en": "Dongfeng",
+        "company_zh": "东风",
+        "group_type": "traditional",
+        "year": 2026,
+        "month": 6,
+        "overseas_units": 20059,
+        "metric": "customs_export",
+        "yoy_pct": "",
+        "source_url": "https://bestsellingcarsblog.com/2026/07/china-exports-june-2026-byd-catches-up-on-chery/",
+        "note": "only Jun sourced"
+      }
+    },
+    {
+      "company_key": "baic",
+      "company_en": "BAIC",
+      "company_zh": "北汽",
+      "group_type": "traditional",
+      "latest": {
+        "company_key": "baic",
+        "company_en": "BAIC",
+        "company_zh": "北汽",
+        "group_type": "traditional",
+        "year": 2026,
+        "month": 6,
+        "overseas_units": 32000,
+        "metric": "overseas",
+        "yoy_pct": "15.7",
+        "source_url": "https://www.autoreport.cn/zonghexinwen/20260707/17111305717.html",
+        "note": "group overseas-market sales rounded"
+      }
+    },
+    {
+      "company_key": "nio",
+      "company_en": "NIO",
+      "company_zh": "蔚来",
+      "group_type": "new_force",
+      "latest": {
+        "company_key": "nio",
+        "company_en": "NIO",
+        "company_zh": "蔚来",
+        "group_type": "new_force",
+        "year": 2026,
+        "month": 5,
+        "overseas_units": 88,
+        "metric": "customs_export",
+        "yoy_pct": "",
+        "source_url": "https://eletric-vehicles.com/nio/nios-exports-rebound-in-may-on-firefly-strength/",
+        "note": ""
+      }
+    },
+    {
+      "company_key": "xpeng",
+      "company_en": "XPeng",
+      "company_zh": "小鹏",
+      "group_type": "new_force",
+      "latest": {
+        "company_key": "xpeng",
+        "company_en": "XPeng",
+        "company_zh": "小鹏",
+        "group_type": "new_force",
+        "year": 2026,
+        "month": 6,
+        "overseas_units": 7533,
+        "metric": "customs_export",
+        "yoy_pct": "99.3",
+        "source_url": "https://eletric-vehicles.com/xpeng/xpeng-sees-european-registrations-triple-in-june-ahead-of-l03-launch/",
+        "note": ""
+      }
+    },
+    {
+      "company_key": "li",
+      "company_en": "Li Auto",
+      "company_zh": "理想",
+      "group_type": "new_force",
+      "latest": null
+    },
+    {
+      "company_key": "leapmotor",
+      "company_en": "Leapmotor",
+      "company_zh": "零跑",
+      "group_type": "new_force",
+      "latest": {
+        "company_key": "leapmotor",
+        "company_en": "Leapmotor",
+        "company_zh": "零跑",
+        "group_type": "new_force",
+        "year": 2026,
+        "month": 6,
+        "overseas_units": 21102,
+        "metric": "customs_export",
+        "yoy_pct": "",
+        "source_url": "https://bestsellingcarsblog.com/2026/07/china-exports-june-2026-byd-catches-up-on-chery/",
+        "note": "China-made export; Stellantis-channel differs"
+      }
+    },
+    {
+      "company_key": "xiaomi",
+      "company_en": "Xiaomi",
+      "company_zh": "小米",
+      "group_type": "new_force",
+      "latest": null
+    }
+  ]
+}

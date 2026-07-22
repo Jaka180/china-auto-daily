@@ -1,7 +1,8 @@
 # 出口/海外销量数据底座（overseas-sales）
 
-持续维护的月度**海外销量**时间序列,覆盖 10 家传统车企 + 5 家新势力。由日报 pipeline
-每月自动追加,git 版本管理,可喂给网站 /data 页与日报做同比/趋势。
+持续维护的月度**海外销量/海关出口**时间序列,覆盖 10 家传统车企集团 + 5 家新势力。旗下
+子品牌全部并入母集团，不单独拆量或重复计算。由日报 pipeline 每月自动追加,git 版本管理,
+并由 `tools/inject_export_radar.py` 强制写入每期网站、邮件和公众号正文。
 
 ## 口径（重要）
 - **overseas_units = 海外销量,含当地生产**（overseas / global-ex-China deliveries，
